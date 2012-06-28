@@ -1,7 +1,44 @@
-function Game() {
+function Game(id, amountPlayers) {
 	this.id = 0;
-	this.players = new Array();
+
+	if (amountPlayers >= 3 && amountPlayers <= 6) {
+		this.players = new Array(amountPlayers);
+	} else {
+		throw 'At least 3 and at most 6 players can play this game.';
+	}
+
+	this.allowedHouses = function() {
+		switch(this.players.length) {
+			case 3:
+				return ['Stark', 'Lannister', 'Baratheon'];
+			case 4:
+				return ['Stark', 'Lannister', 'Baratheon', 'Greyjoy'];
+			case 5:
+				return ['Stark', 'Lannister', 'Baratheon', 'Greyjoy', 'Tyrell'];
+			case 6:
+				return ['Stark', 'Lannister', 'Baratheon', 'Greyjoy', 'Tyrell', 'Martell'];
+			default:
+				//todo should not happen
+		}
+	};
+
+	this.addPlayer = function(player) {
+		if (this.allowedHouses().indexOf(player.house.name) === -1) {
+			throw 'No player can choose house ' + player.house.name + ' in a game with ' + this.players.length + ' players.';
+		}
+		if (this.players.indexOf(player) >= 0) { //todo fixme this 'if' is not working
+			throw 'Player ' + player.name + ' was already added to the game ' + id;
+		}
+
+		for (var i = 0; i < this.players.length; i++) {
+			if (this.players[i] === null || this.players[i] === 'undefined') {
+				this.players[i] = player;
+			}
+		}
+	};
 }
+
+
 
 function Player(name, house) {
 	this.name = name;
@@ -51,20 +88,20 @@ function GameStateMachine() {
 	this.currentState = new GameState(); //startup, westeros, assign orders, execute orders
 }
 
-function GameState() {
-	this.action = function() {
-	}
+function GameState(action) {
+	this.action = action;
 }
 
-function House() {
-	this.name = "";
+function House(name, defaultIronThrone, defaultFiefdom, defaultKingsCourt, defaultSupply, defaultVictory, cards) {
+	this.name = name;
+	this.defaultIronThrone = defaultIronThrone;
+	this.defaultFiefdom = defaultFiefdom;
+	this.defaultKingsCourt = defaultKingsCourt;
+	this.defaultSupply = defaultSupply;
+	this.defaultVictory = defaultVictory;
+	this.cards = cards;
+
 	this.available = true;
-	this.defaultIronThrone = 1;
-	this.defaultFiefdom = 1;
-	this.defaultKingsCourt = 1;
-	this.defaultSupply = 1;
-	this.defaultVictory = 1;
-	this.cards = new Array(7);
 }
 
 function Board() {
@@ -77,7 +114,7 @@ function Board() {
 			this.adjacency[i] = new Array(this.areas.length);
 		}
 		return this.adjacency;
-	}
+	};
 }
 
 function Area(name, type, supply, power, castle, hasPort, defaultController, available) {
