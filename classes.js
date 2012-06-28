@@ -108,8 +108,9 @@ function Army() {
 	this.units = new Array();
 }
 
-function Unit() {
-	this.type = 0; //siege, knight, footman, ship, thatThingThatDefendsCastles
+function Unit(type, controller) {
+	this.type = 0; //1 = footman, 2 = knight, 3 = ship, 4 = siege, 5 = thatThingThatDefendsCastles. Herança representaria melhor...
+	this.controller = controller;
 }
 
 function WesterosCard() {
