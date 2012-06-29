@@ -7,6 +7,7 @@ var tyrell    = new House('Tyrell',    6, 2, 5, 2, 1, null);
 var martel    = new House('Martell',   4, 3, 3, 2, 1, null);
 var noHouse   = null;
 
+//Cards legend ------------------------------------> p  s  t  text handler
 //Cards - Stark
 var ned        = new HouseCard('Eddard Stark',       4, 2, 0, null, null);
 var robb       = new HouseCard('Robb Stark',         3, 0, 0, 'If you win this combat, you may choose the area to which your opponent retreats. You must choose a legal area where your opponent loses the fewest units.', null);
@@ -138,6 +139,7 @@ var p6 = new Player('P6', martel);
 var game = new Game(1, 3);
 game.addPlayer(p1);
 game.addPlayer(p2);
-game.addPlayer(p2);
 game.addPlayer(p3);
 
+var sm = new GameStateMachine(game);
+sm.fireEvent('woopee');

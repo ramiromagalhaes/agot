@@ -1,5 +1,6 @@
 function Game(id, amountPlayers) {
 	this.id = 0;
+	this.players = new Array(0);
 
 	if (amountPlayers >= 3 && amountPlayers <= 6) {
 		this.players = new Array(amountPlayers);
@@ -18,7 +19,7 @@ function Game(id, amountPlayers) {
 			case 6:
 				return ['Stark', 'Lannister', 'Baratheon', 'Greyjoy', 'Tyrell', 'Martell'];
 			default:
-				//todo should not happen
+				//todo no code should get here
 		}
 	};
 
@@ -27,12 +28,25 @@ function Game(id, amountPlayers) {
 			throw 'No player can choose house ' + player.house.name + ' in a game with ' + this.players.length + ' players.';
 		}
 		if (this.players.indexOf(player) >= 0) { //todo fixme this 'if' is not working
-			throw 'Player ' + player.name + ' was already added to the game ' + id;
+			throw 'Player ' + player.name + ' was already added to the game.';
 		}
 
 		for (var i = 0; i < this.players.length; i++) {
-			if (this.players[i] === null || this.players[i] === 'undefined') {
+			if (typeof(this.players[i]) === 'undefined') {
+				continue;
+			}
+			if (this.players[i].name == player.name) {
+				throw 'A player named ' + player.name + ' was already added to the game.';
+			}
+			if (this.players[i].house == player.house) {
+				throw 'Another player already chose to play with house ' + player.house.name;
+			}
+		}
+
+		for (var i = 0; i < this.players.length; i++) {
+			if (this.players[i] === null || typeof(this.players[i]) === 'undefined') {
 				this.players[i] = player;
+				break;
 			}
 		}
 	};
@@ -65,13 +79,49 @@ function Player(name, house) {
 
 }
 
+
+
 function PlayerStats() {
 	this.powerTokens = 5;
 	this.ironThrone = 0; //-1 not yours, 0 unused, 1 used
 	this.sword = 0;
 	this.raven = 0;
-	this.cards = new Array(7); //each player has 7 cards
+
+	this.playSword = function() {
+		if (this.sword != 0) {
+			throw 'You cannot use the sword because you don\'t own it or it has already been used.';
+		}
+	};
+
+	this.playRaven = function() {
+		if (this.raven != 0) {
+			throw 'You cannot use the raven because you don\'t own it or it has already been used.';
+		}
+	};
+
+	this.usePower = function(amount) {
+		if (amount < 0) {
+			throw 'You can only use 0 or more Power tokens.';
+		}
+
+		if (this.powerTokens < amount) {
+			throw 'You don\'t have ' + amount + ' Power tokens to spare (you have ' + this.powerTokens + ').';
+		}
+
+		this.powerTokens -= amount;
+	};
+
+	this.gainPower = function(amount) {
+		if (amount < 0) {
+			throw 'You can only gain 0 or more Power tokens.';
+		}
+
+		this.powerTokens += amount;
+	};
+
 }
+
+
 
 function GameStats() {
 	this.playersCount = 6;
@@ -83,14 +133,25 @@ function GameStats() {
 	this.supply = new Array(this.playersCount);
 }
 
+
+
 function GameStateMachine(game) {
 	this.game = game;
 	this.currentState = new GameState(); //startup, westeros, assign orders, execute orders
+
+	this.fireEvent = function(event) { //event should be the function name to call on the state
+		this.currentState = this.currentState[event](this.game);
+	}
+
 }
+
+
 
 function GameState(action) {
 	this.action = action;
 }
+
+
 
 function House(name, defaultIronThrone, defaultFiefdom, defaultKingsCourt, defaultSupply, defaultVictory, cards) {
 	this.name = name;
@@ -103,6 +164,8 @@ function House(name, defaultIronThrone, defaultFiefdom, defaultKingsCourt, defau
 
 	this.available = true;
 }
+
+
 
 function Board() {
 	this.areas = new Array(50); //12 mar, 38 terra = 50 áreas
@@ -158,11 +221,18 @@ function WildlingCard() {
 	this.name = "";
 }
 
-function HouseCard(name, power, swords, towers, effect, onEffect) {
+function HouseCard(name, power, swords, towers, text, effect) {
 	this.name = name;
 	this.power = power;
 	this.swords = swords;
 	this.towers = towers;
+	this.text = text;
 	this.effect = effect;
-	this.onEffect = onEffect;
+	this.available = true;
+
+	//Plays the card
+	this.play = function() {
+		this.effect();
+		this.available = false;
+	};
 }
