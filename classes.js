@@ -26,7 +26,6 @@ function Player(name, house) {
 		this.stats.raven = -1;
 	}
 
-	this.stats.cards = this.house.cards;
 }
 
 function PlayerStats() {
@@ -47,7 +46,8 @@ function GameStats() {
 	this.supply = new Array(this.playersCount);
 }
 
-function GameStateMachine() {
+function GameStateMachine(game) {
+	this.game = game;
 	this.currentState = new GameState(); //startup, westeros, assign orders, execute orders
 }
 
@@ -58,7 +58,6 @@ function GameState() {
 
 function House() {
 	this.name = "";
-	this.available = true;
 	this.defaultIronThrone = 1;
 	this.defaultFiefdom = 1;
 	this.defaultKingsCourt = 1;
