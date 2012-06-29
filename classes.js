@@ -131,6 +131,25 @@ function GameStats() {
 	this.kingsCourt = new Array(this.playersCount);
 	this.victory = new Array(this.playersCount);
 	this.supply = new Array(this.playersCount);
+
+
+	this.setSupply = function(s) {
+	}
+
+	this.getSupply = function(house) {
+		for (var i = 0; i < this.playersCount; i++) {
+			if (this.supply[i] === null || typeof(this.supply[i]) === 'undefined') {
+				continue;
+			}
+
+			if (this.supply[i][0].house.name === house.name) {
+				return this.supply[i][1];
+			}
+		}
+
+		return null;
+	}
+
 }
 
 
