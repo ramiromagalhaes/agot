@@ -121,11 +121,14 @@ var board = new Board();
 
 
 //Game states (phases)
-var setupState    = new GameState(null);
-var westerosState = new GameState(null);
-var assignState   = new GameState(null);
-var revealState   = new GameState(null);
-var cleanupState  = new GameState(null);
+var setupState    = new GameState();
+setupState.done = function() {
+};
+
+var westerosState = new GameState();
+var assignState   = new GameState();
+var revealState   = new GameState();
+var cleanupState  = new GameState();
 
 //Players
 var p1 = new Player('P1', stark);

@@ -137,7 +137,7 @@ function GameStats() {
 
 function GameStateMachine(game) {
 	this.game = game;
-	this.currentState = new GameState(); //startup, westeros (1, 2, 3, wildlings), assign orders, execute orders (raid, march, combat, consolidate, cleanup)
+	this.currentState = new GameState(); //setup, westeros (1, 2, 3, wildlings), assign orders, execute orders (raid, march, combat, consolidate, cleanup)
 
 	this.fireEvent = function(event) { //event should be the function name to call on the state
 		this.currentState = this.currentState[event](this.game);
@@ -147,8 +147,8 @@ function GameStateMachine(game) {
 
 
 
-function GameState(action) {
-	this.action = action;
+function GameState() {
+	//maybe some functions will fit here.
 }
 
 
