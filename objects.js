@@ -121,11 +121,11 @@ var board = new Board();
 
 
 //Game states (phases)
-var setupState    = new GameState();
-var westerosState = new GameState();
-var assignState   = new GameState();
-var revealState   = new GameState();
-var cleanupState  = new GameState();
+var setupState    = new GameState(null);
+var westerosState = new GameState(null);
+var assignState   = new GameState(null);
+var revealState   = new GameState(null);
+var cleanupState  = new GameState(null);
 
 //Players
 var p1 = new Player('P1', stark);
@@ -141,5 +141,5 @@ game.addPlayer(p1);
 game.addPlayer(p2);
 game.addPlayer(p3);
 
-var sm = new GameStateMachine(game);
-sm.fireEvent('woopee');
+var stateMachine = new GameStateMachine(game);
+

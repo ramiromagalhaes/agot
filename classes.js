@@ -1,6 +1,12 @@
 function Game(id, amountPlayers) {
 	this.id = 0;
 	this.players = new Array(0);
+	this.allowedHousesArray = new Array(
+		['Stark', 'Lannister', 'Baratheon'],
+		['Stark', 'Lannister', 'Baratheon', 'Greyjoy'],
+		['Stark', 'Lannister', 'Baratheon', 'Greyjoy', 'Tyrell'],
+		['Stark', 'Lannister', 'Baratheon', 'Greyjoy', 'Tyrell', 'Martell']
+	);
 
 	if (amountPlayers >= 3 && amountPlayers <= 6) {
 		this.players = new Array(amountPlayers);
@@ -9,18 +15,12 @@ function Game(id, amountPlayers) {
 	}
 
 	this.allowedHouses = function() {
-		switch(this.players.length) {
-			case 3:
-				return ['Stark', 'Lannister', 'Baratheon'];
-			case 4:
-				return ['Stark', 'Lannister', 'Baratheon', 'Greyjoy'];
-			case 5:
-				return ['Stark', 'Lannister', 'Baratheon', 'Greyjoy', 'Tyrell'];
-			case 6:
-				return ['Stark', 'Lannister', 'Baratheon', 'Greyjoy', 'Tyrell', 'Martell'];
-			default:
-				//todo no code should get here
+		var index = this.players.length - 3;
+		if (index < 0 || index > 3) {
+			throw 'Impossible to determine the allowed houses since the amount of players is illegal.';
 		}
+
+		return this.allowedHousesArray[index];
 	};
 
 	this.addPlayer = function(player) {
@@ -137,7 +137,7 @@ function GameStats() {
 
 function GameStateMachine(game) {
 	this.game = game;
-	this.currentState = new GameState(); //startup, westeros, assign orders, execute orders
+	this.currentState = new GameState(); //startup, westeros (1, 2, 3, wildlings), assign orders, execute orders (raid, march, combat, consolidate, cleanup)
 
 	this.fireEvent = function(event) { //event should be the function name to call on the state
 		this.currentState = this.currentState[event](this.game);
@@ -161,8 +161,6 @@ function House(name, defaultIronThrone, defaultFiefdom, defaultKingsCourt, defau
 	this.defaultSupply = defaultSupply;
 	this.defaultVictory = defaultVictory;
 	this.cards = cards;
-
-	this.available = true;
 }
 
 
@@ -210,6 +208,7 @@ function Army() {
 
 function Unit(type, controller) {
 	this.type = 0; //1 = footman, 2 = knight, 3 = ship, 4 = siege, 5 = thatThingThatDefendsCastles. Herança representaria melhor...
+	this.routed = false;
 	this.controller = controller;
 }
 
