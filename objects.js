@@ -4,7 +4,7 @@ var lannister = new House('Lannister', 2, 6, 1, 2, 1, null);
 var baratheon = new House('Baratheon', 1, 5, 4, 2, 1, null);
 var greyjoy   = new House('Greyjoy',   5, 1, 6, 2, 1, null);
 var tyrell    = new House('Tyrell',    6, 2, 5, 2, 1, null);
-var martel    = new House('Martell',   4, 3, 3, 2, 1, null);
+var martell    = new House('Martell',   4, 3, 3, 2, 1, null);
 var noHouse   = null;
 
 //Cards legend ------------------------------------> p  s  t  text handler
@@ -53,7 +53,7 @@ var alester   = new HouseCard('Alester Florent',     1, 0, 1, null, null);
 var margaery  = new HouseCard('Margaery Tyrell',     1, 0, 1, null, null);
 var queen     = new HouseCard('Queen of Thorns',     0, 0, 0, 'Immediately remove one of your opponent\'s Order token in any one area adjacent to the embattled area. You may not remove the March Order token used to start this combat.', null);
 
-//Cards - Martel
+//Cards - Martell
 var viper         = new HouseCard('The Red Viper',   4, 2, 1, null, null);
 var areo          = new HouseCard('Areo Hotah',      3, 0, 1, null, null);
 var obara         = new HouseCard('Obara Sand',      2, 1, 0, null, null);
@@ -97,7 +97,7 @@ var boneway            = new Area('The Boneway',               0, 0, 1, 0, false
 var oldtown            = new Area('Oldtown',                   0, 0, 0, 2, true, tyrell);
 var princesPass        = new Area('Princes Pass',              0, 1, 1, 0, false);
 var threeTowers        = new Area('Three Towers',              0, 1, 0, 0, false);
-var sunspear           = new Area('Sunspear',                  0, 1, 1, 2, true, martel);
+var sunspear           = new Area('Sunspear',                  0, 1, 1, 2, true, martell);
 var yronwood           = new Area('Yronwood',                  0, 0, 0, 1, false);
 var saltShore          = new Area('Salt Shore',                0, 1, 0, 0, false);
 var starfall           = new Area('Starfall',                  0, 1, 0, 1, false);
@@ -136,7 +136,7 @@ var p2 = new Player('P2', lannister);
 var p3 = new Player('P3', baratheon);
 var p4 = new Player('P4', greyjoy);
 var p5 = new Player('P5', tyrell);
-var p6 = new Player('P6', martel);
+var p6 = new Player('P6', martell);
 
 //Game
 var game = new Game(1, 3);
@@ -145,4 +145,16 @@ game.addPlayer(p2);
 game.addPlayer(p3);
 
 var stateMachine = new GameStateMachine(game);
+
+
+var gameStats = new GameStats();
+gameStats.supply = new Array(
+	null,
+	[lannister],
+	[stark],
+	[baratheon],
+	null,
+	[],
+	null
+);
 

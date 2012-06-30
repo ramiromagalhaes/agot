@@ -130,25 +130,55 @@ function GameStats() {
 	this.fiefdom = new Array(this.playersCount);
 	this.kingsCourt = new Array(this.playersCount);
 	this.victory = new Array(this.playersCount);
-	this.supply = new Array(this.playersCount);
+
+	this.maxSupply = 6;
+	this.supply = new Array(this.maxSupply + 1); //array of arrays of houses with i supply, where i is the base array index
 
 
-	this.setSupply = function(s) {
-	}
+	this.setSupply = function(amount, house) {
+		var indexes = findHouseOnSupplyTrack(house);
+		if (indexes === -1) {
+			//house not yet added to the supply track. just add it.
+		} else {
+			//house already in supply track: remove it first, then add it again
+		}
 
-	this.getSupply = function(house) {
-		for (var i = 0; i < this.playersCount; i++) {
+		return null;
+	};
+
+	this.findHouseOnSupplyTrack = function(house) {
+		for (var i = 0; i < this.maxSupply; i++) {
 			if (this.supply[i] === null || typeof(this.supply[i]) === 'undefined') {
 				continue;
 			}
 
-			if (this.supply[i][0].house.name === house.name) {
-				return this.supply[i][1];
+			for (var j = 0; j < this.supply[i].length; j++) {
+				if (this.supply[i][j].name === house.name) {
+					return new Array(i, j);
+				}
 			}
 		}
 
-		return null;
+		return -1;
 	}
+
+	this.getSupplyOfHouse = function(house) {
+		var indexes = this.findHouseOnSupplyTrack(house);
+
+		if (indexes === -1) {
+			throw 'House ' + house.name + ' is not on the supply track.';
+		}
+
+		return indexes[0];
+	};
+
+	this.getHousesWithSupply = function(amountSupply) {
+		if (amountSupply < 0 || amountSupply > this.maxSupply) {
+			throw 'The supply track ranges from 0 to 6.';
+		}
+
+		return this.supply[amountSupply];
+	};
 
 }
 
