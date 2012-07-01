@@ -9,10 +9,64 @@
 <script src="objects.js" type="text/javascript" charset="UTF-8"></script>
 
 <script type="text/javascript" charset="UTF-8">//<![CDATA[
+function log(text) {
+	var el = document.createElement('div');
+	el.textContent = text;
+	document.documentElement.appendChild(el);
+}
+
+
+//Players
+var p1 = new Player('P1', stark);
+var p2 = new Player('P2', lannister);
+var p3 = new Player('P3', baratheon);
+var p4 = new Player('P4', greyjoy);
+var p5 = new Player('P5', tyrell);
+var p6 = new Player('P6', martell);
+
+//Game
+var game = new Game(1, 3);
+game.addPlayer(p1);
+game.addPlayer(p2);
+game.addPlayer(p3);
+
+
+
+var gameStats = new GameStats();
+gameStats.supply = new Array(
+	null,
+	[lannister],
+	[stark],
+	[baratheon],
+	null,
+	[],
+	null
+);
+gameStats.setSupply(0, lannister);
+gameStats.setSupply(0, baratheon);
+gameStats.setSupply(5, stark);
+gameStats.setSupply(1, lannister);
+gameStats.setSupply(0, baratheon);
+gameStats.setSupply(2, lannister);
+gameStats.setSupply(1, stark);
+gameStats.setSupply(3, lannister);
+gameStats.setSupply(5, stark);
+gameStats.setSupply(4, lannister);
+gameStats.setSupply(6, baratheon);
+gameStats.setSupply(5, lannister);
+gameStats.setSupply(6, baratheon);
+gameStats.setSupply(6, lannister);
+
+log(gameStats.getSupplyOfHouse(stark) === 5);
+log(gameStats.getSupplyOfHouse(lannister) === 6);
+log(gameStats.getSupplyOfHouse(baratheon) === 6);
+
+
 
 //]]></script>
 
 </head>
-<body></body>
+<body id="body">
+</body>
 </html>
 

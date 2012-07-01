@@ -123,38 +123,21 @@ var board = new Board();
 //Game states (phases)
 var setupState    = new GameState();
 setupState.done = function() {
+	//do lots of stuff
+	return westerosState();
 };
 
 var westerosState = new GameState();
+
+var westerosCard1 = new GameState();
+var westerosCard2 = new GameState();
+var westerosCard3 = new GameState();
+
 var assignState   = new GameState();
 var revealState   = new GameState();
 var cleanupState  = new GameState();
 
-//Players
-var p1 = new Player('P1', stark);
-var p2 = new Player('P2', lannister);
-var p3 = new Player('P3', baratheon);
-var p4 = new Player('P4', greyjoy);
-var p5 = new Player('P5', tyrell);
-var p6 = new Player('P6', martell);
-
-//Game
-var game = new Game(1, 3);
-game.addPlayer(p1);
-game.addPlayer(p2);
-game.addPlayer(p3);
-
 var stateMachine = new GameStateMachine(game);
 
 
-var gameStats = new GameStats();
-gameStats.supply = new Array(
-	null,
-	[lannister],
-	[stark],
-	[baratheon],
-	null,
-	[],
-	null
-);
 
