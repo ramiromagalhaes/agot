@@ -57,35 +57,28 @@ function Game(id, amountPlayers) {
 function Player(name, house) {
 	this.name = name;
 	this.house = house;
-	this.stats = new PlayerStats();
-
-	if (this.house.defaultIronThrone == 1) {
-		this.stats.ironThrone = 0;
-	} else {
-		this.stats.ironThrone = -1;
-	}
-
-	if (this.house.defaultFiefdom == 1) {
-		this.stats.sword = 0;
-	} else {
-		this.stats.sword = -1;
-	}
-
-	if (this.house.defaultKingsCourt == 1) {
-		this.stats.raven = 0;
-	} else {
-		this.stats.raven = -1;
-	}
-
-}
-
-
-
-function PlayerStats() {
 	this.powerTokens = 5;
 	this.ironThrone = 0; //-1 not yours, 0 unused, 1 used
 	this.sword = 0;
 	this.raven = 0;
+
+	if (this.house.defaultIronThrone == 1) {
+		this.ironThrone = 0;
+	} else {
+		this.ironThrone = -1;
+	}
+
+	if (this.house.defaultFiefdom == 1) {
+		this.sword = 0;
+	} else {
+		this.sword = -1;
+	}
+
+	if (this.house.defaultKingsCourt == 1) {
+		this.raven = 0;
+	} else {
+		this.raven = -1;
+	}
 
 	this.playSword = function() {
 		if (this.sword != 0) {
@@ -129,6 +122,8 @@ function GameStats() {
 	this.ironThrone = new Array(this.playersCount);
 	this.fiefdom = new Array(this.playersCount);
 	this.kingsCourt = new Array(this.playersCount);
+
+	this.maxVictory = 7;
 	this.victory = new Array(this.playersCount);
 
 	this.maxSupply = 6;
@@ -197,20 +192,22 @@ function GameStats() {
 
 
 
-function GameStateMachine(game) {
-	this.game = game;
-	this.currentState = new GameState(); //setup, westeros (1, 2, 3, wildlings), assign orders, execute orders (raid, march, combat, consolidate, cleanup)
-
-	this.fireEvent = function(event) { //event should be the function name to call on the state
-		this.currentState = this.currentState[event](this.game);
-	}
-
+function GameState(stateMachine, name) {
+	this.stateMachine = stateMachine;
+	this.name = name;
+	//maybe some functions will fit here.
 }
 
 
 
-function GameState() {
-	//maybe some functions will fit here.
+function GameStateMachine(game) {
+	this.game = game;
+	this.currentState = null; //setup, westeros (1, 2, 3, wildlings), assign orders, execute orders (raid, march, combat, consolidate, cleanup)
+
+	this.fireEvent = function(event, params) { //event should be the function name to call on the state
+		this.currentState = this.currentState[event](params);
+	}
+
 }
 
 
