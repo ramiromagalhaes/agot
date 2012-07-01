@@ -17,15 +17,12 @@ setupState.start = function() {
 stateMachine.currentState = setupState; //still configuring the stateMachine
 
 
-//Deck 1 - Winter is Coming, Mustering, Supply, Last Days of Summer, A Throne of Blades
-//Deck 2 - Clash of Kings, Last Days of Summer, Winter is Coming, "Dark Wings, Dark Words", Game of Thrones
-//Deck 3 - Wildlings Attack, Put to the Sword, Web of Lies, Rains of Autumn, Sea of Storms, Storm of Swords, Feast for Crows
 var westerosState = new GameState(stateMachine, 'Westeros');
 westerosState.deckToDraw = 0;
 westerosState.start = function() {
 	this.deckToDraw++;
 
-	//draw from deck this.deckToDraw
+	//draw from deck #this.deckToDraw
 	//resolve card
 
 	if (this.deckToDraw >= 3) {

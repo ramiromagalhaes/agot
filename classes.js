@@ -192,6 +192,11 @@ function GameStats() {
 
 
 
+function MultistatsRank() {
+}
+
+
+
 function GameState(stateMachine, name) {
 	this.stateMachine = stateMachine;
 	this.name = name;
@@ -237,6 +242,8 @@ function Board() {
 	};
 }
 
+
+
 function Area(name, type, supply, power, castle, hasPort, defaultController, available) {
 	this.name = name;
 	this.type = type; //0 = land, 1 = sea
@@ -246,12 +253,17 @@ function Area(name, type, supply, power, castle, hasPort, defaultController, ava
 	this.castle = castle; //0 = none, 1 = castle, 2 = stronghold
 	this.hasPort = false;
 
-	if(typeof(defaultController)==='undefined') defaultController = null;
+	if(typeof(defaultController)==='undefined') {
+		defaultController = null;
+	}
 	this.defaultController = defaultController;
 	this.currentController = defaultController;
 
-	if(typeof(available)==='undefined') this.available = true;
-	else this.available = available;
+	if(typeof(available)==='undefined') {
+		this.available = true;
+	} else {
+		this.available = available;
+	}
 
 
 
@@ -261,23 +273,21 @@ function Area(name, type, supply, power, castle, hasPort, defaultController, ava
 	}
 }
 
+
+
 function Army() {
 	this.units = new Array();
 }
 
+
+
 function Unit(type, controller) {
-	this.type = 0; //1 = footman, 2 = knight, 3 = ship, 4 = siege, 5 = thatThingThatDefendsCastles. Herança representaria melhor...
+	this.type = 0; //1 = footman, 2 = knight, 3 = ship, 4 = siege, 5 = neutral
 	this.routed = false;
 	this.controller = controller;
 }
 
-function WesterosCard() {
-	this.name = "";
-}
 
-function WildlingCard() {
-	this.name = "";
-}
 
 function HouseCard(name, power, swords, towers, text, effect) {
 	this.name = name;
@@ -294,3 +304,21 @@ function HouseCard(name, power, swords, towers, text, effect) {
 		this.available = false;
 	};
 }
+
+
+
+function WesterosCard(name, wildling, text) {
+	this.name = name;
+	this.wildling = wildling;
+	this.text = text;
+}
+
+
+
+function WildlingCard(name, lowestBidderText, everyoneElseText, highestBidderText) {
+	this.name = name;
+	this.lowestBidderText = lowestBidderText;
+	this.everyoneElseText = everyoneElseText;
+	this.highestBidderText = highestBidderText;
+}
+
