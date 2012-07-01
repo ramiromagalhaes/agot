@@ -10,6 +10,9 @@ var stateMachine = new GameStateMachine(game);
 var setupState = new GameState(stateMachine, 'Setup');
 setupState.start = function() {
 	//do lots of stuff to setup the board and players
+	//setup NPCs
+	//setup tracks
+	//setup units
 	return assignState;
 };
 
