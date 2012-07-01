@@ -244,7 +244,7 @@ function Board() {
 
 
 
-function Area(name, type, supply, power, castle, hasPort, defaultController, available) {
+function Area(name, type, supply, power, castle, hasPort, defaultController) {
 	this.name = name;
 	this.type = type; //0 = land, 1 = sea
 
@@ -255,21 +255,8 @@ function Area(name, type, supply, power, castle, hasPort, defaultController, ava
 
 	if(typeof(defaultController)==='undefined') {
 		defaultController = null;
-	}
-	this.defaultController = defaultController;
-	this.currentController = defaultController;
-
-	if(typeof(available)==='undefined') {
-		this.available = true;
 	} else {
-		this.available = available;
-	}
-
-
-
-	this.setCurrentController = function(aHouse) {
-		if(typeof(aHouse)==='undefined') aHouse = this.defaultController;
-		this.currentController = aHouse;
+		this.defaultController = defaultController;
 	}
 }
 
@@ -277,6 +264,7 @@ function Area(name, type, supply, power, castle, hasPort, defaultController, ava
 
 function Army() {
 	this.units = new Array();
+	this.controller = null;
 }
 
 
@@ -285,6 +273,15 @@ function Unit(type, controller) {
 	this.type = 0; //1 = footman, 2 = knight, 3 = ship, 4 = siege, 5 = neutral
 	this.routed = false;
 	this.controller = controller;
+}
+
+
+
+function Occupation(area, occupiers) {
+	this.area = null;
+	this.occupiers = null;
+	this.contestants = null; //should I use this attribute to controll combat?
+	this.house = null; //occupant house
 }
 
 

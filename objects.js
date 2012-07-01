@@ -7,7 +7,37 @@ var stateMachine = new GameStateMachine(game);
 
 
 //Game states (phases)
-var setupState = new GameState(stateMachine, 'Setup');
+var setupState3Players = new GameState(stateMachine, 'Setup');
+setupState.start = function() {
+	//do lots of stuff to setup the board and players
+	//setup NPCs
+	//setup tracks
+	//setup units
+	return assignState;
+};
+
+
+var setupState4Players = new GameState(stateMachine, 'Setup');
+setupState.start = function() {
+	//do lots of stuff to setup the board and players
+	//setup NPCs
+	//setup tracks
+	//setup units
+	return assignState;
+};
+
+
+var setupState5Players = new GameState(stateMachine, 'Setup');
+setupState.start = function() {
+	//do lots of stuff to setup the board and players
+	//setup NPCs
+	//setup tracks
+	//setup units
+	return assignState;
+};
+
+
+var setupState6Players = new GameState(stateMachine, 'Setup');
 setupState.start = function() {
 	//do lots of stuff to setup the board and players
 	//setup NPCs
