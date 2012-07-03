@@ -1,15 +1,10 @@
-var game = new Game(1, 3);
-
-
-
-var stateMachine = new GameStateMachine(game);
-
-
-
 //Game states (phases)
 var setupState3Players = new GameState(stateMachine, 'Setup');
 setupState.start = function() {
 	//do lots of stuff to setup the board and players
+	var gameStats = stateMachine.game.gameStats;
+	
+
 	//setup NPCs
 	//setup tracks
 	//setup units
