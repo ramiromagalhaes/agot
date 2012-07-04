@@ -213,26 +213,6 @@ function GameStats() {
 
 
 
-function GameState(stateMachine, name) {
-	this.stateMachine = stateMachine;
-	this.name = name;
-	//maybe some functions will fit here.
-}
-
-
-
-function GameStateMachine(game) {
-	this.game = game;
-	this.currentState = null; //setup, westeros (1, 2, 3, wildlings), assign orders, execute orders (raid, march, combat, consolidate, cleanup)
-
-	this.fireEvent = function(event, params) { //event should be the function name to call on the state
-		this.currentState = this.currentState[event](params);
-	}
-
-}
-
-
-
 function House(name, defaultIronThrone, defaultFiefdom, defaultKingsCourt, defaultSupply, defaultVictory, cards) {
 	this.name = name;
 	this.defaultIronThrone = defaultIronThrone;
@@ -335,3 +315,146 @@ function WildlingCard(name, lowestBidderText, everyoneElseText, highestBidderTex
 	this.highestBidderText = highestBidderText;
 }
 
+
+
+function GameStateMachine(game) {
+	this.game = game;
+	this.currentState = null; //setup, westeros (1, 2, 3, wildlings), assign orders, execute orders (raid, march, combat, consolidate, cleanup)
+
+	this.fireEvent = function(event, params) { //event should be the function name to call on the state
+		this.currentState = this.currentState[event](params);
+	}
+
+}
+
+
+
+function GameState(stateMachine, name) {
+	this.stateMachine = stateMachine;
+	this.name = name;
+	//maybe some functions will fit here.
+}
+
+
+
+function Setup3PlayerGame() {
+	this.start = function() {
+		//do lots of stuff to setup the board and players
+		var gameStats = stateMachine.game.gameStats;
+
+		return null;
+	};
+}
+
+function Setup4PlayerGame() {
+	this.start = function() {
+		//do lots of stuff to setup the board and players
+		var gameStats = stateMachine.game.gameStats;
+
+		return null;
+	};
+}
+
+function Setup5PlayerGame() {
+	this.start = function() {
+		//do lots of stuff to setup the board and players
+		var gameStats = stateMachine.game.gameStats;
+
+		return null;
+	};
+}
+
+function Setup6PlayerGame() {
+	this.start = function() {
+		//do lots of stuff to setup the board and players
+		var gameStats = stateMachine.game.gameStats;
+
+		return null;
+	};
+}
+
+
+
+function WesterosState() {
+	this.deckToDraw = 0;
+
+	this.start = function() {
+		this.deckToDraw++;
+
+		//draw from deck #this.deckToDraw
+		//resolve card
+
+		if (this.deckToDraw >= 3) {
+			westerosState.deckToDraw = 0;
+			return assignState;
+		} else {
+			return westerosState;
+		}
+	};
+}
+
+
+
+function AssignState() {
+	this.playersDone = new Array();
+
+	this.isDone = function() {
+		return this.playersDone.length === this.stateMachine.game.players.length;
+	}
+
+	this.start = function() {
+		if (this.isDone()) {
+			//receive player orders
+			//checks if all possible orders were correctly given
+			return null;
+		} else {
+			//ask players for their orders
+			return null;
+		}
+	};
+
+	this.playerDone = function(player) { //todo find a way to notify that a certain player is done and pass it as parameter
+		for (var i = 0; i < this.stateMachine.game.players.length; i++) {
+			if (this.playersDone[i].name === player.name) {
+				return null;
+			}
+		}
+
+		this.playersDone.push(player);
+		return this.start(); //todo should I, instead of calling this here, post a 'start' event on the StateMachine and let it consume the event?
+	};
+
+}
+
+
+
+function AssignState() {
+	this.start = function() {
+		//reveal orders
+		//can a player use Raven? Ask what if he wants to use it and what for.
+		this.ravenUsage(); //todo should I, instead of calling this here, post an event on the StateMachine and let it consume it?
+		return null;
+	};
+
+	this.ravenUsage = function(use) { //0 (or anything else) == no; 1 == yes, change order; -1 == yes, view next wilding card
+		if (use === 1) {
+			//allow player to change one of his orders
+		} else if (use === -1) {
+			//show next wildling to player
+		}
+
+		return this.postRaven(); //todo should I, instead of calling this here, post an event on the StateMachine and let it consume it?
+	};
+
+	this.postRaven = function() {
+		//in player order
+		//	execute raid orders
+		//	execute march orders (no combat/with combat - add power, use house cards, use sword, add final power, resolve victory, retreat)
+		//	execute consolidate power orders
+		//	more orders?
+		//		yes - repeat
+		//		no  - cleanup
+		return null;
+	};
+
+}
