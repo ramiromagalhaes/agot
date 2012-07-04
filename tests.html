@@ -24,9 +24,6 @@ var game = new Game(1, 3);
 
 
 
-var stateMachine = new GameStateMachine(game);
-
-
 //Players
 var p1 = new Player('P1', stark);
 var p2 = new Player('P2', lannister);
@@ -44,7 +41,7 @@ game.addPlayer(p3);
 
 
 var gameStats = new GameStats();
-gameStats.supply = new Array(
+gameStats.supply.rank = new Array(
 	null,
 	[lannister],
 	[stark],
@@ -72,6 +69,15 @@ log(gameStats.getSupplyOfHouse(stark) === 5);
 log(gameStats.getSupplyOfHouse(lannister) === 6);
 log(gameStats.getSupplyOfHouse(baratheon) === 6);
 
+var stateMachine = new GameStateMachine(game);
+stateMachine.currentState = new Setup3PlayerGame();
+stateMachine.fireEvent('start');
+
+log(game.gameStats.ironThrone.getRank()[0].name == baratheon.name);
+log(game.gameStats.ironThrone.getRank()[1].name == lannister.name);
+log(game.gameStats.ironThrone.getRank()[2].name == stark.name);
+
+/*
 log(stateMachine.currentState.name);
 stateMachine.fireEvent('start');
 log(stateMachine.currentState.name);
@@ -93,6 +99,7 @@ stateMachine.fireEvent('start');
 log(stateMachine.currentState.name);
 stateMachine.fireEvent('start');
 log(stateMachine.currentState.name);
+*/
 
 //]]></script>
 

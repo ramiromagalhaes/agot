@@ -259,11 +259,12 @@ function House(name, defaultIronThrone, defaultFiefdom, defaultKingsCourt, defau
 
 
 function Board() {
-	this.areas = new Array(0); //12 mar, 38 terra = 50 áreas
-	this.adjacency = new Array(this.areas.length);
+	this.areaCount = 50; //12 sea, 38 land = 50
+	this.areas = new Array();
+	this.adjacency = new Array();
 
-	for (var i = 0; i < this.areas.length; i++) {
-		this.adjacency[i].push(new Array(this.areas.length));
+	for (var i = 0; i < this.areaCount; i++) {
+		this.adjacency.push(new Array(this.areaCount));
 	}
 
 	this.addArea = function(area) {
@@ -271,8 +272,13 @@ function Board() {
 		this.areas.push(area);
 	};
 
-	this.addAdjacency = function(area, areas) {
+	this.setAdjacency = function(area, adjacents) {
+		for (var i = 0; i < adjacents.length; i++) {
+			this.adjacency[area.id][adjacents[i].id] = true;
+			this.adjacency[adjacents[i].id][area.id] = true;
+		}
 	};
+
 }
 
 
