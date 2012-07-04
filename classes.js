@@ -1,6 +1,7 @@
 function Game(id, amountPlayers) {
 	this.id = 0;
 	this.players = new Array(0);
+	this.gameStats = new GameStats(amountPlayers);
 	this.allowedHousesArray = new Array(
 		['Stark', 'Lannister', 'Baratheon'],
 		['Stark', 'Lannister', 'Baratheon', 'Greyjoy'],
@@ -23,9 +24,13 @@ function Game(id, amountPlayers) {
 		return this.allowedHousesArray[index];
 	};
 
+	this.getPlayers = function() {
+		return this.players.length;
+	};
+
 	this.addPlayer = function(player) {
 		if (this.allowedHouses().indexOf(player.house.name) === -1) {
-			throw 'No player can choose house ' + player.house.name + ' in a game with ' + this.players.length + ' players.';
+			throw 'No player can choose house ' + player.house.name + ' in a game with ' + this.getPlayers() + ' players.'; //todo message should say what houses are allowed
 		}
 		if (this.players.indexOf(player) >= 0) { //todo fixme this 'if' is not working
 			throw 'Player ' + player.name + ' was already added to the game.';
@@ -116,7 +121,36 @@ function Player(name, house) {
 
 
 
-function MultiplayerRankTracker(minPosition, maxPosition) {
+function SingleRankTracker(amountPlayers) {
+	this.amountPlayers = amountPlayers;
+	this.rank = new Array(6);
+
+	this.setPosition = function(position, house) {
+		this.rank[position] = house;
+	};
+
+	this.consolidate = function() {
+		var j = 0;
+		var newRank = new Array(this.amountPlayers);
+		for (var i = 0; i < this.rank.length; i++) {
+			if (this.rank[i] === null || typeof(this.rank[i]) === 'undefined') {
+				continue;
+			}
+
+			newRank[j++] = this.rank[i];
+		}
+		this.rank = newRank;
+	};
+
+	this.getRank = function() {
+		this.consolidate();
+		return this.rank;
+	};
+};
+
+
+
+function MultiRankTracker(minPosition, maxPosition) {
 	this.minimum = minPosition;
 	this.maximum = maxPosition;
 	this.rank = new Array(this.maximum - this.minimum + 1);
@@ -183,15 +217,14 @@ function MultiplayerRankTracker(minPosition, maxPosition) {
 
 
 
-function GameStats() {
-	this.playersCount = 6;
+function GameStats(amountPlayers) {
 	this.wildlings = 0;
-	this.ironThrone = new Array(this.playersCount);
-	this.fiefdom = new Array(this.playersCount);
-	this.kingsCourt = new Array(this.playersCount);
+	this.ironThrone = new SingleRankTracker(amountPlayers);
+	this.fiefdom = new SingleRankTracker(amountPlayers);
+	this.kingsCourt = new SingleRankTracker(amountPlayers);
 
-	this.victory = new MultiplayerRankTracker(1, 7);
-	this.supply = new MultiplayerRankTracker(0, 6);
+	this.victory = new MultiRankTracker(1, 7);
+	this.supply = new MultiRankTracker(0, 6);
 
 	this.setSupply = function(supply, house) {
 		this.supply.setPosition(supply, house);
@@ -226,21 +259,27 @@ function House(name, defaultIronThrone, defaultFiefdom, defaultKingsCourt, defau
 
 
 function Board() {
-	this.areas = new Array(50); //12 mar, 38 terra = 50 áreas
-	this.adjacency = 0;
+	this.areas = new Array(0); //12 mar, 38 terra = 50 áreas
+	this.adjacency = new Array(this.areas.length);
 
-	this.buildAdjacencyMatrix = function() {
-		this.adjacency = new Array(this.areas.length);
-		for (var i = 0; i < this.areas.length; i++) {
-			this.adjacency[i] = new Array(this.areas.length);
-		}
-		return this.adjacency;
+	for (var i = 0; i < this.areas.length; i++) {
+		this.adjacency[i].push(new Array(this.areas.length));
+	}
+
+	this.addArea = function(area) {
+		area.id = this.areas.length;
+		this.areas.push(area);
+	};
+
+	this.addAdjacency = function(area, areas) {
 	};
 }
 
 
 
 function Area(name, type, supply, power, castle, hasPort, defaultController) {
+	this.id = 0; //used to index this Area in the Board.
+
 	this.name = name;
 	this.type = type; //0 = land, 1 = sea
 
@@ -329,49 +368,76 @@ function GameStateMachine(game) {
 
 
 
-function GameState(stateMachine, name) {
-	this.stateMachine = stateMachine;
-	this.name = name;
-	//maybe some functions will fit here.
-}
+//Got some info about inheritance from:
+//	http://blog.jcoglan.com/2007/07/23/writing-a-linked-list-in-javascript/
+//	http://phrogz.net/js/classes/OOPinJS2.html
 
 
 
-function Setup3PlayerGame() {
-	this.start = function() {
-		//do lots of stuff to setup the board and players
-		var gameStats = stateMachine.game.gameStats;
+function GameState(machine, stateName) {
+	this.stateMachine = machine;
+	this.name = stateName;
+};
 
-		return null;
-	};
-}
 
-function Setup4PlayerGame() {
-	this.start = function() {
-		//do lots of stuff to setup the board and players
-		var gameStats = stateMachine.game.gameStats;
 
-		return null;
-	};
-}
+function Setup3PlayerGame() {};
+Setup3PlayerGame.prototype = new GameState();
+Setup3PlayerGame.prototype.constructor = Setup3PlayerGame;
+Setup3PlayerGame.prototype.setGameStats = function() {
+	var game = stateMachine.game;
+	var gameStats = game.gameStats;
 
-function Setup5PlayerGame() {
-	this.start = function() {
-		//do lots of stuff to setup the board and players
-		var gameStats = stateMachine.game.gameStats;
+	for (var i = 0; i < game.getPlayers(); i++) {
+		var theHouse = game.players[i].house;
 
-		return null;
-	};
-}
+		gameStats.ironThrone.setPosition(theHouse.defaultIronThrone, theHouse);
+		gameStats.fiefdom.setPosition(theHouse.defaultFiefdom, theHouse);
+		gameStats.kingsCourt.setPosition(theHouse.defaultKingsCourt, theHouse);
+		gameStats.setSupply(theHouse.defaultSupply, theHouse);
+		gameStats.setVictory(theHouse.defaultVictory, theHouse);
+	}
+};
+Setup3PlayerGame.prototype.start = function() {
+	this.setGameStats();
 
-function Setup6PlayerGame() {
-	this.start = function() {
-		//do lots of stuff to setup the board and players
-		var gameStats = stateMachine.game.gameStats;
+	//setup the game board
 
-		return null;
-	};
-}
+	return null;
+};
+
+
+
+function Setup4PlayerGame() {};
+Setup4PlayerGame.prototype = new Setup3PlayerGame();
+Setup4PlayerGame.prototype.constructor = Setup4PlayerGame;
+Setup4PlayerGame.prototype.start = function() {
+	this.setGameStats();
+
+	return null;
+};
+
+
+
+function Setup5PlayerGame() {};
+Setup5PlayerGame.prototype = new Setup3PlayerGame();
+Setup5PlayerGame.prototype.constructor = Setup5PlayerGame;
+Setup5PlayerGame.prototype.start = function() {
+	this.setGameStats();
+
+	return null;
+};
+
+
+
+function Setup6PlayerGame() {};
+Setup6PlayerGame.prototype = new Setup3PlayerGame();
+Setup6PlayerGame.prototype.constructor = Setup6PlayerGame;
+Setup6PlayerGame.prototype.start = function() {
+	this.setGameStats();
+
+	return null;
+};
 
 
 
