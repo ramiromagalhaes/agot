@@ -147,7 +147,7 @@ board.setAdjacency(arbor, [redwyneStraights, westSummerSea]);
 
 board.setAdjacency(bayOfIce, [castleBlack, winterfell, stonyShore, greywaterWatch, sunsetSea, flintsFinger]);
 board.setAdjacency(shiveringSea, [castleBlack, karhold, winterfell, whiteHarbor, widowsWatch, narrowSea]);
-board.setAdjacency(narrowsea, [shiveringSea, whiteHarbor, widowsWatch, moatCailin, fingers, twins, mountainsOfTheMoon, eyrie, crackclawPoint, shipbreakerBay]);
+board.setAdjacency(narrowSea, [shiveringSea, whiteHarbor, widowsWatch, moatCailin, fingers, twins, mountainsOfTheMoon, eyrie, crackclawPoint, shipbreakerBay]);
 board.setAdjacency(sunsetSea, [bayOfIce, flintsFinger, ironmansBay, goldenSound, searoadMarches, westSummerSea]);
 board.setAdjacency(ironmansBay, [sunsetSea, flintsFinger, seagard, pike, riverrun, goldenSound]);
 board.setAdjacency(goldenSound, [sunsetSea, ironmansBay, riverrun, lannisport, searoadMarches]);
