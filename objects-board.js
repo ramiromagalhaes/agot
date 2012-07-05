@@ -145,5 +145,15 @@ board.setAdjacency(saltShore, [sunspear, yronwood, starfall, eastSummerSea]);
 board.setAdjacency(starfall, [princesPass, yronwood, saltShore, westSummerSea, eastSummerSea]);
 board.setAdjacency(arbor, [redwyneStraights, westSummerSea]);
 
-//board.setAdjacency(, []);
 board.setAdjacency(bayOfIce, [castleBlack, winterfell, stonyShore, greywaterWatch, sunsetSea, flintsFinger]);
+board.setAdjacency(shiveringSea, [castleBlack, karhold, winterfell, whiteHarbor, widowsWatch, narrowSea]);
+board.setAdjacency(narrowsea, [shiveringSea, whiteHarbor, widowsWatch, moatCailin, fingers, twins, mountainsOfTheMoon, eyrie, crackclawPoint, shipbreakerBay]);
+board.setAdjacency(sunsetSea, [bayOfIce, flintsFinger, ironmansBay, goldenSound, searoadMarches, westSummerSea]);
+board.setAdjacency(ironmansBay, [sunsetSea, flintsFinger, seagard, pike, riverrun, goldenSound]);
+board.setAdjacency(goldenSound, [sunsetSea, ironmansBay, riverrun, lannisport, searoadMarches]);
+board.setAdjacency(blackwaterBay, [crackclawPoint, kingsLanding, kingswood, shipbreakerBay]);
+board.setAdjacency(shipbreakerBay, [narrowSea, dragonstone, crackclawPoint, blackwaterBay, kingswood, stormsEnd, eastSummerSea]);
+board.setAdjacency(seaOfDorne, [stormsEnd, boneway, sunspear, yronwood, eastSummerSea]);
+board.setAdjacency(redwyneStraights, [highgarden, oldtown, threeTowers, arbor, westSummerSea]);
+board.setAdjacency(westSummerSea, [sunsetSea, searoadMarches, highgarden, threeTowers, redwyneStraights, starfall, arbor, eastSummerSea]);
+board.setAdjacency(eastSummerSea, [shipbreakerBay, stormsEnd, seaOfDorne, sunspear, saltShore, starfall, westSummerSea]);
