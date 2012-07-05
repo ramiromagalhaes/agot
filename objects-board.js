@@ -93,6 +93,18 @@ board.addArea(yronwood);
 board.addArea(saltShore);
 board.addArea(starfall);
 board.addArea(arbor);
+board.addArea(bayOfIce);
+board.addArea(shiveringSea);
+board.addArea(narrowSea);
+board.addArea(sunsetSea);
+board.addArea(ironmansBay);
+board.addArea(goldenSound);
+board.addArea(blackwaterBay);
+board.addArea(shipbreakerBay);
+board.addArea(seaOfDorne);
+board.addArea(redwyneStraights);
+board.addArea(westSummerSea);
+board.addArea(eastSummerSea);
 
 board.setAdjacency(castleBlack, [bayOfIce, karhold, winterfell, shiveringSea]);
 board.setAdjacency(karhold, [castleBlack, winterfell, shiveringSea]);
