@@ -258,10 +258,19 @@ function House(name, defaultIronThrone, defaultFiefdom, defaultKingsCourt, defau
 
 
 
+function Occupation(area, occupiers) {
+	this.area = null;
+	this.occupiers = null;
+	this.house = null; //occupant house
+}
+
+
+
 function Board() {
 	this.areaCount = 50; //12 sea, 38 land = 50
 	this.areas = new Array();
 	this.adjacency = new Array();
+	this.occupations = new Array();
 
 	for (var i = 0; i < this.areaCount; i++) {
 		this.adjacency.push(new Array(this.areaCount));
@@ -279,6 +288,10 @@ function Board() {
 		}
 	};
 
+	this.addOccupation = function(occupation) {
+		//todo lots of checks and verifications
+		this.occupations.push(occupation);
+	};
 }
 
 
@@ -287,12 +300,12 @@ function Area(name, type, supply, power, castle, hasPort, defaultController) {
 	this.id = 0; //used to index this Area in the Board.
 
 	this.name = name;
-	this.type = type; //0 = land, 1 = sea
+	this.type = type; //0 = land, 1 = sea, -1 port
+	//ports will be treated like a normal area, but with special features
 
 	this.supply = supply;
 	this.power = power;
 	this.castle = castle; //0 = none, 1 = castle, 2 = stronghold
-	this.hasPort = false;
 
 	if(typeof(defaultController)==='undefined') {
 		defaultController = null;
@@ -303,27 +316,69 @@ function Area(name, type, supply, power, castle, hasPort, defaultController) {
 
 
 
-function Army() {
-	this.units = new Array();
-	this.controller = null;
-}
-
-
-
 function Unit(type, controller) {
-	this.type = 0; //1 = footman, 2 = knight, 3 = ship, 4 = siege, 5 = neutral
 	this.routed = false;
 	this.controller = controller;
 }
 
+function Footman() {};
+Footman.prototype = new Unit();
+Footman.prototype.constructor = Unit;
+Footman.prototype.strength = function() {
+	return 1;
+};
+
+function Knight() {};
+Knight.prototype = new Unit();
+Knight.prototype.constructor = Unit;
+Knight.prototype.strength = function() {
+	return 2;
+};
+
+function Ship() {};
+Ship.prototype = new Unit();
+Ship.prototype.constructor = Unit;
+Ship.prototype.strength = function() {
+	return 1;
+};
+
+function Siege() {};
+Siege.prototype = new Unit();
+Siege.prototype.constructor = Unit;
+Siege.prototype.strength = function(embattledArea) {
+	if (embattledArea.castle === 0) {
+		return 0;
+	} else {
+		return 4;
+	}
+};
+
+function Garrison(strength) {
+	this.strength = strength;
+};
+Garrison.prototype = new Unit();
+Garrison.prototype.constructor = Garrison;
+Garrison.prototype.strength = function() {
+	return this.strength;
+};
 
 
-function Occupation(area, occupiers) {
-	this.area = null;
-	this.occupiers = null;
-	this.contestants = null; //should I use this attribute to controll combat?
-	this.house = null; //occupant house
+
+function Army() {
+	this.units = new Array();
 }
+Army.prototype = new Unit();
+Army.prototype.constructor = Army;
+Army.prototype.strength = function(embattledArea) {
+	var armyStrength = 0;
+	for (var i = 0; i < this.units.length; i++) {
+		armyStrength += this.units[i].strength(embattledArea);
+	}
+	return armyStrength;
+};
+Army.prototype.size = function() {
+	this.units.length;
+};
 
 
 
@@ -407,7 +462,8 @@ Setup3PlayerGame.prototype.setGameStats = function() {
 Setup3PlayerGame.prototype.start = function() {
 	this.setGameStats();
 
-	//setup the game board
+	//setup the garrisons and neutrals
+	//setup players units
 
 	return null;
 };
