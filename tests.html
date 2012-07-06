@@ -12,7 +12,13 @@
 <script src="objects.js" type="text/javascript" charset="UTF-8"></script>
 
 <script type="text/javascript" charset="UTF-8">//<![CDATA[
-function log(text) {
+function assert(expected, value) {
+	if (expected === value) {
+		return;
+	}
+
+	throw 'Expected: ' + expected.toString() + '; got: ' + value.toString();
+
 	var el = document.createElement('div');
 	el.textContent = text;
 	document.documentElement.appendChild(el);
@@ -65,41 +71,62 @@ gameStats.setSupply(5, lannister);
 gameStats.setSupply(6, baratheon);
 gameStats.setSupply(6, lannister);
 
-log(gameStats.getSupplyOfHouse(stark) === 5);
-log(gameStats.getSupplyOfHouse(lannister) === 6);
-log(gameStats.getSupplyOfHouse(baratheon) === 6);
+assert(gameStats.getSupplyOfHouse(stark), 5);
+assert(gameStats.getSupplyOfHouse(lannister), 6);
+assert(gameStats.getSupplyOfHouse(baratheon), 6);
 
 var stateMachine = new GameStateMachine(game);
 stateMachine.currentState = new Setup3PlayerGame();
 stateMachine.fireEvent('start');
 
-log(game.gameStats.ironThrone.getRank()[0].name == baratheon.name);
-log(game.gameStats.ironThrone.getRank()[1].name == lannister.name);
-log(game.gameStats.ironThrone.getRank()[2].name == stark.name);
+assert(game.gameStats.ironThrone.getRank()[0].name, baratheon.name);
+assert(game.gameStats.ironThrone.getRank()[1].name, lannister.name);
+assert(game.gameStats.ironThrone.getRank()[2].name, stark.name);
 
 /*
-log(stateMachine.currentState.name);
+assert(stateMachine.currentState.name);
 stateMachine.fireEvent('start');
-log(stateMachine.currentState.name);
+assert(stateMachine.currentState.name);
 stateMachine.fireEvent('start');
-log(stateMachine.currentState.name);
+assert(stateMachine.currentState.name);
 stateMachine.fireEvent('start');
-log(stateMachine.currentState.name);
+assert(stateMachine.currentState.name);
 stateMachine.fireEvent('start');
-log(stateMachine.currentState.name);
+assert(stateMachine.currentState.name);
 stateMachine.fireEvent('start');
-log(stateMachine.currentState.name);
+assert(stateMachine.currentState.name);
 stateMachine.fireEvent('start');
-log(stateMachine.currentState.name);
+assert(stateMachine.currentState.name);
 stateMachine.fireEvent('start');
-log(stateMachine.currentState.name);
+assert(stateMachine.currentState.name);
 stateMachine.fireEvent('start');
-log(stateMachine.currentState.name);
+assert(stateMachine.currentState.name);
 stateMachine.fireEvent('start');
-log(stateMachine.currentState.name);
+assert(stateMachine.currentState.name);
 stateMachine.fireEvent('start');
-log(stateMachine.currentState.name);
+assert(stateMachine.currentState.name);
 */
+
+var footman  = new Footman(stark);
+var knight   = new Knight(lannister);
+var ship     = new Ship(baratheon);
+var siege    = new Siege(stark);
+var garrison = new Garrison(null, 5);
+
+assert(footman.strength(), 1);
+assert(footman.controller.name, 'Stark');
+assert(knight.strength(), 2);
+assert(knight.controller.name, 'Lannister');
+assert(ship.strength(), 1);
+assert(ship.controller.name, 'Baratheon');
+//assert(siege.strength(), 4);
+assert(siege.controller.name, 'Stark');
+assert(garrison.strength(), 5);
+
+var army = new Army([footman, garrison]);
+assert(army.controller.name, 'Stark');
+assert(army.strength(), 1+5);
+
 
 //]]></script>
 
