@@ -28,14 +28,70 @@ var kingBeyond  = new WildlingCard('A King Beyond the Wall',
 	'Moves his tokens to the lowest position of every influence track.',
 	'In turn order, each player chooses either the Fiefdoms or King\'s Court influence track and moves his token to the lowest position of that track.',
 	'Moves his token to the top of one Influence track of this choice, then takes the appropriate Dominance token.');
+kingBeyond.takeEffect = function(playerVictory, gameStats, bidders, bids) { //bidders are Players ordered by bidding order; bids indexes are the same as the bidders
+	if (playerVictory) {
+		var highestBidder = bidders[0].house;
+		//get choice of player X between Iron Throne, Fiefdom or King's Court to move to the last position
+		var choice = 0; //-1: throne, 0: fiefdom, 1: court
+		switch (choice) {
+			case -1:
+				gameStats.ironThrone.moveToLastPosition( null ); //todo will fiefdom store players or houses???
+				break;
+			case 0:
+				gameStats.fiefdom.moveToLastPosition( null ); //todo will fiefdom store players or houses???
+				break;
+			case 1:
+				gameStats.kingsCourt.moveToLastPosition( null ); //todo will kingsCourt store players or houses???
+				break;
+		}
+	} else {
+		var lowestBidder =  bidders[bidders.length - 1].house;
+		gameStats.ironThrone.moveToLastPosition( lowestBidder );
+
+		var actors = gameStats.ironThrone.getRank();
+		for (var i = 0; i < actors.length; i++) {
+			//get choice of player X between Fiefdom or King's Court to move to the last position
+			var choice = 0; //0: fiefdom, 1: court
+			switch (choice) {
+				case 0:
+					gameStats.fiefdom.moveToLastPosition( null ); //todo will fiefdom store players or houses???
+					break;
+				case 1:
+					gameStats.kingsCourt.moveToLastPosition( null ); //todo will kingsCourt store players or houses???
+					break;
+			}
+		}
+	}
+};
+
+
+
 var crowKillers = new WildlingCard('Crow Killers',
 	'Replaces all of his Knights with available Footmen. Any Knight unable to be replaced is destroyed.',
 	'Replaces 2 of their Knights with available Footmen. Any Knight unable to be replaced is destroyed.',
 	'May immediately replace up to 2 of his Footmen, anywhere, with available Knights.');
+
+
+
 var skinChanger = new WildlingCard('Skinchanger Scout',
 	'Discards all available Power tokens.',
 	'Discards 2 available Power tokens, or as many as they are able.',
 	'All Power tokens he bid on this attack are immediately returned to his available Power.');
+skinChanger.takeEffect = function(playerVictory, gameStats, bidders, bids) {
+	if (playerVictory) {
+		var lowestBidder =  bidders[bidders.length - 1].house;
+		lowestBidder.discardPower(lowestBidder.powerTokens);
+
+		for (var i = 0; i < bidders.length - 1; i++) {
+			bidders[i].discardPower(2);
+		}
+	} else {
+		bidders[0].gainPower(bids[0]);
+	}
+};
+
+
+
 var preemptive  = new WildlingCard('Preemptive Raid',
 	'Chooses on of the following: A. Destroys 2 of his units anywhere. B. Is reduced 2 positions on his highest Influence track.',
 	'Nothing happens.',
@@ -52,7 +108,11 @@ var milkwater   = new WildlingCard('Massing on the Milkwater',
 	'If he has more than one House card in his hand, he discards all cards with the highest combat strength.',
 	'If they have more than one House card in their hand, they must choose and discard one of those cards.',
 	'Returns his entire House card discard pile into his hand.');
+
 var silence     = new WildlingCard('Silence at the Wall', 'Nothing happens.', 'Nothing happens.', 'Nothing happens.');
+silence.takeEffect = function(playerVictory, gameStats, bidders, bids) {
+};
+
 var rattleshirt = new WildlingCard('Rattleshirt\'s Raiders',
 	'Is reduced 2 positions on the Supply track (to no lower than 0). Then reconcile armies to their new Supply limits.',
 	'Is reduced 1 position on the Supply track (to no lower than 0). Then reconcile armies to their new Supply limits.',

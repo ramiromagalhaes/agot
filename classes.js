@@ -106,6 +106,13 @@ function Player(name, house) {
 		//todo use raven
 	};
 
+	this.discardPower = function(amount) {
+		this.powerTokens -= amount;
+		if (this.powerTokens < 0) {
+			this.powerTokens = 0;
+		}
+	}
+
 	this.usePower = function(amount) {
 		if (amount < 0) {
 			throw 'You can only use 0 or more Power tokens.';
@@ -132,11 +139,45 @@ function Player(name, house) {
 
 function SingleRankTracker(amountPlayers) {
 	this.amountPlayers = amountPlayers;
-	this.rank = new Array(6);
+	this.rank = new Array(6); //todo rank is storing Houses. Should it store Players instead?
 
 	this.setPosition = function(position, house) {
 		this.rank[position] = house;
 	};
+
+	this.moveToLastPosition = function(house) {
+		for (var i = 0; i < this.rank.length; i++) {
+			if (this.rank[i] === null || typeof(this.rank[i]) === 'undefined') {
+				continue;
+			}
+			if (this.rank[i].name === house.name) {
+				this.rank[i] = null;
+				this.rank.push(house);
+				break;
+			}
+		}
+
+		this.consolidate();
+	}
+
+	this.moveToFirstPosition = function(house) {
+		var j = 1;
+		var newRank = new Array(this.amountPlayers);
+
+		newRank[0] = house;
+
+		for (var i = 1; i < this.rank.length; i++) {
+			if (this.rank[i] === null || typeof(this.rank[i]) === 'undefined') {
+				continue;
+			}
+			if (this.rank[i].name === house.name) {
+				continue;
+			}
+
+			newRank[j++] = this.rank[i];
+		}
+		this.rank = newRank;
+	}
 
 	this.consolidate = function() {
 		var j = 0;
