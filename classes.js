@@ -30,10 +30,7 @@ function Game(id, amountPlayers) {
 
 	this.addPlayer = function(player) {
 		if (this.allowedHouses().indexOf(player.house.name) === -1) {
-			throw 'No player can choose house ' + player.house.name + ' in a game with ' + this.getPlayers() + ' players.'; //todo message should say what houses are allowed
-		}
-		if (this.players.indexOf(player) >= 0) { //todo fixme this 'if' is not working
-			throw 'Player ' + player.name + ' was already added to the game.';
+			throw 'No player can choose house ' + player.house.name + ' in a game with ' + this.getPlayers() + ' players.';
 		}
 
 		for (var i = 0; i < this.players.length; i++) {
@@ -86,15 +83,27 @@ function Player(name, house) {
 	}
 
 	this.playSword = function() {
-		if (this.sword != 0) {
-			throw 'You cannot use the sword because you don\'t own it or it has already been used.';
+		if (this.sword === 1) {
+			throw 'Player ' + this.name + ' cannot use the sword because he has already used it.'
 		}
+		if (this.sword === -1) {
+			throw 'Player ' + this.name + ' cannot use the sword because he does not own it.'
+		}
+
+		this.sword = 1;
+		//todo use sword
 	};
 
 	this.playRaven = function() {
-		if (this.raven != 0) {
-			throw 'You cannot use the raven because you don\'t own it or it has already been used.';
+		if (this.raven === 1) {
+			throw 'Player ' + this.name + ' cannot use the raven because he has already used it.'
 		}
+		if (this.raven === -1) {
+			throw 'Player ' + this.name + ' cannot use the raven because he does not own it.'
+		}
+
+		this.raven = 1;
+		//todo use raven
 	};
 
 	this.usePower = function(amount) {
@@ -241,7 +250,6 @@ function GameStats(amountPlayers) {
 	this.getVictoryOfHouse = function(house) {
 		return this.victory.getPositionOfHouse(house);
 	};
-
 }
 
 
@@ -254,14 +262,6 @@ function House(name, defaultIronThrone, defaultFiefdom, defaultKingsCourt, defau
 	this.defaultSupply = defaultSupply;
 	this.defaultVictory = defaultVictory;
 	this.cards = cards;
-}
-
-
-
-function Occupation(area, occupiers) {
-	this.area = null;
-	this.occupiers = null;
-	this.house = null; //occupant house
 }
 
 
@@ -279,6 +279,7 @@ function Board() {
 	this.addArea = function(area) {
 		area.id = this.areas.length;
 		this.areas.push(area);
+		this.occupation.push(null);
 	};
 
 	this.setAdjacency = function(area, adjacents) {
@@ -288,10 +289,6 @@ function Board() {
 		}
 	};
 
-	this.addOccupation = function(occupation) {
-		//todo lots of checks and verifications
-		this.occupations.push(occupation);
-	};
 }
 
 
@@ -364,21 +361,29 @@ Garrison.prototype.strength = function() {
 
 
 
-function Army() {
-	this.units = new Array();
-}
-Army.prototype = new Unit();
-Army.prototype.constructor = Army;
-Army.prototype.strength = function(embattledArea) {
-	var armyStrength = 0;
-	for (var i = 0; i < this.units.length; i++) {
-		armyStrength += this.units[i].strength(embattledArea);
+function Army(units) {
+	this.controller = units[0].controller;
+	for (var i = 1; i < units.length; i++) {
+		if (units[i].controller.name === this.controller) {
+			continue;
+		}
+		throw 'All units in an Army should be controlled by the same house.';
 	}
-	return armyStrength;
-};
-Army.prototype.size = function() {
-	this.units.length;
-};
+	this.units = units;
+
+
+	this.strength = function(embattledArea) {
+		var armyStrength = 0;
+		for (var i = 0; i < this.units.length; i++) {
+			armyStrength += this.units[i].strength(embattledArea);
+		}
+		return armyStrength;
+	};
+
+	this.size = function() {
+		return this.units.length;
+	};
+}
 
 
 

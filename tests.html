@@ -12,9 +12,13 @@
 <script src="objects.js" type="text/javascript" charset="UTF-8"></script>
 
 <script type="text/javascript" charset="UTF-8">//<![CDATA[
-function log(text) {
+function assert(expected, value) {
+	if (expected, value) {
+		return;
+	}
+
 	var el = document.createElement('div');
-	el.textContent = text;
+	el.textContent = 'Expected ' + expected.toString() + ' but got ' + value.toString();
 	document.documentElement.appendChild(el);
 }
 
@@ -65,40 +69,40 @@ gameStats.setSupply(5, lannister);
 gameStats.setSupply(6, baratheon);
 gameStats.setSupply(6, lannister);
 
-log(gameStats.getSupplyOfHouse(stark) === 5);
-log(gameStats.getSupplyOfHouse(lannister) === 6);
-log(gameStats.getSupplyOfHouse(baratheon) === 6);
+assert(gameStats.getSupplyOfHouse(stark), 5);
+assert(gameStats.getSupplyOfHouse(lannister), 6);
+assert(gameStats.getSupplyOfHouse(baratheon), 6);
 
 var stateMachine = new GameStateMachine(game);
 stateMachine.currentState = new Setup3PlayerGame();
 stateMachine.fireEvent('start');
 
-log(game.gameStats.ironThrone.getRank()[0].name == baratheon.name);
-log(game.gameStats.ironThrone.getRank()[1].name == lannister.name);
-log(game.gameStats.ironThrone.getRank()[2].name == stark.name);
+assert(game.gameStats.ironThrone.getRank()[0].name, baratheon.name);
+assert(game.gameStats.ironThrone.getRank()[1].name, lannister.name);
+assert(game.gameStats.ironThrone.getRank()[2].name, stark.name);
 
 /*
-log(stateMachine.currentState.name);
+assert(stateMachine.currentState.name);
 stateMachine.fireEvent('start');
-log(stateMachine.currentState.name);
+assert(stateMachine.currentState.name);
 stateMachine.fireEvent('start');
-log(stateMachine.currentState.name);
+assert(stateMachine.currentState.name);
 stateMachine.fireEvent('start');
-log(stateMachine.currentState.name);
+assert(stateMachine.currentState.name);
 stateMachine.fireEvent('start');
-log(stateMachine.currentState.name);
+assert(stateMachine.currentState.name);
 stateMachine.fireEvent('start');
-log(stateMachine.currentState.name);
+assert(stateMachine.currentState.name);
 stateMachine.fireEvent('start');
-log(stateMachine.currentState.name);
+assert(stateMachine.currentState.name);
 stateMachine.fireEvent('start');
-log(stateMachine.currentState.name);
+assert(stateMachine.currentState.name);
 stateMachine.fireEvent('start');
-log(stateMachine.currentState.name);
+assert(stateMachine.currentState.name);
 stateMachine.fireEvent('start');
-log(stateMachine.currentState.name);
+assert(stateMachine.currentState.name);
 stateMachine.fireEvent('start');
-log(stateMachine.currentState.name);
+assert(stateMachine.currentState.name);
 */
 
 //]]></script>

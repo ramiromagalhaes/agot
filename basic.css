@@ -17,7 +17,7 @@ table thead tr td.cardname {
 	width: 7em;
 }
 
-#wrapper {
+#dashboard {
 	min-width: 80em;
 }
 
@@ -41,6 +41,7 @@ table thead tr td.cardname {
 
 #map img {
 	width: 100%;
+	border: 1px solid black;
 }
 
 .playerRank {
