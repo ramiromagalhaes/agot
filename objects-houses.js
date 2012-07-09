@@ -5,7 +5,7 @@ var baratheon = new House('Baratheon', 1, 5, 4, 2, 1, null);
 var greyjoy   = new House('Greyjoy',   5, 1, 6, 2, 1, null);
 var tyrell    = new House('Tyrell',    6, 2, 5, 2, 1, null);
 var martell   = new House('Martell',   4, 3, 3, 2, 1, null);
-var noHouse   = null;
+var noHouse   = new House('Neutral',   0, 0, 0, 0, 0, null);
 
 //Cards legend ------------------------------------> p  s  t  text handler
 //Cards - Stark

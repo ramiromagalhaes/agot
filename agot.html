@@ -17,164 +17,206 @@
 </head>
 
 <body>
-	<div id="wrapper">
-	<div id="map">
-		<img src="http://cf.geekdo-images.com/images/pic1197083.jpg"/>
+	<div id="dashboard">
+		<div id="map">
+			<img src="board.svg" />
+		</div>
+
+		<div id="stats">
+			<div id="player">
+				<h1>Tyrell</h1>
+				<ul>
+					<li><span>Power tokens: </span><span id="playerPowerTokens">5</span></li>
+					<li><span>Iron Throne: </span><span id="playerIronThroneStatus">(not yours)</span></li>
+					<li><span>Valerian steel sword: </span><span id="playerSwordStatus">not used</span></li>
+					<li><span>Raven: </span><span id="playerRavenStatus">used</span></li>
+				</ul>
+				<h2>Cards</h2>
+				<table id="playerCards">
+					<thead>
+						<tr>
+							<td class="cardname">Name</td>
+							<td>P</td>
+							<td>S</td>
+							<td>T</td>
+							<td>Effects</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Tywin Lannister</td>
+							<td>4</td>
+							<td>2</td>
+							<td>2</td>
+							<td>-</td>
+						</tr>
+						<tr>
+							<td>Tirion Lannister</td>
+							<td>4</td>
+							<td>2</td>
+							<td>2</td>
+							<td>-</td>
+						</tr>
+						<tr>
+							<td>Cersei Lannister</td>
+							<td>0</td>
+							<td>0</td>
+							<td>0</td>
+							<td>Does not care about you or your life. Bitches about being a woman. This card should have a long text so that we can see the effect of long texts on the interface.</td>
+						</tr>
+						<tr>
+							<td>Carta 4</td>
+							<td>4</td>
+							<td>2</td>
+							<td>2</td>
+							<td>-</td>
+						</tr>
+						<tr>
+							<td>Carta 5</td>
+							<td>4</td>
+							<td>2</td>
+							<td>2</td>
+							<td>-</td>
+						</tr>
+						<tr>
+							<td>Carta 6</td>
+							<td>4</td>
+							<td>2</td>
+							<td>2</td>
+							<td>-</td>
+						</tr>
+						<tr>
+							<td>Carta 7</td>
+							<td>4</td>
+							<td>0</td>
+							<td>0</td>
+							<td>Makes coffee every morning with toasts. Loves popcorn with bacon so mutch that won't give you any.</td>
+						</tr>
+					</tbody>
+				</table>
+				<h2>Orders</h2>
+				<ul>
+					<li>Raid(*): <span>2(1)</span></li>
+					<li>March(*): <span>2(1)</span></li>
+					<li>Defend(*): <span>2(1)</span></li>
+					<li>Support(*): <span>2(1)</span></li>
+					<li>Consolidate Power(*): <span>2(1)</span></li>
+				</ul>
+			</div>
+
+			<div id="influencetracks">
+				<h1>Influence</h1>
+				<div id="ironthrone" class="playerRank">
+					<h2>Iron Throne</h2>
+					<ol>
+						<li>Stark</li>
+						<li>Lannister</li>
+						<li>Baratheon</li>
+						<li>Greyjoy</li>
+						<li>Tyrell</li>
+						<li>Martel</li>
+					</ol>
+				</div>
+				<div id="fiefdom" class="playerRank">
+					<h2>Fiefdom</h2>
+					<ol>
+						<li>Stark</li>
+						<li>Lannister</li>
+						<li>Baratheon</li>
+						<li>Greyjoy</li>
+						<li>Tyrell</li>
+						<li>Martel</li>
+					</ol>
+				</div>
+				<div id="kingscourt" class="playerRank">
+					<h2>King's Court</h2>
+					<ol>
+						<li>Stark</li>
+						<li>Lannister</li>
+						<li>Baratheon</li>
+						<li>Greyjoy</li>
+						<li>Tyrell</li>
+						<li>Martel</li>
+					</ol>
+				</div>
+			</div>
+
+			<div id="supplytrack">
+				<h1>Supply</h1>
+				<ol start="0">
+					<li></li>
+					<li></li>
+					<li>Stark, Greyjoy</li>
+					<li>Lannister, Baratheon, Tyrell, Martel</li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ol>
+			</div>
+			<div id="victorytrack" class="playerRank">
+				<h1>Victory</h1>
+				<ol>
+					<li>Stark</li>
+					<li>Lannister</li>
+					<li>Baratheon</li>
+					<li>Greyjoy</li>
+					<li>Tyrell</li>
+					<li>Martel</li>
+				</ol>
+			</div>
+			<div id="roundtrack">
+				<span>Round:</span>
+				<span id="round">1</span>
+			</div>
+			<div id="wildlingstrack">
+				<h1>Wildlings</h1>
+				<span>Track: </span><span id="wildlings">0</span>
+			</div>
+
+		</div>
+		<br style="clear: both;"/>
 	</div>
 
-	<div id="stats">
-		<div id="player">
-			<h1>Tyrell</h1>
+	<div id="combat" style="display:none;">
+		<!--BETA layout -->
+		<div style="float: left;">
+			<span>Lannister</span><span>(you)</span>
 			<ul>
-				<li><span>Power tokens: </span><span id="playerPowerTokens">5</span></li>
-				<li><span>Iron Throne: </span><span id="playerIronThroneStatus">(not yours)</span></li>
-				<li><span>Valerian steel sword: </span><span id="playerSwordStatus">not used</span></li>
-				<li><span>Raven: </span><span id="playerRavenStatus">used</span></li>
+				<li>Knight (+2)</li>
+				<li>Footman (+1)</li>
 			</ul>
-			<h2>Cards</h2>
-			<table id="playerCards">
-				<thead>
-					<tr>
-						<td class="cardname">Name</td>
-						<td>P</td>
-						<td>S</td>
-						<td>T</td>
-						<td>Effects</td>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>Tywin Lannister</td>
-						<td>4</td>
-						<td>2</td>
-						<td>2</td>
-						<td>-</td>
-					</tr>
-					<tr>
-						<td>Tirion Lannister</td>
-						<td>4</td>
-						<td>2</td>
-						<td>2</td>
-						<td>-</td>
-					</tr>
-					<tr>
-						<td>Cersei Lannister</td>
-						<td>0</td>
-						<td>0</td>
-						<td>0</td>
-						<td>Does not care about you or your life. Bitches about being a woman. This card should have a long text so that we can see the effect of long texts on the interface.</td>
-					</tr>
-					<tr>
-						<td>Carta 4</td>
-						<td>4</td>
-						<td>2</td>
-						<td>2</td>
-						<td>-</td>
-					</tr>
-					<tr>
-						<td>Carta 5</td>
-						<td>4</td>
-						<td>2</td>
-						<td>2</td>
-						<td>-</td>
-					</tr>
-					<tr>
-						<td>Carta 6</td>
-						<td>4</td>
-						<td>2</td>
-						<td>2</td>
-						<td>-</td>
-					</tr>
-					<tr>
-						<td>Carta 7</td>
-						<td>4</td>
-						<td>0</td>
-						<td>0</td>
-						<td>Makes coffee every morning with toasts. Loves popcorn with bacon so mutch that won't give you any.</td>
-					</tr>
-				</tbody>
-			</table>
-			<h2>Orders</h2>
+			<form>
+				<div>
+					Choose a card:
+					<radiogroup>
+						<span style="display: block;"><input type="radio"><label>A card</label></span>
+						<span style="display: block;"><input type="radio"><label>A card</label></span>
+						<span style="display: block;"><input type="radio"><label>A card</label></span>
+						<span style="display: block;"><input type="radio"><label>A card</label></span>
+						<span style="display: block;"><input type="radio"><label>A card</label></span>
+						<span style="display: block;"><input type="radio"><label>A card</label></span>
+						<span style="display: block;"><input type="radio"><label>A card</label></span>
+					</radiogroup>
+					<input type="button" value="Start combat" />
+				</div>
+			</form>
+			<span>Final strength: 3</span>
+		</div>
+		<div>
+			<span>Stark</span><span></span>
 			<ul>
-				<li>Raid(*): <span>2(1)</span></li>
-				<li>March(*): <span>2(1)</span></li>
-				<li>Defend(*): <span>2(1)</span></li>
-				<li>Support(*): <span>2(1)</span></li>
-				<li>Consolidate Power(*): <span>2(1)</span></li>
+				<li>Footman (+1)</li>
+				<li>Garrison (+2)</li>
 			</ul>
-		</div>
-
-		<div id="influencetracks">
-			<h1>Influence</h1>
-			<div id="ironthrone" class="playerRank">
-				<h2>Iron Throne</h2>
-				<ol>
-					<li>Stark</li>
-					<li>Lannister</li>
-					<li>Baratheon</li>
-					<li>Greyjoy</li>
-					<li>Tyrell</li>
-					<li>Martel</li>
-				</ol>
+			<div>
+				<span style="font-weight: bold; display:block;">Chosen card: Ned Stark (4/0/0)</span>
+				<span>Special text, describing card effect.</span>
 			</div>
-			<div id="fiefdom" class="playerRank">
-				<h2>Fiefdom</h2>
-				<ol>
-					<li>Stark</li>
-					<li>Lannister</li>
-					<li>Baratheon</li>
-					<li>Greyjoy</li>
-					<li>Tyrell</li>
-					<li>Martel</li>
-				</ol>
-			</div>
-			<div id="kingscourt" class="playerRank">
-				<h2>King's Court</h2>
-				<ol>
-					<li>Stark</li>
-					<li>Lannister</li>
-					<li>Baratheon</li>
-					<li>Greyjoy</li>
-					<li>Tyrell</li>
-					<li>Martel</li>
-				</ol>
-			</div>
+			<span>Final strength: 3</span>
 		</div>
-
-		<div id="supplytrack">
-			<h1>Supply</h1>
-			<ol start="0">
-				<li></li>
-				<li></li>
-				<li>Stark, Greyjoy</li>
-				<li>Lannister, Baratheon, Tyrell, Martel</li>
-				<li></li>
-				<li></li>
-				<li></li>
-			</ol>
-		</div>
-		<div id="victorytrack" class="playerRank">
-			<h1>Victory</h1>
-			<ol>
-				<li>Stark</li>
-				<li>Lannister</li>
-				<li>Baratheon</li>
-				<li>Greyjoy</li>
-				<li>Tyrell</li>
-				<li>Martel</li>
-			</ol>
-		</div>
-		<div id="roundtrack">
-			<span>Round:</span>
-			<span id="round">1</span>
-		</div>
-		<div id="wildlingstrack">
-			<h1>Wildlings</h1>
-			<span>Track: </span><span id="wildlings">0</span>
-		</div>
-
-	</div>
+		<br style="clear: both;"/>
 	</div>
 </body>
 
 </html>
+

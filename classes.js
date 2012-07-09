@@ -30,10 +30,7 @@ function Game(id, amountPlayers) {
 
 	this.addPlayer = function(player) {
 		if (this.allowedHouses().indexOf(player.house.name) === -1) {
-			throw 'No player can choose house ' + player.house.name + ' in a game with ' + this.getPlayers() + ' players.'; //todo message should say what houses are allowed
-		}
-		if (this.players.indexOf(player) >= 0) { //todo fixme this 'if' is not working
-			throw 'Player ' + player.name + ' was already added to the game.';
+			throw 'No player can choose house ' + player.house.name + ' in a game with ' + this.getPlayers() + ' players.';
 		}
 
 		for (var i = 0; i < this.players.length; i++) {
@@ -86,16 +83,35 @@ function Player(name, house) {
 	}
 
 	this.playSword = function() {
-		if (this.sword != 0) {
-			throw 'You cannot use the sword because you don\'t own it or it has already been used.';
+		if (this.sword === 1) {
+			throw 'Player ' + this.name + ' cannot use the sword because he has already used it.'
 		}
+		if (this.sword === -1) {
+			throw 'Player ' + this.name + ' cannot use the sword because he does not own it.'
+		}
+
+		this.sword = 1;
+		//todo use sword
 	};
 
 	this.playRaven = function() {
-		if (this.raven != 0) {
-			throw 'You cannot use the raven because you don\'t own it or it has already been used.';
+		if (this.raven === 1) {
+			throw 'Player ' + this.name + ' cannot use the raven because he has already used it.'
 		}
+		if (this.raven === -1) {
+			throw 'Player ' + this.name + ' cannot use the raven because he does not own it.'
+		}
+
+		this.raven = 1;
+		//todo use raven
 	};
+
+	this.discardPower = function(amount) {
+		this.powerTokens -= amount;
+		if (this.powerTokens < 0) {
+			this.powerTokens = 0;
+		}
+	}
 
 	this.usePower = function(amount) {
 		if (amount < 0) {
@@ -123,11 +139,45 @@ function Player(name, house) {
 
 function SingleRankTracker(amountPlayers) {
 	this.amountPlayers = amountPlayers;
-	this.rank = new Array(6);
+	this.rank = new Array(6); //todo rank is storing Houses. Should it store Players instead?
 
 	this.setPosition = function(position, house) {
 		this.rank[position] = house;
 	};
+
+	this.moveToLastPosition = function(house) {
+		for (var i = 0; i < this.rank.length; i++) {
+			if (this.rank[i] === null || typeof(this.rank[i]) === 'undefined') {
+				continue;
+			}
+			if (this.rank[i].name === house.name) {
+				this.rank[i] = null;
+				this.rank.push(house);
+				break;
+			}
+		}
+
+		this.consolidate();
+	}
+
+	this.moveToFirstPosition = function(house) {
+		var j = 1;
+		var newRank = new Array(this.amountPlayers);
+
+		newRank[0] = house;
+
+		for (var i = 1; i < this.rank.length; i++) {
+			if (this.rank[i] === null || typeof(this.rank[i]) === 'undefined') {
+				continue;
+			}
+			if (this.rank[i].name === house.name) {
+				continue;
+			}
+
+			newRank[j++] = this.rank[i];
+		}
+		this.rank = newRank;
+	}
 
 	this.consolidate = function() {
 		var j = 0;
@@ -173,26 +223,52 @@ function MultiRankTracker(minPosition, maxPosition) {
 	};
 
 	//this is supposed to be a private method
-	this.putHouseInPosition = function(amount, house) {
-		if (this.rank[amount] === null || typeof(this.rank[amount]) === 'undefined') {
-			this.rank[amount] = new Array();
+	//returns the equivalent array index of a position.
+	this.checkPosition = function(position) {
+		if (position < this.minPosition) {
+			return 0;
+		} else if (position > this.maxPosition) {
+			return this.maxPosition - this.minPosition + 1;
 		}
-		this.rank[amount].push(house);
+
+		return position - this.minPosition;
 	};
 
-	this.setPosition = function(amount, house) {
+	//this is supposed to be a private method
+	this.putHouseInPosition = function(index, house) {
+		if (this.rank[index] === null || typeof(this.rank[index]) === 'undefined') {
+			this.rank[index] = new Array();
+		}
+		this.rank[index].push(house);
+	};
+
+	//this is supposed to be a private method
+	//remove a house from a position to another
+	this.moveHouse = function(fromIndexes, toIndex) {
+		var house = this.rank[fromIndexes[0]][fromIndexes[1]];
+
+		this.rank[fromIndexes[0]] =
+			this.rank[fromIndexes[0]].slice(0, fromIndexes[1]).concat(
+				this.rank[fromIndexes[0]].slice(fromIndexes[1] + 1)
+			);
+		this.putHouseInPosition(toIndex, house);
+	};
+
+	this.setPositionOfHouse = function(position, house) {
 		var indexes = this.findHouseOnTrack(house);
 		if (indexes === -1) {
 			//house not yet added to the track. just add it.
-			this.putHouseInPosition(amount, house);
+			var index = this.checkPosition(position);
+			this.putHouseInPosition(index, house);
 		} else {
-			//house already on track: remove it first, then add it on the right place
-			this.rank[indexes[0]] =
-				this.rank[indexes[0]].slice(0, indexes[1]).concat(
-					this.rank[indexes[0]].slice(indexes[1] + 1)
-				);
-			this.putHouseInPosition(amount, house);
+			this.moveHouse(indexes, position);
 		}
+	};
+
+	this.movePositionOfHouse = function(amount, house) {
+		var indexes = this.findHouseOnTrack(house);
+		var position = this.checkPosition(indexes[0] + this.minPosition);
+		this.moveHouse(indexes, position);
 	};
 
 	this.getPositionOfHouse = function(house) {
@@ -227,7 +303,7 @@ function GameStats(amountPlayers) {
 	this.supply = new MultiRankTracker(0, 6);
 
 	this.setSupply = function(supply, house) {
-		this.supply.setPosition(supply, house);
+		this.supply.setPositionOfHouse(supply, house);
 	};
 
 	this.getSupplyOfHouse = function(house) {
@@ -235,13 +311,12 @@ function GameStats(amountPlayers) {
 	};
 
 	this.setVictory = function(victory, house) {
-		this.victory.setPosition(victory, house);
+		this.victory.setPositionOfHouse(victory, house);
 	};
 
 	this.getVictoryOfHouse = function(house) {
 		return this.victory.getPositionOfHouse(house);
 	};
-
 }
 
 
@@ -344,32 +419,30 @@ Garrison.prototype.strength = function() {
 };
 
 
-function Army(theUnits) {
-	if (theUnits === null || typeof(theUnits) === 'undefined') {
-		this.units = new Array();
-	} else {
-		this.units = theUnits;
-		Unit.call(this, theUnits[0].controller); //todo I should probably test the array for the units controllers
+
+function Army(units) {
+	this.controller = units[0].controller;
+	for (var i = 1; i < units.length; i++) {
+		if (units[i].controller.name === this.controller.name) {
+			continue;
+		}
+		throw 'All units in an Army should be controlled by the same house.';
 	}
+	this.units = units;
+
+
+	this.strength = function(embattledArea) {
+		var armyStrength = 0;
+		for (var i = 0; i < this.units.length; i++) {
+			armyStrength += this.units[i].strength(embattledArea);
+		}
+		return armyStrength;
+	};
+
+	this.size = function() {
+		return this.units.length;
+	};
 }
-Army.prototype = new Unit();
-Army.prototype.constructor = Army;
-Army.prototype.strength = function(embattledArea) {
-	var armyStrength = 0;
-	for (var i = 0; i < this.units.length; i++) {
-		armyStrength += this.units[i].strength(embattledArea);
-	}
-	return armyStrength;
-};
-Army.prototype.size = function() {
-	this.units.length;
-};
-Army.prototype.addUnit = function(unit) {
-	//todo should  fire an event to check for the supply limit first?
-	this.units.push(unit);
-};
-
-
 
 function Board() {
 	this.areaCount = 50; //12 sea, 38 land

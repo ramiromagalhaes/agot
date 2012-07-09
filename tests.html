@@ -20,7 +20,7 @@ function assert(expected, value) {
 	throw 'Expected: ' + expected.toString() + '; got: ' + value.toString();
 
 	var el = document.createElement('div');
-	el.textContent = text;
+	el.textContent = 'Expected ' + expected.toString() + ' but got ' + value.toString();
 	document.documentElement.appendChild(el);
 }
 
@@ -111,7 +111,7 @@ var footman  = new Footman(stark);
 var knight   = new Knight(lannister);
 var ship     = new Ship(baratheon);
 var siege    = new Siege(stark);
-var garrison = new Garrison(null, 5);
+var garrison = new Garrison(noHouse, 5);
 
 assert(footman.strength(), 1);
 assert(footman.controller.name, 'Stark');
@@ -123,9 +123,9 @@ assert(ship.controller.name, 'Baratheon');
 assert(siege.controller.name, 'Stark');
 assert(garrison.strength(), 5);
 
-var army = new Army([footman, garrison]);
+var army = new Army([footman, siege]);
 assert(army.controller.name, 'Stark');
-assert(army.strength(), 1+5);
+assert(army.strength(pike), 1+4);
 
 
 //]]></script>
