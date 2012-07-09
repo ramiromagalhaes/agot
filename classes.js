@@ -2,6 +2,7 @@ function Game(id, amountPlayers) {
 	this.id = 0;
 	this.players = new Array(0);
 	this.gameStats = new GameStats(amountPlayers);
+	this.board = new Board();
 	this.allowedHousesArray = new Array(
 		['Stark', 'Lannister', 'Baratheon'],
 		['Stark', 'Lannister', 'Baratheon', 'Greyjoy'],
@@ -506,41 +507,6 @@ function Board() {
 
 
 
-function HouseCard(name, power, swords, towers, text, effect) {
-	this.name = name;
-	this.power = power;
-	this.swords = swords;
-	this.towers = towers;
-	this.text = text;
-	this.effect = effect;
-	this.available = true;
-
-	//Plays the card
-	this.play = function() {
-		this.effect();
-		this.available = false;
-	};
-}
-
-
-
-function WesterosCard(name, wildling, text) {
-	this.name = name;
-	this.wildling = wildling;
-	this.text = text;
-}
-
-
-
-function WildlingCard(name, lowestBidderText, everyoneElseText, highestBidderText) {
-	this.name = name;
-	this.lowestBidderText = lowestBidderText;
-	this.everyoneElseText = everyoneElseText;
-	this.highestBidderText = highestBidderText;
-}
-
-
-
 function GameStateMachine(game) {
 	this.game = game;
 	this.currentState = null; //setup, westeros (1, 2, 3, wildlings), assign orders, execute orders (raid, march, combat, consolidate, cleanup)
@@ -570,11 +536,13 @@ function GameState(machine, stateName) {
 
 
 
-function Setup3PlayerGame() {};
+function Setup3PlayerGame(machine) {
+	GameState.call(this, machine, '3 player game setup');
+};
 Setup3PlayerGame.prototype = new GameState();
 Setup3PlayerGame.prototype.constructor = Setup3PlayerGame;
 Setup3PlayerGame.prototype.setGameStats = function() {
-	var game = stateMachine.game;
+	var game = this.stateMachine.game;
 	var gameStats = game.gameStats;
 
 	for (var i = 0; i < game.getPlayers(); i++) {
@@ -587,9 +555,69 @@ Setup3PlayerGame.prototype.setGameStats = function() {
 		gameStats.setVictory(theHouse.defaultVictory, theHouse);
 	}
 };
+Setup3PlayerGame.prototype.setupBaratheonUnits = function() {
+	var board = this.stateMachine.game.board;
+	var players = this.stateMachine.game.players;
+
+	board.setOccupiers(dragonstone,
+		new Army([
+			new Knight(baratheon),
+			new Footman(baratheon),
+			new Garrison(baratheon, 2)
+		])
+	);
+	board.setOccupiers(shipbreakerBay,
+		new Army([
+			new Ship(baratheon),
+			new Ship(baratheon)
+		])
+	);
+	board.setOccupiers(kingswood,
+		new Footman(baratheon)
+	);
+};
+Setup3PlayerGame.prototype.setupLannisterUnits = function() {
+	var board = this.stateMachine.game.board;
+	var players = this.stateMachine.game.players;
+
+	board.setOccupiers(goldenSound,
+		new Ship(lannister)
+	);
+	board.setOccupiers(lannisport,
+		new Army([
+			new Knight(lannister),
+			new Footman(lannister),
+			new Garrison(lannister, 2)
+		])
+	);
+	board.setOccupiers(stoneySept,
+		new Footman(lannister)
+	);
+};
+Setup3PlayerGame.prototype.setupStarkUnits = function() {
+	var board = this.stateMachine.game.board;
+	var players = this.stateMachine.game.players;
+
+	board.setOccupiers(shiveringSea,
+		new Ship(stark)
+	);
+	board.setOccupiers(winterfell,
+		new Army([
+			new Knight(stark),
+			new Footman(stark),
+			new Garrison(stark, 2)
+		])
+	);
+	board.setOccupiers(whiteHarbor,
+		new Footman(stark)
+	);
+
+};
 Setup3PlayerGame.prototype.start = function() {
 	this.setGameStats();
-
+	this.setupBaratheonUnits();
+	this.setupLannisterUnits();
+	this.setupStarkUnits();
 	//setup the garrisons and neutrals
 	//setup players units
 
@@ -598,33 +626,115 @@ Setup3PlayerGame.prototype.start = function() {
 
 
 
-function Setup4PlayerGame() {};
+function Setup4PlayerGame(machine) {
+	GameState.call(this, machine, '4 player game setup');
+};
 Setup4PlayerGame.prototype = new Setup3PlayerGame();
 Setup4PlayerGame.prototype.constructor = Setup4PlayerGame;
+Setup4PlayerGame.prototype.setupGreyjoyUnits = function() {
+	var board = this.stateMachine.game.board;
+	var players = this.stateMachine.game.players;
+
+	board.setOccupiers(ironmansBay,
+		new Ship(greyjoy)
+	);
+	board.setOccupiers(ironmansBay, //todo need an area named Pike port to put unit on it
+		new Ship(greyjoy)
+	);
+	board.setOccupiers(pike,
+		new Army([
+			new Knight(greyjoy),
+			new Footman(greyjoy),
+			new Garrison(greyjoy, 2)
+		])
+	);
+	board.setOccupiers(greywaterWatch,
+		new Footman(greyjoy)
+	);
+};
 Setup4PlayerGame.prototype.start = function() {
 	this.setGameStats();
 
+	this.setupBaratheonUnits();
+	this.setupLannisterUnits();
+	this.setupStarkUnits();
+	this.setupGreyjoyUnits();
+
 	return null;
 };
 
 
 
-function Setup5PlayerGame() {};
-Setup5PlayerGame.prototype = new Setup3PlayerGame();
+function Setup5PlayerGame(machine) {
+	GameState.call(this, machine, '5 player game setup');
+};
+Setup5PlayerGame.prototype = new Setup4PlayerGame();
 Setup5PlayerGame.prototype.constructor = Setup5PlayerGame;
+Setup5PlayerGame.prototype.setupTyrellUnits = function() {
+	var board = this.stateMachine.game.board;
+	var players = this.stateMachine.game.players;
+
+	board.setOccupiers(highgarden,
+		new Army([
+			new Knight(tyrell),
+			new Footman(tyrell),
+			new Garrison(tyrell, 2)
+		])
+	);
+	board.setOccupiers(redwyneStraights,
+		new Ship(greyjoy)
+	);
+	board.setOccupiers(dornishMarches,
+		new Footman(greyjoy)
+	);
+
+};
 Setup5PlayerGame.prototype.start = function() {
 	this.setGameStats();
 
+	this.setupBaratheonUnits();
+	this.setupLannisterUnits();
+	this.setupStarkUnits();
+	this.setupGreyjoyUnits();
+	this.setupTyrellUnits();
+
 	return null;
 };
 
 
 
-function Setup6PlayerGame() {};
-Setup6PlayerGame.prototype = new Setup3PlayerGame();
+function Setup6PlayerGame(machine) {
+	GameState.call(this, machine, '6 player game setup');
+};
+Setup6PlayerGame.prototype = new Setup5PlayerGame();
 Setup6PlayerGame.prototype.constructor = Setup6PlayerGame;
+Setup6PlayerGame.prototype.setupMartellUnits = function() {
+	var board = this.stateMachine.game.board;
+	var players = this.stateMachine.game.players;
+
+	board.setOccupiers(seaOfDorne,
+		new Ship(martell)
+	);
+	board.setOccupiers(sunspear,
+		new Army([
+			new Knight(martell),
+			new Footman(martell),
+			new Garrison(martell, 2)
+		])
+	);
+	board.setOccupiers(saltShore,
+		new Footman(martell)
+	);
+};
 Setup6PlayerGame.prototype.start = function() {
 	this.setGameStats();
+
+	this.setupBaratheonUnits();
+	this.setupLannisterUnits();
+	this.setupStarkUnits();
+	this.setupGreyjoyUnits();
+	this.setupTyrellUnits();
+	this.setupMartellUnits();
 
 	return null;
 };

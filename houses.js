@@ -1,3 +1,23 @@
+function HouseCard(name, power, swords, towers, text, effect) {
+	this.name = name;
+	this.power = power;
+	this.swords = swords;
+	this.towers = towers;
+	this.text = text;
+	this.effect = effect;
+	this.available = true;
+
+	//Plays the card
+	this.play = function() {
+		this.effect();
+		this.available = false;
+	};
+}
+
+
+
+
+
 //Houses
 var stark     = new House('Stark',     3, 4, 2, 1, 2, null);
 var lannister = new House('Lannister', 2, 6, 1, 2, 1, null);

@@ -1,3 +1,22 @@
+function WesterosCard(name, wildling, text) {
+	this.name = name;
+	this.wildling = wildling;
+	this.text = text;
+}
+
+
+
+function WildlingCard(name, lowestBidderText, everyoneElseText, highestBidderText) {
+	this.name = name;
+	this.lowestBidderText = lowestBidderText;
+	this.everyoneElseText = everyoneElseText;
+	this.highestBidderText = highestBidderText;
+}
+
+
+
+
+
 //Westeros Deck 1 - Winter is Coming, Mustering, Supply, Last Days of Summer, A Throne of Blades
 var mustering = new WesterosCard('Mustering',           0, 'Recruit new units in Strongholds and Castles');
 var supply    = new WesterosCard('Supply',              0, 'Adjust Supply track. Reconcile armies.');
