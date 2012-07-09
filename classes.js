@@ -223,26 +223,52 @@ function MultiRankTracker(minPosition, maxPosition) {
 	};
 
 	//this is supposed to be a private method
-	this.putHouseInPosition = function(amount, house) {
-		if (this.rank[amount] === null || typeof(this.rank[amount]) === 'undefined') {
-			this.rank[amount] = new Array();
+	//returns the equivalent array index of a position.
+	this.checkPosition = function(position) {
+		if (position < this.minPosition) {
+			return 0;
+		} else if (position > this.maxPosition) {
+			return this.maxPosition - this.minPosition + 1;
 		}
-		this.rank[amount].push(house);
+
+		return position - this.minPosition;
 	};
 
-	this.setPosition = function(amount, house) {
+	//this is supposed to be a private method
+	this.putHouseInPosition = function(index, house) {
+		if (this.rank[index] === null || typeof(this.rank[index]) === 'undefined') {
+			this.rank[index] = new Array();
+		}
+		this.rank[index].push(house);
+	};
+
+	//this is supposed to be a private method
+	//remove a house from a position to another
+	this.moveHouse = function(fromIndexes, toIndex) {
+		var house = this.rank[fromIndexes[0]][fromIndexes[1]];
+
+		this.rank[fromIndexes[0]] =
+			this.rank[fromIndexes[0]].slice(0, fromIndexes[1]).concat(
+				this.rank[fromIndexes[0]].slice(fromIndexes[1] + 1)
+			);
+		this.putHouseInPosition(toIndex, house);
+	};
+
+	this.setPositionOfHouse = function(position, house) {
 		var indexes = this.findHouseOnTrack(house);
 		if (indexes === -1) {
 			//house not yet added to the track. just add it.
-			this.putHouseInPosition(amount, house);
+			var index = this.checkPosition(position);
+			this.putHouseInPosition(index, house);
 		} else {
-			//house already on track: remove it first, then add it on the right place
-			this.rank[indexes[0]] =
-				this.rank[indexes[0]].slice(0, indexes[1]).concat(
-					this.rank[indexes[0]].slice(indexes[1] + 1)
-				);
-			this.putHouseInPosition(amount, house);
+			this.moveHouse(indexes, position);
 		}
+	};
+
+	this.movePositionOfHouse = function(amount, house) {
+		var indexes = this.findHouseOnTrack(house);
+		var position = this.checkPosition(indexes[0] + this.minPosition);
+		this.moveHouse(indexes, position);
 	};
 
 	this.getPositionOfHouse = function(house) {

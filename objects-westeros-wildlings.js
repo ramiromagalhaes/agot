@@ -111,10 +111,22 @@ var milkwater   = new WildlingCard('Massing on the Milkwater',
 
 var silence     = new WildlingCard('Silence at the Wall', 'Nothing happens.', 'Nothing happens.', 'Nothing happens.');
 silence.takeEffect = function(playerVictory, gameStats, bidders, bids) {
+	//nothing happens
 };
 
 var rattleshirt = new WildlingCard('Rattleshirt\'s Raiders',
 	'Is reduced 2 positions on the Supply track (to no lower than 0). Then reconcile armies to their new Supply limits.',
 	'Is reduced 1 position on the Supply track (to no lower than 0). Then reconcile armies to their new Supply limits.',
 	'Is increased 1 position on the Supply track (to no higher than 6).');
+rattleshirt.takeEffect = function(playerVictory, gameStats, bidders, bids) {
+	if (playerVictory) {
+		gameStats.supply.movePositionOfHouse(-2, bidders[bidders.length - 1].house);
+		for (var i = 0; i < bidders.length - 1; i++) {
+			gameStats.supply.movePositionOfHouse(-1, bidders[i].house);
+		}
+		//todo reconcile armies, i.e. ask players which units they want to destroy and destroy them
+	} else {
+		gameStats.supply.movePositionOfHouse(1, bidders[0].house);
+	}
+};
 
