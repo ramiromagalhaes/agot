@@ -1,3 +1,17 @@
+function House(name, defaultIronThrone, defaultFiefdom, defaultKingsCourt, defaultSupply, defaultVictory, cards) {
+	this.name = name;
+	this.defaultIronThrone = defaultIronThrone;
+	this.defaultFiefdom = defaultFiefdom;
+	this.defaultKingsCourt = defaultKingsCourt;
+	this.defaultSupply = defaultSupply;
+	this.defaultVictory = defaultVictory;
+	this.cards = cards;
+}
+
+
+
+
+
 function HouseCard(name, power, swords, towers, text, effect) {
 	this.name = name;
 	this.power = power;

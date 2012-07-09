@@ -1,3 +1,93 @@
+function Area(name, type, supply, power, castle, hasPort, defaultController) {
+	this.id = 0; //used to index this Area in the Board.
+
+	this.name = name;
+	this.type = type; //0 = land, 1 = sea, -1 port
+	//ports will be treated like a normal area, but with special features
+
+	this.supply = supply;
+	this.power = power;
+	this.castle = castle; //0 = none, 1 = castle, 2 = stronghold
+
+	if (typeof(defaultController) === 'undefined') {
+		this.defaultController = null;
+	} else {
+		this.defaultController = defaultController;
+	}
+
+	this.hasDefaultController = function() {
+		return this.defaultController != null;
+	}
+}
+
+
+
+
+
+function Board() {
+	this.areaCount = 50; //12 sea, 38 land
+	this.areas = new Array();
+	this.adjacency = new Array(); //big matrix telling what is adjacent to what
+	this.occupations = new Array(); //what units are in a certain area. Army or 1 Unit.
+
+	for (var i = 0; i < this.areaCount; i++) {
+		this.adjacency.push(new Array(this.areaCount));
+	}
+
+	this.addArea = function(area) {
+		area.id = this.areas.length; //the area's id is the area's index on the array
+		this.areas.push(area);
+		this.occupations.push(null);
+	};
+
+	this.setAdjacency = function(area, adjacents) {
+		for (var i = 0; i < adjacents.length; i++) {
+			this.adjacency[area.id][adjacents[i].id] = true;
+			this.adjacency[adjacents[i].id][area.id] = true;
+		}
+	};
+
+	this.isOccupied = function(area) {
+		var occupier = this.occupations[area.id];
+		if (occupier == null || typeof(occupier) === 'undefined') {
+			return false;
+		}
+
+		return true;
+	};
+
+	this.hasController = function(area) {
+		if ( this.isOccupied(area) ) {
+			return true;
+		} else if ( this.areas[area.id].hasDefaultController() ) {
+			return true;
+		}
+
+		return false;
+	};
+
+	this.getController = function(area) {
+		if ( this.hasController(area) ) {
+			return this.occupations[area.id];
+		}
+
+		return null;
+	};
+
+	this.setOccupiers = function(area, units) {
+		if ( this.isOccupied(area) ) {
+			//todo throw error?
+		} else {
+			this.occupations[area.id] = units;
+		}
+	};
+
+}
+
+
+
+
+
 //Areas and Board
 //Legend --------------- LAND AREAS -------------------------> t  s  p  c  port? ctrller
 var castleBlack        = new Area('Castle Black',              0, 0, 1, 0, false);
