@@ -681,6 +681,11 @@ Setup6PlayerGame.prototype.setupMartellUnits = function() {
 		new Footman(martell)
 	);
 };
+Setup6PlayerGame.prototype.setupNeutrals = function() {
+	var board = this.stateMachine.game.board;
+	board.setOccupiers(kingsLanding, new Garrison(noHouse, 5));
+	board.setOccupiers(eyrie, new Garrison(noHouse, 6));
+};
 Setup6PlayerGame.prototype.start = function() {
 	this.setGameStats();
 
@@ -690,6 +695,8 @@ Setup6PlayerGame.prototype.start = function() {
 	this.setupGreyjoyUnits();
 	this.setupTyrellUnits();
 	this.setupMartellUnits();
+
+	this.setupNeutrals();
 
 	return null;
 };
