@@ -248,10 +248,7 @@ function MultiRankTracker(minPosition, maxPosition) {
 	this.moveHouse = function(fromIndexes, toIndex) {
 		var house = this.rank[fromIndexes[0]][fromIndexes[1]];
 
-		this.rank[fromIndexes[0]] =
-			this.rank[fromIndexes[0]].slice(0, fromIndexes[1]).concat(
-				this.rank[fromIndexes[0]].slice(fromIndexes[1] + 1)
-			);
+		this.rank[fromIndexes[0]] = this.rank[fromIndexes[0]].splice(fromIndexes[1], 1);
 		this.putHouseInPosition(toIndex, house);
 	};
 
@@ -515,7 +512,6 @@ Setup3PlayerGame.prototype.setupStarkUnits = function() {
 	board.setOccupiers(whiteHarbor,
 		new Footman(stark)
 	);
-
 };
 Setup3PlayerGame.prototype.setupNeutrals = function() {
 	var board = this.stateMachine.game.board;
@@ -703,20 +699,23 @@ Setup6PlayerGame.prototype.start = function() {
 
 
 
-function WesterosState() {
-	this.deckToDraw = 0;
+function WesterosState(machine, decks) { //should receive an array of the 3 westeros decks
+	this.decks = decks;
+	this.stateMachine = machine;
 
 	this.start = function() {
-		this.deckToDraw++;
+		var cards = new Array(
+			this.decks[0].draw(),
+			this.decks[1].draw(),
+			this.decks[2].draw()
+		);
 
-		//draw from deck #this.deckToDraw
-		//resolve card
+		//todo show cards to players
 
-		if (this.deckToDraw >= 3) {
-			westerosState.deckToDraw = 0;
-			return assignState;
-		} else {
-			return westerosState;
+		for (var i = 0; i < cards.length; i++) {
+			this.stateMachine.gameStats.wildlings += cards[i].wildling * 2;
+
+			//todo cards[i].takeEffect();
 		}
 	};
 }
@@ -733,7 +732,7 @@ function AssignState() {
 	this.start = function() {
 		if (this.isDone()) {
 			//receive player orders
-			//checks if all possible orders were correctly given
+			//checks if all possible orders were correctly given (starred orders, all units got orders, no orders give to somewhere else)
 			return null;
 		} else {
 			//ask players for their orders
@@ -785,4 +784,40 @@ function AssignState() {
 		return null;
 	};
 
+}
+
+
+
+function Deck() {
+	this.deck = new Array();
+	this.discarded = new Array();
+
+	this.add = function(card) {
+		this.deck.push(card);
+	};
+
+	this.peek = function() {
+		return this.deck[this.deck.length - 1];
+	};
+
+	this.draw = function() {
+		var card = this.deck.pop();
+		this.discarded.push(card);
+		return card;
+	};
+
+	this.shuffle = function() {
+		var tempDeck = new Array();
+		for (var i = this.deck.length; i > 0; i--) {
+			var randIndex = (Math.random() * this.deck.length) % this.deck.length; //the extra modulus is to avoid problems when the array size is 0.
+			var randomCard = this.deck.splice(randIndex, 1);
+			tempDeck.push(randomCard);
+		}
+		this.deck = tempDeck;
+	};
+
+	this.resetAndShuffle = function() {
+		this.deck = this.deck.concat(this.discarded);
+		this.suffle();
+	};
 }
