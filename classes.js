@@ -375,7 +375,7 @@ Siege.prototype.strength = function(embattledArea) {
 
 function Garrison(controller, strength) {
 	Unit.call(this, controller);
-	this.garrisonStrength = strength;
+	this.garrisonStrength = strength; //-1 = infinity
 }
 Garrison.prototype = new Unit();
 Garrison.prototype.constructor = Garrison;
@@ -517,13 +517,33 @@ Setup3PlayerGame.prototype.setupStarkUnits = function() {
 	);
 
 };
+Setup3PlayerGame.prototype.setupNeutrals = function() {
+	var board = this.stateMachine.game.board;
+	board.setOccupiers(kingsLanding, new Garrison(noHouse, 5));
+	board.setOccupiers(pike, new Garrison(noHouse, -1));
+	board.setOccupiers(boneway, new Garrison(noHouse, -1));
+	board.setOccupiers(yronwood, new Garrison(noHouse, -1));
+	board.setOccupiers(eyrie, new Garrison(noHouse, 6));
+	board.setOccupiers(highgarden, new Garrison(noHouse, -1));
+	board.setOccupiers(threeTowers, new Garrison(noHouse, -1));
+	board.setOccupiers(sunspear, new Garrison(noHouse, -1));
+	board.setOccupiers(princesPass, new Garrison(noHouse, -1));
+	board.setOccupiers(starfall, new Garrison(noHouse, -1));
+	board.setOccupiers(saltShore, new Garrison(noHouse, -1));
+	board.setOccupiers(stormsEnd, new Garrison(noHouse, -1));
+	board.setOccupiers(dornishMarches, new Garrison(noHouse, -1));
+	board.setOccupiers(oldtown, new Garrison(noHouse, -1));
+};
 Setup3PlayerGame.prototype.start = function() {
 	this.setGameStats();
+
 	this.setupBaratheonUnits();
 	this.setupLannisterUnits();
 	this.setupStarkUnits();
-	//setup the garrisons and neutrals
-	//setup players units
+
+	this.setupNeutrals();
+
+	//todo setup king's court overlay
 
 	return null;
 };
@@ -556,6 +576,21 @@ Setup4PlayerGame.prototype.setupGreyjoyUnits = function() {
 		new Footman(greyjoy)
 	);
 };
+Setup4PlayerGame.prototype.setupNeutrals = function() {
+	var board = this.stateMachine.game.board;
+	board.setOccupiers(kingsLanding, new Garrison(noHouse, 5));
+	board.setOccupiers(boneway, new Garrison(noHouse, 3));
+	board.setOccupiers(yronwood, new Garrison(noHouse, 3));
+	board.setOccupiers(eyrie, new Garrison(noHouse, 6));
+	board.setOccupiers(threeTowers, new Garrison(noHouse, 3));
+	board.setOccupiers(sunspear, new Garrison(noHouse, 5));
+	board.setOccupiers(princesPass, new Garrison(noHouse, 3));
+	board.setOccupiers(starfall, new Garrison(noHouse, 3));
+	board.setOccupiers(saltShore, new Garrison(noHouse, 3));
+	board.setOccupiers(stormsEnd, new Garrison(noHouse, 4));
+	board.setOccupiers(dornishMarches, new Garrison(noHouse, 3));
+	board.setOccupiers(oldtown, new Garrison(noHouse, 3));
+};
 Setup4PlayerGame.prototype.start = function() {
 	this.setGameStats();
 
@@ -563,6 +598,9 @@ Setup4PlayerGame.prototype.start = function() {
 	this.setupLannisterUnits();
 	this.setupStarkUnits();
 	this.setupGreyjoyUnits();
+
+	this.setupNeutrals();
+	//setup king's court overlay
 
 	return null;
 };
@@ -593,6 +631,18 @@ Setup5PlayerGame.prototype.setupTyrellUnits = function() {
 	);
 
 };
+Setup5PlayerGame.prototype.setupNeutrals = function() {
+	var board = this.stateMachine.game.board;
+	board.setOccupiers(kingsLanding, new Garrison(noHouse, 5));
+	board.setOccupiers(boneway, new Garrison(noHouse, 3));
+	board.setOccupiers(yronwood, new Garrison(noHouse, 3));
+	board.setOccupiers(eyrie, new Garrison(noHouse, 6));
+	board.setOccupiers(threeTowers, new Garrison(noHouse, 3));
+	board.setOccupiers(sunspear, new Garrison(noHouse, 5));
+	board.setOccupiers(princesPass, new Garrison(noHouse, 3));
+	board.setOccupiers(starfall, new Garrison(noHouse, 3));
+	board.setOccupiers(saltShore, new Garrison(noHouse, 3));
+};
 Setup5PlayerGame.prototype.start = function() {
 	this.setGameStats();
 
@@ -602,6 +652,7 @@ Setup5PlayerGame.prototype.start = function() {
 	this.setupGreyjoyUnits();
 	this.setupTyrellUnits();
 
+	this.setupNeutrals();
 	return null;
 };
 
