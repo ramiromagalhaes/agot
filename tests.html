@@ -67,9 +67,9 @@ gameStats.setSupply(5, lannister);
 gameStats.setSupply(6, baratheon);
 gameStats.setSupply(6, lannister);
 
-assert(gameStats.getSupplyOfHouse(stark), 5);
-assert(gameStats.getSupplyOfHouse(lannister), 6);
-assert(gameStats.getSupplyOfHouse(baratheon), 6);
+assert(5, gameStats.getSupplyOfHouse(stark));
+assert(6, gameStats.getSupplyOfHouse(lannister));
+assert(6, gameStats.getSupplyOfHouse(baratheon));
 
 var stateMachine = new GameStateMachine(game);
 stateMachine.currentState = new Setup6PlayerGame(stateMachine);
@@ -112,19 +112,19 @@ var ship     = new Ship(baratheon);
 var siege    = new Siege(stark);
 var garrison = new Garrison(noHouse, 5);
 
-assert(footman.strength(), 1);
-assert(footman.controller.name, 'Stark');
-assert(knight.strength(), 2);
-assert(knight.controller.name, 'Lannister');
-assert(ship.strength(), 1);
-assert(ship.controller.name, 'Baratheon');
-//assert(siege.strength(), 4);
-assert(siege.controller.name, 'Stark');
-assert(garrison.strength(), 5);
+assert(1, footman.strength());
+assert('Stark', footman.controller.name);
+assert(2, knight.strength());
+assert('Lannister', knight.controller.name);
+assert(1, ship.strength());
+assert('Baratheon', ship.controller.name);
+//assert(4, siege.strength());
+assert('Stark', siege.controller.name);
+assert(5, garrison.strength());
 
 var army = new Army([footman, siege]);
-assert(army.controller.name, 'Stark');
-assert(army.strength(pike), 1+4);
+assert('Stark', army.controller.name);
+assert(1+4, army.strength(pike));
 
 
 //]]></script>
