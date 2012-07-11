@@ -14,12 +14,18 @@
 	<script src="classes.js" type="text/javascript" charset="UTF-8"></script>
 	<script src="westeros-wildlings.js" type="text/javascript" charset="UTF-8"></script>
 	<script src="objects.js" type="text/javascript" charset="UTF-8"></script>
+	<script type="text/javascript" charset="UTF-8">
+	$(document).ready(function(){
+		document.getElementById('map').childNodes[1].getSVGDocument().firstChild.childNodes[1].style.getPropertyValue('fill');
+		document.getElementById('map').childNodes[1].getSVGDocument().firstChild.childNodes[1].style.setProperty('fill', '#d3d3d3', '');
+	});
+	</script>
 </head>
 
 <body>
 	<div id="dashboard">
 		<div id="map">
-			<embed src="board.svg" width="350" />
+			<embed src="board.svg" />
 		</div>
 
 		<div id="stats">
