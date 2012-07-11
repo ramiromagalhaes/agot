@@ -35,6 +35,10 @@ table thead tr td.cardname {
 	width: 45em;
 }
 
+#map embed {
+	width: 45em;
+}
+
 #stats {
 	min-width: 30em;
 }
