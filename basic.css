@@ -14,7 +14,7 @@ table tr td {
 }
 
 table thead tr td.cardname {
-	width: 7em;
+	min-width: 7em;
 }
 
 #dashboard {
@@ -42,6 +42,7 @@ table thead tr td.cardname {
 
 #stats {
 	min-width: 30em;
+	font-size: 0.8em;
 }
 
 .playerRank {
