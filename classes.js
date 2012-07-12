@@ -226,13 +226,13 @@ function MultiRankTracker(minPosition, maxPosition) {
 	//this is supposed to be a private method
 	//returns the equivalent array index of a position.
 	this.checkPosition = function(position) {
-		if (position < this.minPosition) {
+		if (position <= this.minimum) {
 			return 0;
-		} else if (position > this.maxPosition) {
-			return this.maxPosition - this.minPosition + 1;
+		} else if (position >= this.maximum) {
+			return this.maximum - this.minimum + 1;
 		}
 
-		return position - this.minPosition;
+		return position - this.minimum;
 	};
 
 	//this is supposed to be a private method
@@ -248,7 +248,7 @@ function MultiRankTracker(minPosition, maxPosition) {
 	this.moveHouse = function(fromIndexes, toIndex) {
 		var house = this.rank[fromIndexes[0]][fromIndexes[1]];
 
-		this.rank[fromIndexes[0]] = this.rank[fromIndexes[0]].splice(fromIndexes[1], 1);
+		this.rank[fromIndexes[0]].splice(fromIndexes[1], 1);
 		this.putHouseInPosition(toIndex, house);
 	};
 
@@ -265,8 +265,8 @@ function MultiRankTracker(minPosition, maxPosition) {
 
 	this.movePositionOfHouse = function(amount, house) {
 		var indexes = this.findHouseOnTrack(house);
-		var position = this.checkPosition(indexes[0] + this.minPosition);
-		this.moveHouse(indexes, position);
+		var newIndex = this.checkPosition(indexes[0] + this.minPosition + amount);
+		this.moveHouse(indexes, newIndex);
 	};
 
 	this.getPositionOfHouse = function(house) {

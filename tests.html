@@ -42,16 +42,7 @@ game.addPlayer(p3);
 
 
 
-var gameStats = new GameStats();
-gameStats.supply.rank = new Array(
-	null,
-	[lannister],
-	[stark],
-	[baratheon],
-	null,
-	[],
-	null
-);
+var gameStats = new GameStats(3);
 gameStats.setSupply(0, lannister);
 gameStats.setSupply(0, baratheon);
 gameStats.setSupply(5, stark);
