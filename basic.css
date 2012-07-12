@@ -36,16 +36,12 @@ table thead tr td.cardname {
 }
 
 #map embed {
-	width: 45em;
+	width: 100%;
+	border: 1px solid black;
 }
 
 #stats {
 	min-width: 30em;
-}
-
-#map img {
-	width: 100%;
-	border: 1px solid black;
 }
 
 .playerRank {
