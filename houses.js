@@ -5,7 +5,7 @@ function House(name, defaultIronThrone, defaultFiefdom, defaultKingsCourt, defau
 	this.defaultKingsCourt = defaultKingsCourt;
 	this.defaultSupply = defaultSupply;
 	this.defaultVictory = defaultVictory;
-	this.cards = cards;
+	this.cards = new Array(7);
 }
 
 
@@ -41,6 +41,8 @@ var tyrell    = new House('Tyrell',    6, 2, 5, 2, 1, null);
 var martell   = new House('Martell',   4, 3, 3, 2, 1, null);
 var noHouse   = new House('Neutral',   0, 0, 0, 0, 0, null);
 
+
+
 //Cards legend ------------------------------------> p  s  t  text handler
 //Cards - Stark
 var ned        = new HouseCard('Eddard Stark',       4, 2, 0, null, null);
@@ -50,6 +52,13 @@ var umber      = new HouseCard('Greatjon Umber',     2, 1, 0, null, null);
 var rodrick    = new HouseCard('Ser Rodrick Cassel', 1, 0, 2, null, null);
 var blackfish  = new HouseCard('The Blackfish',      1, 0, 0, 'You do not take casualties in this combat from House card abilities, Combat icons, or Tides of Battle cards.', null);
 var catelyn    = new HouseCard('Catelyn Stark',      0, 0, 0, 'If you have a Defense Order token in the embattled area, its value is doubled', null);
+stark.cards[0] = ned;
+stark.cards[1] = robb;
+stark.cards[2] = bolton;
+stark.cards[3] = umber;
+stark.cards[4] = rodrick;
+stark.cards[5] = blackfish;
+stark.cards[6] = catelyn;
 
 //Cards - Lannister
 var tywin      = new HouseCard('Tywin Lannister',    4, 0, 0, 'If you win this combat, gain two Power tokens', null);
@@ -59,6 +68,13 @@ var jaime      = new HouseCard('Jaime Lannister',    2, 1, 0, null, null);
 var tyrion     = new HouseCard('Tyrion Lannister',   1, 0, 0, 'You may immediately return your opponent\'s House card to his hand. He must then choose a different House card. If he has no other House cards in hand, he cannot use a House card this combat.', null);
 var kevan      = new HouseCard('Kevan Lannister',    1, 0, 0, 'If you are attacking, all of your participating Footman (including supporting Lannister footman) add +2 combat strength instead of +1.', null);
 var cersei     = new HouseCard('Cersei Lannister',   0, 0, 0, 'If you win this combat, you may remove on of your opponent\'s Order tokens from anywhere on the board.');
+lannister.cards[0] = tywin;
+lannister.cards[1] = clegane;
+lannister.cards[2] = hound;
+lannister.cards[3] = jaime;
+lannister.cards[4] = tyrion;
+lannister.cards[5] = kevan;
+lannister.cards[6] = cersei;
 
 //Cards - Baratheon
 var stannis    = new HouseCard('Stannis Baratheon',  4, 0, 0, 'If your opponent has a higher position on the Iron Throne Influence track than you, this card gains +1 combat strength.', null);
@@ -68,6 +84,13 @@ var brienne    = new HouseCard('Brienne of Tarth',   2, 1, 1, null, null);
 var melisandre = new HouseCard('Melisandre',         1, 1, 0, null, null);
 var salladhor  = new HouseCard('Salladhor Saan',     1, 0, 0, 'If you are being supported in this combat, the combat strength of all non-Baratheon Ships is reduced to 0.', null);
 var patchface  = new HouseCard('Patchface',          0, 0, 0, 'After combat, you may look at your opponent\'s hand and discard on card of your choice.');
+baratheon.cards[0] = stannis;
+baratheon.cards[1] = renly;
+baratheon.cards[2] = davos;
+baratheon.cards[3] = brienne;
+baratheon.cards[4] = melisandre;
+baratheon.cards[5] = salladhor;
+baratheon.cards[6] = patchface;
 
 //Cards - Greyjoy
 var euron       = new HouseCard('Euron Crow\'s Eye', 4, 1, 0, null, null);
@@ -77,6 +100,13 @@ var balon       = new HouseCard('Balon Greyjoy',     2, 0, 0, 'The printed comba
 var asha        = new HouseCard('Asha Greyjoy',      1, 0, 0, 'If you are not being supported in this combat, this card gains two swords icons and one fortification icon.', null);
 var dagmar      = new HouseCard('Dagmar Cleftjaw',   1, 1, 1, null, null);
 var aeron       = new HouseCard('Aeron Damphair',    0, 0, 0, 'You may immediately discard two Power tokens to discard Aeron Damphair and choose a different House Card from your hand (if able).', null);
+greyjoy.cards[0] = euron;
+greyjoy.cards[1] = victarion;
+greyjoy.cards[2] = theon;
+greyjoy.cards[3] = balon;
+greyjoy.cards[4] = asha;
+greyjoy.cards[5] = dagmar;
+greyjoy.cards[6] = aeron;
 
 //Cards - Tyrell
 var mace      = new HouseCard('Mace Tyrell',         4, 0, 0, 'Immediately destroy one of your opponent\'s attacking or defending Footmen units.', null);
@@ -86,6 +116,13 @@ var randyll   = new HouseCard('Randyll Tarly',       2, 1, 0, null, null);
 var alester   = new HouseCard('Alester Florent',     1, 0, 1, null, null);
 var margaery  = new HouseCard('Margaery Tyrell',     1, 0, 1, null, null);
 var queen     = new HouseCard('Queen of Thorns',     0, 0, 0, 'Immediately remove one of your opponent\'s Order token in any one area adjacent to the embattled area. You may not remove the March Order token used to start this combat.', null);
+tyrell.cards[0] = mace;
+tyrell.cards[1] = loras;
+tyrell.cards[2] = garlan;
+tyrell.cards[3] = randyll;
+tyrell.cards[4] = alester;
+tyrell.cards[5] = margaery;
+tyrell.cards[6] = queen;
 
 //Cards - Martell
 var viper         = new HouseCard('The Red Viper',   4, 2, 1, null, null);
@@ -95,4 +132,11 @@ var darkstar      = new HouseCard('Darkstar',        2, 1, 0, null, null);
 var nymeria       = new HouseCard('Nymeria Sand',    1, 0, 0, 'If you are defending, this card gains a fortification icon. If you are attacking, this card gains a sword icon.', null);
 var arianne       = new HouseCard('Arianne Martell', 1, 0, 0, 'If you are defending and lose this combat, your opponent may not move his units into the embattled area. They return to the area from which they marched. Your own units must still retreat.', null);
 var doran         = new HouseCard('Doran Martell',   0, 0, 0, 'Immediately move your opponent to the bottom of one Influence track of your choice.', null);
+martell.cards[0] = viper;
+martell.cards[1] = areo;
+martell.cards[2] = obara;
+martell.cards[3] = darkstar;
+martell.cards[4] = nymeria;
+martell.cards[5] = arianne;
+martell.cards[6] = doran;
 

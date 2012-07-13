@@ -63,9 +63,6 @@ assert(6, gameStats.getSupplyOfHouse(lannister));
 assert(6, gameStats.getSupplyOfHouse(baratheon));
 
 var stateMachine = new GameStateMachine(game);
-stateMachine.currentState = new Setup6PlayerGame(stateMachine);
-stateMachine.currentState = new Setup5PlayerGame(stateMachine);
-stateMachine.currentState = new Setup4PlayerGame(stateMachine);
 stateMachine.currentState = new Setup3PlayerGame(stateMachine);
 stateMachine.fireEvent('start');
 

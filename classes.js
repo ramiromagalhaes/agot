@@ -1,5 +1,6 @@
 function Game(id, amountPlayers) {
 	this.id = 0;
+	this.amountPlayers = amountPlayers;
 	this.players = new Array(0);
 	this.gameStats = new GameStats(amountPlayers);
 	this.board = new Board();
@@ -15,6 +16,7 @@ function Game(id, amountPlayers) {
 	} else {
 		throw 'At least 3 and at most 6 players can play this game.';
 	}
+
 
 	this.allowedHouses = function() {
 		var index = this.players.length - 3;
@@ -53,6 +55,7 @@ function Game(id, amountPlayers) {
 			}
 		}
 	};
+
 }
 
 
@@ -61,58 +64,13 @@ function Player(name, house) {
 	this.name = name;
 	this.house = house;
 	this.powerTokens = 5;
-	this.ironThrone = 0; //-1 not yours, 0 unused, 1 used
-	this.sword = 0;
-	this.raven = 0;
-
-	if (this.house.defaultIronThrone == 1) {
-		this.ironThrone = 0;
-	} else {
-		this.ironThrone = -1;
-	}
-
-	if (this.house.defaultFiefdom == 1) {
-		this.sword = 0;
-	} else {
-		this.sword = -1;
-	}
-
-	if (this.house.defaultKingsCourt == 1) {
-		this.raven = 0;
-	} else {
-		this.raven = -1;
-	}
-
-	this.playSword = function() {
-		if (this.sword === 1) {
-			throw 'Player ' + this.name + ' cannot use the sword because he has already used it.'
-		}
-		if (this.sword === -1) {
-			throw 'Player ' + this.name + ' cannot use the sword because he does not own it.'
-		}
-
-		this.sword = 1;
-		//todo use sword
-	};
-
-	this.playRaven = function() {
-		if (this.raven === 1) {
-			throw 'Player ' + this.name + ' cannot use the raven because he has already used it.'
-		}
-		if (this.raven === -1) {
-			throw 'Player ' + this.name + ' cannot use the raven because he does not own it.'
-		}
-
-		this.raven = 1;
-		//todo use raven
-	};
 
 	this.discardPower = function(amount) {
 		this.powerTokens -= amount;
 		if (this.powerTokens < 0) {
 			this.powerTokens = 0;
 		}
-	}
+	};
 
 	this.usePower = function(amount) {
 		if (amount < 0) {
@@ -159,7 +117,7 @@ function SingleRankTracker(amountPlayers) {
 		}
 
 		this.consolidate();
-	}
+	};
 
 	this.moveToFirstPosition = function(house) {
 		var j = 1;
@@ -178,7 +136,7 @@ function SingleRankTracker(amountPlayers) {
 			newRank[j++] = this.rank[i];
 		}
 		this.rank = newRank;
-	}
+	};
 
 	this.consolidate = function() {
 		var j = 0;
@@ -197,7 +155,13 @@ function SingleRankTracker(amountPlayers) {
 		this.consolidate();
 		return this.rank;
 	};
-};
+
+	this.getFirst = function() {
+		this.consolidate();
+		return this.rank[0];
+	};
+
+}
 
 
 
@@ -293,12 +257,72 @@ function MultiRankTracker(minPosition, maxPosition) {
 
 function GameStats(amountPlayers) {
 	this.wildlings = 0;
+
+	this.swordUsed = false;
+	this.ravenUsed = false;
+
 	this.ironThrone = new SingleRankTracker(amountPlayers);
 	this.fiefdom = new SingleRankTracker(amountPlayers);
 	this.kingsCourt = new SingleRankTracker(amountPlayers);
 
 	this.victory = new MultiRankTracker(1, 7);
 	this.supply = new MultiRankTracker(0, 6);
+
+
+	this.isSwordUsable = function() {
+		return !this.swordUsed;
+	};
+
+	this.isRavenUsable = function() {
+		return !this.ravenUsed;
+	};
+
+	this.ownsIronThrone = function(house) {
+		return house.name === this.ironThrone.getFirst().name;
+	};
+
+	this.ownsSword = function(house) {
+		return house.name === this.fiefdom.getFirst().name;
+	};
+
+	this.ownsRaven = function(house) {
+		return house.name === this.kingsCourt.getFirst().name;
+	};
+
+	this.ironThroneStatusText = function(house) {
+		if ( this.ownsIronThrone(house) ) {
+			return 'yours';
+		} else {
+			return 'not yours';
+		}
+	};
+
+	this.swordStatusText = function(house) {
+		var text = '';
+		if ( this.isSwordUsable() ) {
+			text += 'unused';
+		} else {
+			text += 'used';
+		}
+		if ( !this.ownsSword(house) ) {
+			text += ' (not yours)';
+		}
+		return text;
+	};
+
+	this.ravenStatusText = function(house) {
+		var text = '';
+		if ( this.isRavenUsable() ) {
+			text += 'unused';
+		} else {
+			text += 'used';
+		}
+		if ( !this.ownsRaven(house) ) {
+			text += ' (not yours)';
+		}
+		return text;
+	};
+
 
 	this.setSupply = function(supply, house) {
 		this.supply.setPositionOfHouse(supply, house);
@@ -411,6 +435,21 @@ function Army(units) {
 function GameStateMachine(game) {
 	this.game = game;
 	this.currentState = null; //setup, westeros (1, 2, 3, wildlings), assign orders, execute orders (raid, march, combat, consolidate, cleanup)
+
+	switch (this.game.amountPlayers) {
+		case 3:
+			this.currentState = new Setup3PlayerGame(this);
+			break;
+		case 4:
+			this.currentState = new Setup4PlayerGame(this);
+			break;
+		case 5:
+			this.currentState = new Setup5PlayerGame(this);
+			break;
+		case 6:
+			this.currentState = new Setup6PlayerGame(this);
+			break;
+	}
 
 	this.fireEvent = function(event, params) { //event should be the function name to call on the state
 		this.currentState = this.currentState[event](params);
