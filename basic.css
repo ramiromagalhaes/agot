@@ -1,20 +1,10 @@
+/*
+Overall structure
+*/
 body {
 	margin: 0;
 	padding: 0;
 	border: 0;
-}
-
-table {
-	border: 1px solid black;
-	width: 30em;
-}
-
-table tr td {
-	border: 1px solid black;
-}
-
-table thead tr td.cardname {
-	min-width: 7em;
 }
 
 #dashboard {
@@ -25,7 +15,6 @@ table thead tr td.cardname {
 	display: inline;
 	float: left;
 	min-height: 45em;
-	margin: 0;
 	padding: 0;
 	border: 0;
 	margin: 1em;
@@ -42,9 +31,90 @@ table thead tr td.cardname {
 
 #stats {
 	min-width: 30em;
-	font-size: 0.8em;
+	font-size: 0.75em;
 }
 
+
+
+/*
+Player DIV
+*/
+#player {
+	overflow: hidden;
+}
+
+#houseCaput * {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+#houseCaput {
+	border-bottom: 1px solid black;
+}
+
+#houseName {
+	margin-right: 0.5em;
+	display: inline;
+}
+
+#playerPowerTokens, #playerSupply, #playerVictory, #round {
+	margin-right: 0.5em;
+}
+
+#player h2 {
+	text-decoration: underline;
+}
+
+#player ul {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	list-style-type: none;
+}
+
+#player li {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+#orders, #units, #dominance {
+	display: inline-block;
+	float: left;
+	min-width: 11em;
+}
+
+.label {
+	font-weight: bold;
+}
+
+table#playerCards thead tr {
+	background-color: #bbb;
+}
+
+table#playerCards thead tr td.cardname {
+	min-width: 5em;
+}
+
+table#playerCards {
+	border: 1px solid black;
+	max-width: 39em;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+table#playerCards tr td {
+	border: 1px solid black;
+	padding: 0 0.3em;
+}
+
+
+
+
+/*
+Other DIVs
+*/
 .playerRank {
 	display: block;
 	clear: both;

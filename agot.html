@@ -47,6 +47,16 @@
 			map.appendChild(circle);
 		}
 		if (unit instanceof Knight) {
+			var circle = svgDoc.createElementNS(svgns, 'circle');
+			circle.setAttribute('cx', Math.random()*1458);
+			circle.setAttribute('cy', Math.random()*2736);
+			circle.setAttribute('r', 40);
+			circle.setAttribute('fill', color);
+			circle.setAttribute('stroke', '#000');
+			circle.setAttribute('stroke-width', 8);
+			map.appendChild(circle);
+		}
+		if (unit instanceof Ship) {
 			var rect = svgDoc.createElementNS(svgns, 'rect');
 			rect.setAttribute('x', Math.random()*1458);
 			rect.setAttribute('y', Math.random()*2736);
@@ -55,21 +65,16 @@
 			rect.setAttribute('fill', color);
 			map.appendChild(rect);
 		}
-		if (unit instanceof Ship) {
-			var circle = svgDoc.createElementNS(svgns, 'circle');
-			circle.setAttribute('cx', Math.random()*1458);
-			circle.setAttribute('cy', Math.random()*2736);
-			circle.setAttribute('r', 40);
-			circle.setAttribute('fill', color);
-			map.appendChild(circle);
-		}
 		if (unit instanceof Siege) {
-			var circle = svgDoc.createElementNS(svgns, 'circle');
-			circle.setAttribute('cx', Math.random()*1458);
-			circle.setAttribute('cy', Math.random()*2736);
-			circle.setAttribute('r', 40);
-			circle.setAttribute('fill', color);
-			map.appendChild(circle);
+			var rect = svgDoc.createElementNS(svgns, 'rect');
+			rect.setAttribute('x', Math.random()*1458);
+			rect.setAttribute('y', Math.random()*2736);
+			rect.setAttribute('width', 80);
+			rect.setAttribute('height', 80);
+			rect.setAttribute('fill', color);
+			rect.setAttribute('stroke', 'black');
+			rect.setAttribute('stroke-width', 4);
+			map.appendChild(rect);
 		}
 	}
 
@@ -88,17 +93,19 @@
 		var stateMachine = new GameStateMachine(game);
 		stateMachine.fireEvent('start');
 
-		document.getElementById('houseName').textContent = game.players[0].house.name;
-		document.getElementById('playerPowerTokens').textContent = game.players[0].powerTokens;
-		document.getElementById('playerIronThroneStatus').textContent = game.gameStats.ironThroneStatusText(game.players[0].house);
-		document.getElementById('playerSwordStatus').textContent = game.gameStats.swordStatusText(game.players[0].house);
-		document.getElementById('playerRavenStatus').textContent = game.gameStats.ravenStatusText(game.players[0].house);
+		var thisPlayer = game.players[1];
+
+		document.getElementById('houseName').textContent = thisPlayer.house.name;
+		document.getElementById('playerPowerTokens').textContent = thisPlayer.powerTokens;
+		document.getElementById('playerIronThroneStatus').textContent = game.gameStats.ironThroneStatusText(thisPlayer.house);
+		document.getElementById('playerSwordStatus').textContent = game.gameStats.swordStatusText(thisPlayer.house);
+		document.getElementById('playerRavenStatus').textContent = game.gameStats.ravenStatusText(thisPlayer.house);
 
 		var cardsTable = document.getElementById('playerCards').tBodies[0];
 		for (; cardsTable.rows.length > 0; cardsTable.deleteRow(0));
-		for (var i = 0; i < game.players[0].house.cards.length; i++) {
+		for (var i = 0; i < thisPlayer.house.cards.length; i++) {
 			var row = cardsTable.insertRow(-1);
-			var card = game.players[0].house.cards[i];
+			var card = thisPlayer.house.cards[i];
 			row.insertCell(0).textContent = card.name;
 			row.insertCell(1).textContent = card.power;
 			row.insertCell(2).textContent = card.swords;
@@ -132,13 +139,49 @@
 
 		<div id="stats">
 			<div id="player">
-				<h1 id="houseName">Tyrell</h1>
-				<ul>
-					<li><span>Power tokens: </span><span id="playerPowerTokens"></span></li>
-					<li><span>Iron Throne: </span><span id="playerIronThroneStatus"></span></li>
-					<li><span>Valerian steel sword: </span><span id="playerSwordStatus"></span></li>
-					<li><span>Raven: </span><span id="playerRavenStatus"></span></li>
-				</ul>
+				<div id="houseCaput">
+					<h1 id="houseName"></h1>
+					<div>
+						<span>Power tokens: </span><span id="playerPowerTokens"></span>
+						<span>Supply: </span><span id="playerSupply">2 (3, 2, 2)</span>
+						<span>Victory: </span><span id="playerVictory">4</span>
+						<span>Round: </span><span id="round">1</span>
+						<span>Wildlings: </span><span id="wildlings">2</span>
+					</div>
+				</div>
+
+				<div id="orders">
+					<h2>Orders left</h2>
+					<ul>
+						<li><span class="label">Raid(*): </span><span>2(1)</span></li>
+						<li><span class="label">March(*): </span><span>2(1)</span></li>
+						<li><span class="label">Defend(*): </span><span>2(1)</span></li>
+						<li><span class="label">Support(*): </span><span>2(1)</span></li>
+						<li><span class="label" title="Consolidate Power">C. Power(*):</span> <span>2(1)</span></li>
+					</ul>
+				</div>
+
+				<div id="units">
+					<h2>Units left</h2>
+					<ul>
+						<li><span class="label">Footmen: </span><span>1</span></li>
+						<li><span class="label">Knight: </span><span>2</span></li>
+						<li><span class="label">Ship: </span><span>3</span></li>
+						<li><span class="label">Siege: </span><span>4</span></li>
+					</ul>
+				</div>
+
+				<div id="dominance">
+					<h2>Dominance tokens</h2>
+					<ul>
+						<li><span class="label">Iron Throne: </span><span id="playerIronThroneStatus"></span></li>
+						<li><span class="label" title="Valeerian Steel Blade">V. S. Blade: </span><span id="playerSwordStatus"></span></li>
+						<li><span class="label">Raven: </span><span id="playerRavenStatus"></span></li>
+					</ul>
+				</div>
+
+				<br style="clear: both;" />
+
 				<h2>Cards</h2>
 				<table id="playerCards">
 					<thead>
@@ -152,20 +195,60 @@
 					</thead>
 					<tbody></tbody>
 				</table>
-				<h2>Orders</h2>
-				<ul>
-					<li>Raid(*): <span>2(1)</span></li>
-					<li>March(*): <span>2(1)</span></li>
-					<li>Defend(*): <span>2(1)</span></li>
-					<li>Support(*): <span>2(1)</span></li>
-					<li>Consolidate Power(*): <span>2(1)</span></li>
-				</ul>
 			</div>
 
-			<div id="influencetracks">
-				<h1>Influence</h1>
-				<div id="ironthrone" class="playerRank">
-					<h2>Iron Throne</h2>
+			<div id="tracks">
+				<div id="influencetracks">
+					<h1>Influence</h1>
+					<div id="ironthrone" class="playerRank">
+						<h2>Iron Throne</h2>
+						<ol>
+							<li>Stark</li>
+							<li>Lannister</li>
+							<li>Baratheon</li>
+							<li>Greyjoy</li>
+							<li>Tyrell</li>
+							<li>Martel</li>
+						</ol>
+					</div>
+					<div id="fiefdom" class="playerRank">
+						<h2>Fiefdom</h2>
+						<ol>
+							<li>Stark</li>
+							<li>Lannister</li>
+							<li>Baratheon</li>
+							<li>Greyjoy</li>
+							<li>Tyrell</li>
+							<li>Martel</li>
+						</ol>
+					</div>
+					<div id="kingscourt" class="playerRank">
+						<h2>King's Court</h2>
+						<ol>
+							<li>Stark</li>
+							<li>Lannister</li>
+							<li>Baratheon</li>
+							<li>Greyjoy</li>
+							<li>Tyrell</li>
+							<li>Martel</li>
+						</ol>
+					</div>
+				</div>
+
+				<div id="supplytrack">
+					<h1>Supply</h1>
+					<ol start="0">
+						<li></li>
+						<li></li>
+						<li>Stark, Greyjoy</li>
+						<li>Lannister, Baratheon, Tyrell, Martel</li>
+						<li></li>
+						<li></li>
+						<li></li>
+					</ol>
+				</div>
+				<div id="victorytrack" class="playerRank">
+					<h1>Victory</h1>
 					<ol>
 						<li>Stark</li>
 						<li>Lannister</li>
@@ -175,105 +258,11 @@
 						<li>Martel</li>
 					</ol>
 				</div>
-				<div id="fiefdom" class="playerRank">
-					<h2>Fiefdom</h2>
-					<ol>
-						<li>Stark</li>
-						<li>Lannister</li>
-						<li>Baratheon</li>
-						<li>Greyjoy</li>
-						<li>Tyrell</li>
-						<li>Martel</li>
-					</ol>
-				</div>
-				<div id="kingscourt" class="playerRank">
-					<h2>King's Court</h2>
-					<ol>
-						<li>Stark</li>
-						<li>Lannister</li>
-						<li>Baratheon</li>
-						<li>Greyjoy</li>
-						<li>Tyrell</li>
-						<li>Martel</li>
-					</ol>
-				</div>
 			</div>
-
-			<div id="supplytrack">
-				<h1>Supply</h1>
-				<ol start="0">
-					<li></li>
-					<li></li>
-					<li>Stark, Greyjoy</li>
-					<li>Lannister, Baratheon, Tyrell, Martel</li>
-					<li></li>
-					<li></li>
-					<li></li>
-				</ol>
-			</div>
-			<div id="victorytrack" class="playerRank">
-				<h1>Victory</h1>
-				<ol>
-					<li>Stark</li>
-					<li>Lannister</li>
-					<li>Baratheon</li>
-					<li>Greyjoy</li>
-					<li>Tyrell</li>
-					<li>Martel</li>
-				</ol>
-			</div>
-			<div id="roundtrack">
-				<span>Round:</span>
-				<span id="round">1</span>
-			</div>
-			<div id="wildlingstrack">
-				<h1>Wildlings</h1>
-				<span>Track: </span><span id="wildlings">0</span>
-			</div>
-
 		</div>
 		<br style="clear: both;"/>
 	</div>
 
-	<div id="combat" style="display:none;">
-		<!--BETA layout -->
-		<div style="float: left;">
-			<span>Lannister</span><span>(you)</span>
-			<ul>
-				<li>Knight (+2)</li>
-				<li>Footman (+1)</li>
-			</ul>
-			<form>
-				<div>
-					Choose a card:
-					<radiogroup>
-						<span style="display: block;"><input type="radio"><label>A card</label></span>
-						<span style="display: block;"><input type="radio"><label>A card</label></span>
-						<span style="display: block;"><input type="radio"><label>A card</label></span>
-						<span style="display: block;"><input type="radio"><label>A card</label></span>
-						<span style="display: block;"><input type="radio"><label>A card</label></span>
-						<span style="display: block;"><input type="radio"><label>A card</label></span>
-						<span style="display: block;"><input type="radio"><label>A card</label></span>
-					</radiogroup>
-					<input type="button" value="Start combat" />
-				</div>
-			</form>
-			<span>Final strength: 3</span>
-		</div>
-		<div>
-			<span>Stark</span><span></span>
-			<ul>
-				<li>Footman (+1)</li>
-				<li>Garrison (+2)</li>
-			</ul>
-			<div>
-				<span style="font-weight: bold; display:block;">Chosen card: Ned Stark (4/0/0)</span>
-				<span>Special text, describing card effect.</span>
-			</div>
-			<span>Final strength: 3</span>
-		</div>
-		<br style="clear: both;"/>
-	</div>
 </body>
 
 </html>
