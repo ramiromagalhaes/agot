@@ -97,7 +97,6 @@
 
 		document.getElementById('houseName').textContent = thisPlayer.house.name;
 		document.getElementById('playerPowerTokens').textContent = thisPlayer.powerTokens;
-		document.getElementById('playerIronThroneStatus').textContent = game.gameStats.ironThroneStatusText(thisPlayer.house);
 		document.getElementById('playerSwordStatus').textContent = game.gameStats.swordStatusText(thisPlayer.house);
 		document.getElementById('playerRavenStatus').textContent = game.gameStats.ravenStatusText(thisPlayer.house);
 
@@ -142,11 +141,9 @@
 				<div id="houseCaput">
 					<h1 id="houseName"></h1>
 					<div>
-						<span>Power tokens: </span><span id="playerPowerTokens"></span>
-						<span>Supply: </span><span id="playerSupply">2 (3, 2, 2)</span>
-						<span>Victory: </span><span id="playerVictory">4</span>
-						<span>Round: </span><span id="round">1</span>
-						<span>Wildlings: </span><span id="wildlings">2</span>
+						<span>Power tokens: </span><span id="playerPowerTokens" class="needsRoom"></span>
+						<span>Supply: </span><span id="playerSupply" class="needsRoom">2 (3, 2, 2)</span>
+						<span>Victory: </span><span id="playerVictory" class="needsRoom">4</span>
 					</div>
 				</div>
 
@@ -171,14 +168,14 @@
 					</ul>
 				</div>
 
-				<div id="dominance">
-					<h2>Dominance tokens</h2>
+				<div id="other">
+					<h2>Other</h2>
 					<ul>
-						<li><span class="label">Iron Throne: </span><span id="playerIronThroneStatus"></span></li>
-						<li><span class="label" title="Valeerian Steel Blade">V. S. Blade: </span><span id="playerSwordStatus"></span></li>
-						<li><span class="label">Raven: </span><span id="playerRavenStatus"></span></li>
+						<li><span class="label">Round: </span><span>1</span></li>
+						<li><span class="label">Wildling strength: </span><span>2</span></li>
 					</ul>
 				</div>
+
 
 				<br style="clear: both;" />
 
@@ -199,8 +196,15 @@
 
 			<div id="tracks">
 				<div id="influencetracks">
-					<h1>Influence</h1>
-					<div id="ironthrone" class="playerRank">
+					<div id="influenceCaput">
+						<h1>Influence</h1>
+						<div id="dominance">
+							<span class="label" title="Valyrian Steel Blade">V. S. Blade: </span><span id="playerSwordStatus" class="needsRoom"></span>
+							<span class="label">Raven: </span><span id="playerRavenStatus"></span>
+						</div>
+					</div>
+
+					<div id="ironthrone">
 						<h2>Iron Throne</h2>
 						<ol>
 							<li>Stark</li>
@@ -211,7 +215,7 @@
 							<li>Martel</li>
 						</ol>
 					</div>
-					<div id="fiefdom" class="playerRank">
+					<div id="fiefdom">
 						<h2>Fiefdom</h2>
 						<ol>
 							<li>Stark</li>
@@ -222,7 +226,7 @@
 							<li>Martel</li>
 						</ol>
 					</div>
-					<div id="kingscourt" class="playerRank">
+					<div id="kingscourt">
 						<h2>King's Court</h2>
 						<ol>
 							<li>Stark</li>
@@ -233,31 +237,36 @@
 							<li>Martel</li>
 						</ol>
 					</div>
+
+					<br style="clear: both;" />
+				</div>
+
+				<div id="victorytrack">
+					<h1>Victory track</h1>
+					<ol>
+						<li></li>
+						<li>Stark</li>
+						<li>Lannister</li>
+						<li>Baratheon, Greyjoy</li>
+						<li></li>
+						<li>Martel, Tyrell</li>
+						<li></li>
+					</ol>
 				</div>
 
 				<div id="supplytrack">
-					<h1>Supply</h1>
+					<h1>Supply track</h1>
 					<ol start="0">
 						<li></li>
 						<li></li>
-						<li>Stark, Greyjoy</li>
-						<li>Lannister, Baratheon, Tyrell, Martel</li>
+						<li></li>
+						<li>Stark, Greyjoy, Lannister, Baratheon, Tyrell, Martel</li>
 						<li></li>
 						<li></li>
 						<li></li>
 					</ol>
 				</div>
-				<div id="victorytrack" class="playerRank">
-					<h1>Victory</h1>
-					<ol>
-						<li>Stark</li>
-						<li>Lannister</li>
-						<li>Baratheon</li>
-						<li>Greyjoy</li>
-						<li>Tyrell</li>
-						<li>Martel</li>
-					</ol>
-				</div>
+
 			</div>
 		</div>
 		<br style="clear: both;"/>

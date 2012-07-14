@@ -34,59 +34,54 @@ body {
 	font-size: 0.75em;
 }
 
-
-
-/*
-Player DIV
-*/
-#player {
-	overflow: hidden;
+h1 {
+	margin: 1em 0 0 0;
+	border: 0;
+	padding: 0;
 }
 
-#houseCaput * {
+ol {
 	margin: 0;
-	padding: 0;
+	padding-top: 0;
+	padding-bottom: 0;
 	border: 0;
 }
 
-#houseCaput {
-	border-bottom: 1px solid black;
-}
-
-#houseName {
-	margin-right: 0.5em;
-	display: inline;
-}
-
-#playerPowerTokens, #playerSupply, #playerVictory, #round {
-	margin-right: 0.5em;
-}
-
-#player h2 {
-	text-decoration: underline;
-}
-
-#player ul {
+ul {
 	margin: 0;
 	padding: 0;
 	border: 0;
 	list-style-type: none;
 }
 
-#player li {
+li {
 	margin: 0;
 	padding: 0;
 	border: 0;
 }
 
-#orders, #units, #dominance {
-	display: inline-block;
-	float: left;
-	min-width: 11em;
+h2 {
+	text-decoration: underline;
+	margin-bottom: 0.3em;
 }
 
-.label {
-	font-weight: bold;
+
+
+/*
+Player DIV
+*/
+#houseCaput {
+	border-bottom: 1px solid black;
+}
+
+#houseName {
+	margin: 0;
+}
+
+#orders, #units {
+	display: inline-block;
+	float: left;
+	margin-right: 1.5em;
 }
 
 table#playerCards thead tr {
@@ -113,8 +108,47 @@ table#playerCards tr td {
 
 
 /*
+Track DIVs
+*/
+#influenceCaput {
+	border-bottom: 1px solid black;
+}
+
+#influencetracks h1 {
+	margin-top: 1em;
+}
+
+#ironthrone, #fiefdom, #kingscourt {
+	display: inline-block;
+	float: left;
+	margin-right: 1em;
+}
+
+
+
+/*
 Other DIVs
 */
+#victorytrack, #supplytrack {
+	width: 15em;
+	float: left;
+	margin-right: 1em;
+}
+
+#victorytrack h1, #supplytrack h1 {
+	text-decoration: underline;
+}
+
+.label {
+	font-weight: bold;
+}
+
+.needsRoom {
+	margin-right: 0.5em;
+}
+
+
+
 .playerRank {
 	display: block;
 	clear: both;
