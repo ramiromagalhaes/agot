@@ -18,6 +18,61 @@
 	<script src="orders.js" type="text/javascript" charset="UTF-8"></script>
 
 	<script type="text/javascript" charset="UTF-8">
+	function drawUnit(unit, area) {
+		var svgns = "http://www.w3.org/2000/svg";
+		var svgDoc = document.getElementById('map').childNodes[1].getSVGDocument();
+		var map = document.getElementById('map').childNodes[1].getSVGDocument().childNodes[0];
+
+		var color = null;
+		if (unit.controller.name === stark.name) {
+			color = '#aaa';
+		} else if (unit.controller.name === lannister.name) {
+			color = '#f00';
+		} else if (unit.controller.name === baratheon.name) {
+			color = '#cc0';
+		} else if (unit.controller.name === greyjoy.name) {
+			color = '#222';
+		} else if (unit.controller.name === tyrell.name) {
+			color = '#5f5';
+		} else if (unit.controller.name === martell.name) {
+			color = '#d70';
+		}
+
+		if (unit instanceof Footman) {
+			var circle = svgDoc.createElementNS(svgns, 'circle');
+			circle.setAttribute('cx', Math.random()*1458);
+			circle.setAttribute('cy', Math.random()*2736);
+			circle.setAttribute('r', 40);
+			circle.setAttribute('fill', color);
+			map.appendChild(circle);
+		}
+		if (unit instanceof Knight) {
+			var rect = svgDoc.createElementNS(svgns, 'rect');
+			rect.setAttribute('x', Math.random()*1458);
+			rect.setAttribute('y', Math.random()*2736);
+			rect.setAttribute('width', 80);
+			rect.setAttribute('height', 80);
+			rect.setAttribute('fill', color);
+			map.appendChild(rect);
+		}
+		if (unit instanceof Ship) {
+			var circle = svgDoc.createElementNS(svgns, 'circle');
+			circle.setAttribute('cx', Math.random()*1458);
+			circle.setAttribute('cy', Math.random()*2736);
+			circle.setAttribute('r', 40);
+			circle.setAttribute('fill', color);
+			map.appendChild(circle);
+		}
+		if (unit instanceof Siege) {
+			var circle = svgDoc.createElementNS(svgns, 'circle');
+			circle.setAttribute('cx', Math.random()*1458);
+			circle.setAttribute('cy', Math.random()*2736);
+			circle.setAttribute('r', 40);
+			circle.setAttribute('fill', color);
+			map.appendChild(circle);
+		}
+	}
+
 	$(document).ready(function(){
 		/*
 		var svg = document.getElementById('map').childNodes[1].getSVGDocument();
@@ -50,7 +105,22 @@
 			row.insertCell(3).textContent = card.towers;
 			row.insertCell(4).textContent = card.text;
 		}
+
+		for (var i = 0; i < game.board.occupiers.length; i++) {
+			var occupier = game.board.occupiers[i];
+			if (occupier === null || typeof(occupier) === 'undefined') {
+				continue;
+			}
+			if (occupier instanceof Army) {
+				for (var j = 0; j < occupier.units.length; j++) {
+					drawUnit(occupier.units[j], game.board.areas[i]);
+				}
+			} else {
+				drawUnit(occupier, game.board.areas[i]);
+			}
+		}
 	});
+
 	</script>
 </head>
 

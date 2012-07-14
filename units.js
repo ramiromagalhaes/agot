@@ -62,6 +62,7 @@ Garrison.prototype.strength = function() {
 
 
 function Army(units) {
+	this.units = units;
 	this.controller = units[0].controller;
 	for (var i = 1; i < units.length; i++) {
 		if (units[i].controller.name === this.controller.name) {
@@ -69,7 +70,6 @@ function Army(units) {
 		}
 		throw 'All units in an Army should be controlled by the same house.';
 	}
-	this.units = units;
 
 
 	this.strength = function(embattledArea) {

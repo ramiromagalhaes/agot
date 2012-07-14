@@ -30,7 +30,7 @@ function Board() {
 	this.adjacency = new Array(); //big matrix telling what is adjacent to what
 	                              //todo add code to verify movement adjacency due to ship transportation
 	                              //todo should I provide an alternative way to store adjacencies to a certain area?
-	this.occupations = new Array(); //what units are in a certain area. Army or 1 Unit.
+	this.occupiers = new Array(); //what units are in a certain area. Army or 1 Unit.
 
 	for (var i = 0; i < this.areaCount; i++) {
 		this.adjacency.push(new Array(this.areaCount));
@@ -39,7 +39,7 @@ function Board() {
 	this.addArea = function(area) {
 		area.id = this.areas.length; //the area's id is the area's index on the array
 		this.areas.push(area);
-		this.occupations.push(null);
+		this.occupiers.push(null);
 	};
 
 	this.setAdjacency = function(area, adjacents) {
@@ -50,7 +50,7 @@ function Board() {
 	};
 
 	this.isOccupied = function(area) {
-		var occupier = this.occupations[area.id];
+		var occupier = this.occupiers[area.id];
 		if (occupier == null || typeof(occupier) === 'undefined') {
 			return false;
 		}
@@ -70,7 +70,7 @@ function Board() {
 
 	this.getController = function(area) {
 		if ( this.hasController(area) ) {
-			return this.occupations[area.id];
+			return this.occupiers[area.id];
 		}
 
 		return null;
@@ -80,7 +80,7 @@ function Board() {
 		if ( this.isOccupied(area) ) {
 			//todo throw error?
 		} else {
-			this.occupations[area.id] = units;
+			this.occupiers[area.id] = units;
 		}
 	};
 
