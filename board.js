@@ -28,6 +28,8 @@ function Board() {
 	this.areaCount = 50; //12 sea, 38 land
 	this.areas = new Array();
 	this.adjacency = new Array(); //big matrix telling what is adjacent to what
+	                              //todo add code to verify movement adjacency due to ship transportation
+	                              //todo should I provide an alternative way to store adjacencies to a certain area?
 	this.occupations = new Array(); //what units are in a certain area. Army or 1 Unit.
 
 	for (var i = 0; i < this.areaCount; i++) {
@@ -80,6 +82,22 @@ function Board() {
 		} else {
 			this.occupations[area.id] = units;
 		}
+	};
+
+	this.isAdjacent = function(area1, area2) {
+		return this.adjacency[area1.id][area2.id];
+	};
+
+	this.getAdjacents = function(area) { //warning cheap code ahead
+		var adjacents = new Array(); //todo see note on caput of this class
+
+		for (var i = 0; i < this.areaCount; i++) {
+			if (this.adjacency[area.id][i] === true) {
+				adjacents.push(areas[i]);
+			}
+		}
+
+		return adjacents;
 	};
 
 }
