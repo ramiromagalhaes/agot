@@ -64,6 +64,7 @@ function Player(name, house) {
 	this.name = name;
 	this.house = house;
 	this.powerTokens = 5;
+	this.maxPower = 20;
 
 	this.discardPower = function(amount) {
 		this.powerTokens -= amount;
@@ -90,6 +91,10 @@ function Player(name, house) {
 		}
 
 		this.powerTokens += amount;
+
+		if (this.powerTokens > this.maxPower) {
+			this.maxPower = 20;
+		}
 	};
 
 }
