@@ -102,7 +102,8 @@ function Player(name, house) {
 
 
 function GameStats(amountPlayers) {
-	this.wildlings = 0;
+	this.round = 1;
+	this.wildlings = 2;
 
 	this.swordUsed = false;
 	this.ravenUsed = false;

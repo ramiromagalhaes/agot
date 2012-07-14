@@ -108,6 +108,10 @@ function MultiRankTracker(minPosition, maxPosition) {
 	this.maximum = maxPosition;
 	this.rank = new Array(this.maximum - this.minimum + 1);
 
+	for(var i = 0; i < this.rank.length; i++) {
+		this.rank[i] = new Array();
+	}
+
 	//this is supposed to be a private method
 	this.findHouseOnTrack = function(house) {
 		for (var i = 0; i <= this.rank.length; i++) {
@@ -183,7 +187,7 @@ function MultiRankTracker(minPosition, maxPosition) {
 
 	this.getHousesInPosition = function(position) {
 		if (position < this.minimum || position > this.maximum) {
-			throw 'The track ranges from ' + this.minimum + ' to ' + this.maximum + '.';
+			throw 'The track ranges from ' + this.minimum + ' to ' + this.maximum + '. You tried ' + position + '.';
 		}
 
 		return this.rank[position - this.minimum];

@@ -97,8 +97,14 @@
 
 		document.getElementById('houseName').textContent = thisPlayer.house.name;
 		document.getElementById('playerPowerTokens').textContent = thisPlayer.powerTokens;
-		document.getElementById('playerSwordStatus').textContent = game.gameStats.swordStatusText(thisPlayer.house);
-		document.getElementById('playerRavenStatus').textContent = game.gameStats.ravenStatusText(thisPlayer.house);
+		document.getElementById('playerSupply').textContent = game.gameStats.supply.getPositionOfHouse(thisPlayer.house);
+		document.getElementById('playerVictory').textContent = game.gameStats.victory.getPositionOfHouse(thisPlayer.house);
+
+		//todo report orders
+		//todo report units
+
+		document.getElementById('currentRound').textContent = game.gameStats.round;
+		document.getElementById('wildlingsStrength').textContent = game.gameStats.wildlings;
 
 		var cardsTable = document.getElementById('playerCards').tBodies[0];
 		for (; cardsTable.rows.length > 0; cardsTable.deleteRow(0));
@@ -125,6 +131,82 @@
 				drawUnit(occupier, game.board.areas[i]);
 			}
 		}
+
+		document.getElementById('playerSwordStatus').textContent = game.gameStats.swordStatusText();
+		document.getElementById('playerRavenStatus').textContent = game.gameStats.ravenStatusText();
+
+		{
+			var throneTrack = document.getElementById('ironThroneTrack');
+			var throneRank = game.gameStats.ironThrone.getRank();
+			$(throneTrack).empty()
+			for (var i = 0; i < throneRank.length; i++) {
+				var li = document.createElement('li');
+				li.textContent = throneRank[i].name;
+				throneTrack.appendChild(li);
+			}
+		}
+
+		{
+			var fiefdomTrack = document.getElementById('fiefdomTrack');
+			var fiefdomRank = game.gameStats.fiefdom.getRank();
+			$(fiefdomTrack).empty()
+			for (var i = 0; i < fiefdomRank.length; i++) {
+				var li = document.createElement('li');
+				li.textContent = fiefdomRank[i].name;
+				fiefdomTrack.appendChild(li);
+			}
+		}
+
+
+		{
+			var kingsCourtTrack = document.getElementById('kingsCourtTrack');
+			var kingsCourtRank = game.gameStats.kingsCourt.getRank();
+			$(kingsCourtTrack).empty()
+			for (var i = 0; i < kingsCourtRank.length; i++) {
+				var li = document.createElement('li');
+				li.textContent = kingsCourtRank[i].name;
+				kingsCourtTrack.appendChild(li);
+			}
+		}
+
+		{
+			var victoryTrack = document.getElementById('victoryTrack');
+			$(victoryTrack).empty()
+			for (var i = game.gameStats.victory.minimum; i < game.gameStats.victory.maximum; i++) {
+				var li = document.createElement('li');
+				li.textContent = '';
+
+				var housesOnPosition = game.gameStats.victory.getHousesInPosition(i);
+				for (var j = 0; j < housesOnPosition.length; j++) {
+					li.textContent += housesOnPosition[j].name;
+					if (j != housesOnPosition.length - 1) {
+						li.textContent += ', ';
+					}
+				}
+
+				victoryTrack.appendChild(li);
+			}
+		}
+
+		{
+			var supplyTrack = document.getElementById('supplyTrack');
+			$(supplyTrack).empty()
+			for (var i = game.gameStats.supply.minimum; i < game.gameStats.supply.maximum; i++) {
+				var li = document.createElement('li');
+				li.textContent = '';
+
+				var housesOnPosition = game.gameStats.supply.getHousesInPosition(i);
+				for (var j = 0; j < housesOnPosition.length; j++) {
+					li.textContent += housesOnPosition[j].name;
+					if (j != housesOnPosition.length - 1) {
+						li.textContent += ', ';
+					}
+				}
+
+				supplyTrack.appendChild(li);
+			}
+		}
+
 	});
 
 	</script>
@@ -142,8 +224,8 @@
 					<h1 id="houseName"></h1>
 					<div>
 						<span>Power tokens: </span><span id="playerPowerTokens" class="needsRoom"></span>
-						<span>Supply: </span><span id="playerSupply" class="needsRoom">2 (3, 2, 2)</span>
-						<span>Victory: </span><span id="playerVictory" class="needsRoom">4</span>
+						<span>Supply: </span><span id="playerSupply" class="needsRoom"></span>
+						<span>Victory: </span><span id="playerVictory" class="needsRoom"></span>
 					</div>
 				</div>
 
@@ -159,7 +241,7 @@
 				</div>
 
 				<div id="units">
-					<h2>Units left</h2>
+					<h2>Units</h2>
 					<ul>
 						<li><span class="label">Footmen: </span><span>1</span></li>
 						<li><span class="label">Knight: </span><span>2</span></li>
@@ -171,8 +253,8 @@
 				<div id="other">
 					<h2>Game status</h2>
 					<ul>
-						<li><span class="label">Round: </span><span>1</span></li>
-						<li><span class="label">Wildling strength: </span><span>2</span></li>
+						<li><span class="label">Round: </span><span id="currentRound"></span></li>
+						<li><span class="label">Wildling strength: </span><span id="wildlingsStrength"></span></li>
 					</ul>
 				</div>
 
@@ -207,7 +289,7 @@
 
 					<div id="ironthrone">
 						<h2>Iron Throne</h2>
-						<ol>
+						<ol id="ironThroneTrack">
 							<li>Stark</li>
 							<li>Lannister</li>
 							<li>Baratheon</li>
@@ -218,7 +300,7 @@
 					</div>
 					<div id="fiefdom">
 						<h2>Fiefdom</h2>
-						<ol>
+						<ol id="fiefdomTrack">
 							<li>Stark</li>
 							<li>Lannister</li>
 							<li>Baratheon</li>
@@ -229,7 +311,7 @@
 					</div>
 					<div id="kingscourt">
 						<h2>King's Court</h2>
-						<ol>
+						<ol id="kingsCourtTrack">
 							<li>Stark</li>
 							<li>Lannister</li>
 							<li>Baratheon</li>
@@ -242,9 +324,9 @@
 					<br style="clear: both;" />
 				</div>
 
-				<div id="victorytrack">
+				<div id="victory">
 					<h1>Victory track</h1>
-					<ol>
+					<ol id="victoryTrack">
 						<li></li>
 						<li>Stark</li>
 						<li>Lannister</li>
@@ -255,9 +337,9 @@
 					</ol>
 				</div>
 
-				<div id="supplytrack">
+				<div id="supply">
 					<h1>Supply track</h1>
-					<ol start="0">
+					<ol id="supplyTrack" start="0">
 						<li></li>
 						<li></li>
 						<li></li>
