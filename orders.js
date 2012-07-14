@@ -25,8 +25,9 @@ function RaidOrder(area) {
 
 MarchOrder.prototype = new Order();
 MarchOrder.prototype.constructor = MarchOrder;
-function MarchOrder() {
+function MarchOrder(strength) {
 	Order.call(this, 'March', area);
+	this.strength = strength;
 
 	this.execute = function() {
 		//player will split army?

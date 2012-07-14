@@ -135,38 +135,20 @@ function GameStats(amountPlayers) {
 		return house.name === this.kingsCourt.getFirst().name;
 	};
 
-	this.ironThroneStatusText = function(house) {
-		if ( this.ownsIronThrone(house) ) {
-			return 'yours';
-		} else {
-			return 'not yours';
-		}
-	};
-
 	this.swordStatusText = function(house) {
-		var text = '';
 		if ( this.isSwordUsable() ) {
-			text += 'unused';
+			return 'unused';
 		} else {
-			text += 'used';
+			return 'used';
 		}
-		if ( !this.ownsSword(house) ) {
-			text += ' (not yours)';
-		}
-		return text;
 	};
 
 	this.ravenStatusText = function(house) {
-		var text = '';
 		if ( this.isRavenUsable() ) {
-			text += 'unused';
+			return 'unused';
 		} else {
-			text += 'used';
+			return 'used';
 		}
-		if ( !this.ownsRaven(house) ) {
-			text += ' (not yours)';
-		}
-		return text;
 	};
 
 
