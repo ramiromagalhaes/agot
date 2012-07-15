@@ -29,8 +29,8 @@ function Board() {
 	this.areas = new Array();
 	this.adjacency = new Array(); //big matrix telling what is adjacent to what
 	                              //todo add code to verify movement adjacency due to ship transportation
-	                              //todo should I provide an alternative way to store adjacencies to a certain area?
-	this.occupiers = new Array(); //what units are in a certain area. Army or 1 Unit.
+	                              //todo should I provide an alternative way to store adjacencies to a certain area for performance sake?
+	this.occupiers = new Array(); //what units are in a certain area: Army or 1 Unit.
 
 	for (var i = 0; i < this.areaCount; i++) {
 		this.adjacency.push(new Array(this.areaCount));

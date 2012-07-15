@@ -500,8 +500,10 @@ function WesterosState(machine, decks) { //should receive an array of the 3 west
 }
 
 
-
-function AssignState() {
+AssignState.prototype = new GameState();
+AssignState.prototype.constructor = AssignState;
+function AssignState(machine) {
+	GameState.call(this, machine, 'Assign Orders');
 	this.playersDone = new Array();
 
 	this.isDone = function() {
@@ -510,8 +512,7 @@ function AssignState() {
 
 	this.start = function() {
 		if (this.isDone()) {
-			//receive player orders
-			//checks if all possible orders were correctly given (starred orders, all units got orders, no orders give to somewhere else)
+			//todo ask for players orders and put them in a OrdersCollection instance
 			return null;
 		} else {
 			//ask players for their orders
@@ -534,7 +535,9 @@ function AssignState() {
 
 
 
-function AssignState() {
+ExecuteState.prototype = new GameState();
+ExecuteState.prototype.constructor = ExecuteState;
+function ExecuteState() {
 	this.start = function() {
 		//reveal orders
 		//can a player use Raven? Ask what if he wants to use it and what for.
