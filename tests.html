@@ -22,111 +22,174 @@ function assert(expected, value) {
 	throw 'Expected: ' + expected.toString() + '; got: ' + value.toString();
 }
 
+{
+	var game = new Game(1, 3);
 
+	//Players
+	var p1 = new Player('P1', stark);
+	var p2 = new Player('P2', lannister);
+	var p3 = new Player('P3', baratheon);
+	var p4 = new Player('P4', greyjoy);
+	var p5 = new Player('P5', tyrell);
+	var p6 = new Player('P6', martell);
 
-var game = new Game(1, 3);
-
-
-
-//Players
-var p1 = new Player('P1', stark);
-var p2 = new Player('P2', lannister);
-var p3 = new Player('P3', baratheon);
-var p4 = new Player('P4', greyjoy);
-var p5 = new Player('P5', tyrell);
-var p6 = new Player('P6', martell);
-
-//Game
-//var game = new Game(1, 3);
-game.addPlayer(p1);
-game.addPlayer(p2);
-game.addPlayer(p3);
+	game.addPlayer(p1);
+	game.addPlayer(p2);
+	game.addPlayer(p3);
 
 
 
-var gameStats = new GameStats(3);
-gameStats.setSupply(0, lannister);
-gameStats.setSupply(0, baratheon);
-gameStats.setSupply(5, stark);
-gameStats.setSupply(1, lannister);
-gameStats.setSupply(0, baratheon);
-gameStats.setSupply(2, lannister);
-gameStats.setSupply(1, stark);
-gameStats.setSupply(3, lannister);
-gameStats.setSupply(5, stark);
-gameStats.setSupply(4, lannister);
-gameStats.setSupply(6, baratheon);
-gameStats.setSupply(5, lannister);
-gameStats.setSupply(6, baratheon);
-gameStats.setSupply(6, lannister);
+	var gameStats = new GameStats(3);
+	gameStats.setSupply(0, lannister);
+	gameStats.setSupply(0, baratheon);
+	gameStats.setSupply(5, stark);
+	gameStats.setSupply(1, lannister);
+	gameStats.setSupply(0, baratheon);
+	gameStats.setSupply(2, lannister);
+	gameStats.setSupply(1, stark);
+	gameStats.setSupply(3, lannister);
+	gameStats.setSupply(5, stark);
+	gameStats.setSupply(4, lannister);
+	gameStats.setSupply(6, baratheon);
+	gameStats.setSupply(5, lannister);
+	gameStats.setSupply(6, baratheon);
+	gameStats.setSupply(6, lannister);
 
-assert(5, gameStats.getSupplyOfHouse(stark));
-assert(6, gameStats.getSupplyOfHouse(lannister));
-assert(6, gameStats.getSupplyOfHouse(baratheon));
+	assert(5, gameStats.getSupplyOfHouse(stark));
+	assert(6, gameStats.getSupplyOfHouse(lannister));
+	assert(6, gameStats.getSupplyOfHouse(baratheon));
 
-var stateMachine = new GameStateMachine(game);
-stateMachine.currentState = new Setup3PlayerGame(stateMachine);
-stateMachine.fireEvent('start');
+	var stateMachine = new GameStateMachine(game);
+	stateMachine.currentState = new Setup3PlayerGame(stateMachine);
+	stateMachine.fireEvent('start');
 
-assert(game.gameStats.ironThrone.getRank()[0].name, baratheon.name);
-assert(game.gameStats.ironThrone.getRank()[1].name, lannister.name);
-assert(game.gameStats.ironThrone.getRank()[2].name, stark.name);
+	assert(game.gameStats.ironThrone.getRank()[0].name, baratheon.name);
+	assert(game.gameStats.ironThrone.getRank()[1].name, lannister.name);
+	assert(game.gameStats.ironThrone.getRank()[2].name, stark.name);
 
-/*
-assert(stateMachine.currentState.name);
-stateMachine.fireEvent('start');
-assert(stateMachine.currentState.name);
-stateMachine.fireEvent('start');
-assert(stateMachine.currentState.name);
-stateMachine.fireEvent('start');
-assert(stateMachine.currentState.name);
-stateMachine.fireEvent('start');
-assert(stateMachine.currentState.name);
-stateMachine.fireEvent('start');
-assert(stateMachine.currentState.name);
-stateMachine.fireEvent('start');
-assert(stateMachine.currentState.name);
-stateMachine.fireEvent('start');
-assert(stateMachine.currentState.name);
-stateMachine.fireEvent('start');
-assert(stateMachine.currentState.name);
-stateMachine.fireEvent('start');
-assert(stateMachine.currentState.name);
-stateMachine.fireEvent('start');
-assert(stateMachine.currentState.name);
-*/
+	/*
+	assert(stateMachine.currentState.name);
+	stateMachine.fireEvent('start');
+	assert(stateMachine.currentState.name);
+	stateMachine.fireEvent('start');
+	assert(stateMachine.currentState.name);
+	stateMachine.fireEvent('start');
+	assert(stateMachine.currentState.name);
+	stateMachine.fireEvent('start');
+	assert(stateMachine.currentState.name);
+	stateMachine.fireEvent('start');
+	assert(stateMachine.currentState.name);
+	stateMachine.fireEvent('start');
+	assert(stateMachine.currentState.name);
+	stateMachine.fireEvent('start');
+	assert(stateMachine.currentState.name);
+	stateMachine.fireEvent('start');
+	assert(stateMachine.currentState.name);
+	stateMachine.fireEvent('start');
+	assert(stateMachine.currentState.name);
+	stateMachine.fireEvent('start');
+	assert(stateMachine.currentState.name);
+	*/
 
-var footman  = new Footman(stark);
-var knight   = new Knight(lannister);
-var ship     = new Ship(baratheon);
-var siege    = new Siege(stark);
-var garrison = new Garrison(noHouse, 5);
+	var footman  = new Footman(stark);
+	var knight   = new Knight(lannister);
+	var ship	 = new Ship(baratheon);
+	var siege	= new Siege(stark);
+	var garrison = new Garrison(noHouse, 5);
 
-assert(1, footman.strength());
-assert('Stark', footman.controller.name);
-assert(2, knight.strength());
-assert('Lannister', knight.controller.name);
-assert(1, ship.strength());
-assert('Baratheon', ship.controller.name);
-//assert(4, siege.strength());
-assert('Stark', siege.controller.name);
-assert(5, garrison.strength());
+	assert(1, footman.strength());
+	assert('Stark', footman.controller.name);
+	assert(2, knight.strength());
+	assert('Lannister', knight.controller.name);
+	assert(1, ship.strength());
+	assert('Baratheon', ship.controller.name);
+	//assert(4, siege.strength());
+	assert('Stark', siege.controller.name);
+	assert(5, garrison.strength());
 
-var army = new Army([footman, siege]);
-assert('Stark', army.controller.name);
-assert(1+4, army.strength(pike));
-
-
-var order = new MarchOrder();
-order = new RaidOrder();
-order = new SupportOrder();
-order = new DefendOrder();
-order = new ConsolidatePowerOrder();
+	var army = new Army([footman, siege]);
+	assert('Stark', army.controller.name);
+	assert(1+4, army.strength(pike));
 
 
+	var order = new MarchOrder();
+	order = new RaidOrder();
+	order = new SupportOrder();
+	order = new DefendOrder();
+	order = new ConsolidatePowerOrder();
+}
+
+{
+	var game = new Game(1, 3);
+	var p1 = new Player('P1', stark);
+	var p2 = new Player('P2', lannister);
+	var p3 = new Player('P3', baratheon);
+	game.addPlayer(p1);
+	game.addPlayer(p2);
+	game.addPlayer(p3);
+	var stateMachine = new GameStateMachine(game);
+	stateMachine.currentState = new Setup3PlayerGame(stateMachine);
+	stateMachine.fireEvent('start');
+
+	var mockOrders = [
+		new RaidOrder(baratheon),
+		new MarchOrder(lannister),
+		new RaidOrder(stark),
+		new RaidOrder(baratheon),
+		new MarchOrder(stark),
+		new SupportOrder(lannister),
+		new RaidOrder(stark),
+		new RaidOrder(lannister),
+		new ConsolidatePowerOrder(baratheon)
+	];
+
+	var oc = new OrderCollection(game.board, game.gameStats);
+	var finalOrders = oc.sortOrdersByIronThroneInfluence(mockOrders);
+
+	assert('Baratheon', finalOrders[0].issuer.name);
+	assert('Baratheon', finalOrders[1].issuer.name);
+	assert('Baratheon', finalOrders[2].issuer.name);
+	assert('Lannister', finalOrders[3].issuer.name);
+	assert('Lannister', finalOrders[4].issuer.name);
+	assert('Lannister', finalOrders[5].issuer.name);
+	assert('Stark', finalOrders[6].issuer.name);
+	assert('Stark', finalOrders[7].issuer.name);
+	assert('Stark', finalOrders[8].issuer.name);
+
+	oc.orders = mockOrders;
+
+	finalOrders = oc.getRaidOrders();
+	assert('Baratheon', finalOrders[0].issuer.name);
+	assert('Baratheon', finalOrders[1].issuer.name);
+	assert('Lannister', finalOrders[2].issuer.name);
+	assert('Stark', finalOrders[3].issuer.name);
+	assert('Stark', finalOrders[4].issuer.name);
+	assert('Raid', finalOrders[0].name);
+	assert('Raid', finalOrders[1].name);
+	assert('Raid', finalOrders[2].name);
+	assert('Raid', finalOrders[3].name);
+	assert('Raid', finalOrders[4].name);
 
 
-var oc = new OrderCollection(mockBoard, mockGameStats);
+	finalOrders = oc.getMarchOrders();
+	assert('Lannister', finalOrders[0].issuer.name);
+	assert('Stark', finalOrders[1].issuer.name);
+	assert('March', finalOrders[0].name);
+	assert('March', finalOrders[1].name);
+
+	finalOrders = oc.getDefendOrders();
+	assert(0, finalOrders.length);
+
+	finalOrders = oc.getSupportOrders();
+	assert('Lannister', finalOrders[0].issuer.name);
+	assert('Support', finalOrders[0].name);
+
+	finalOrders = oc.getConsolidatePowerOrders();
+	assert('Baratheon', finalOrders[0].issuer.name);
+	assert('Consolidate Power', finalOrders[0].name);
+
+
+}
 
 
 //]]></script>
@@ -135,4 +198,3 @@ var oc = new OrderCollection(mockBoard, mockGameStats);
 <body id="body">
 </body>
 </html>
-

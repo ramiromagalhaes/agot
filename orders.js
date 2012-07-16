@@ -42,7 +42,7 @@ function OrderCollection(board, gameStats) { //todo more verifications on the or
 				continue;
 			}
 			if (this.orders[i] instanceof window[orderName]) {
-				ordersOfType.push(orders[i]);
+				ordersOfType.push(this.orders[i]);
 			}
 		}
 
@@ -52,13 +52,13 @@ function OrderCollection(board, gameStats) { //todo more verifications on the or
 	//supposed to be a private method
 	this.sortOrdersByIronThroneInfluence = function(someOrders) {
 		var rank = this.gameStats.ironThrone.getRank();
-		var hashRank = new Object(); // todo will this work???
+		var hashRank = new Object(); //todo consider applying this technique in the SingleRankTracker.getRank() method
 		for (var i = 0; i < rank.length; i++) {
-			hashRank[rank[i].name] = rank.length - i;
+			hashRank[rank[i].name] = i;
 		}
 
-		var sortFunction = function(houseA, houseB) {
-			return hashRank[houseA.name] - hashRank[houseB.name];
+		var sortFunction = function(orderA, orderB) {
+			return hashRank[orderA.issuer.name] - hashRank[orderB.issuer.name];
 		};
 
 		someOrders.sort(sortFunction);
