@@ -21,7 +21,7 @@
 	function drawUnit(unit, area) {
 		var svgns = "http://www.w3.org/2000/svg";
 		var svgDoc = document.getElementById('map').childNodes[1].getSVGDocument();
-		var map = document.getElementById('map').childNodes[1].getSVGDocument().childNodes[0];
+		var map = svgDoc.childNodes[0];
 
 		var color = null;
 		if (unit.controller.name === stark.name) {

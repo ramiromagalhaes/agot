@@ -10,8 +10,9 @@ function Order(name, issuer) {
 
 
 
-function OrderCollection(board) { //todo more verifications on the order placement
+function OrderCollection(board, gameStats) { //todo more verifications on the order placement
 	this.board = board;
+	this.gameStats = gameStats;
 	this.orders = new Array(this.board.areaCount);
 	this.revealOrders = false;
 
@@ -50,7 +51,17 @@ function OrderCollection(board) { //todo more verifications on the order placeme
 
 	//supposed to be a private method
 	this.sortOrdersByIronThroneInfluence = function(someOrders) {
-		//todo implement
+		var rank = this.gameStats.ironThrone.getRank();
+		var hashRank = new Object(); // todo will this work???
+		for (var i = 0; i < rank.length; i++) {
+			hashRank[rank[i].name] = rank.length - i;
+		}
+
+		var sortFunction = function(houseA, houseB) {
+			return hashRank[houseA.name] - hashRank[houseB.name];
+		};
+
+		someOrders.sort(sortFunction);
 		return someOrders;
 	};
 
