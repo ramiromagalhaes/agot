@@ -3,7 +3,7 @@ function Game(id, amountPlayers) {
 	this.amountPlayers = amountPlayers;
 	this.players = new Array(0);
 	this.gameStats = new GameStats(amountPlayers);
-	this.board = new Board();
+	this.board = board; //todo how shall I initiate the board? Is like this ok?
 	this.allowedHousesArray = new Array(
 		['Stark', 'Lannister', 'Baratheon'],
 		['Stark', 'Lannister', 'Baratheon', 'Greyjoy'],
@@ -399,10 +399,10 @@ Setup5PlayerGame.prototype.setupTyrellUnits = function() {
 		])
 	);
 	board.setOccupiers(redwyneStraights,
-		new Ship(greyjoy)
+		new Ship(tyrell)
 	);
 	board.setOccupiers(dornishMarches,
-		new Footman(greyjoy)
+		new Footman(tyrell)
 	);
 
 };

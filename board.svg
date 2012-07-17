@@ -25,11 +25,13 @@ function onloadSVG(event) {
 }
 
 function onmouseoverArea(event) {
-	event.target.setAttribute('fill', '#eee');
+	//todo must find another way to highlight a certain area
+	//event.target.setAttribute('fill', '#eee');
 }
 
 function onmouseoutArea(event) {
-	event.target.setAttribute('fill', '#fff');
+	//todo must find another way to highlight a certain area
+	//event.target.setAttribute('fill', '#fff');
 }
 
 ]]></script>

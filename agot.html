@@ -18,6 +18,37 @@
 	<script src="orders.js" type="text/javascript" charset="UTF-8"></script>
 
 	<script type="text/javascript" charset="UTF-8">
+	function highlightControlledArea(theBoard, someArea) {
+		var svgns = "http://www.w3.org/2000/svg";
+		var svgDoc = document.getElementById('map').childNodes[1].getSVGDocument();
+
+		var controller = theBoard.getController(someArea);
+
+		var color = null;
+		switch (controller.name) {
+			case stark.name:
+				color = '#d9d9d9';
+				break;
+			case lannister.name:
+				color = '#ffc0c0';
+				break;
+			case baratheon.name:
+				color = '#dfdfa0';
+				break;
+			case greyjoy.name:
+				color = '#7a7a7a';
+				break;
+			case tyrell.name:
+				color = '#afa';
+				break;
+			case martell.name:
+				color = '#fa6';
+				break;
+		}
+
+		svgDoc.getElementById(someArea.codeName).setAttribute('fill', color);
+	}
+
 	function drawUnit(unit, area) {
 		var svgns = "http://www.w3.org/2000/svg";
 		var svgDoc = document.getElementById('map').childNodes[1].getSVGDocument();
@@ -25,7 +56,7 @@
 
 		var color = null;
 		if (unit.controller.name === stark.name) {
-			color = '#aaa';
+			color = '#909090';
 		} else if (unit.controller.name === lannister.name) {
 			color = '#f00';
 		} else if (unit.controller.name === baratheon.name) {
@@ -33,7 +64,7 @@
 		} else if (unit.controller.name === greyjoy.name) {
 			color = '#222';
 		} else if (unit.controller.name === tyrell.name) {
-			color = '#5f5';
+			color = '#181';
 		} else if (unit.controller.name === martell.name) {
 			color = '#d70';
 		}
@@ -85,15 +116,30 @@
 		svg.firstChild.childNodes[5].style.setProperty('fill', '#d3d3d3', '');
 		*/
 
-		var game = new Game(1,3);
+		var game = new Game(1,6);
 		game.addPlayer( new Player('P1', stark) );
 		game.addPlayer( new Player('P2', lannister) );
 		game.addPlayer( new Player('P3', baratheon) );
+		game.addPlayer( new Player('P4', greyjoy) );
+		game.addPlayer( new Player('P5', tyrell) );
+		game.addPlayer( new Player('P6', martell) );
 
 		var stateMachine = new GameStateMachine(game);
 		stateMachine.fireEvent('start');
 
-		var thisPlayer = game.players[1];
+
+
+		//this will display controlled areas on the map
+		for (var i = 0; i < game.board.occupiers.length; i++) {
+			if (game.board.hasController(game.board.areas[i])) {
+				highlightControlledArea(game.board, game.board.areas[i]);
+			}
+		}
+
+
+
+		//displaying game details to the player
+		var thisPlayer = game.players[0];
 
 		document.getElementById('houseName').textContent = thisPlayer.house.name;
 		document.getElementById('playerPowerTokens').textContent = thisPlayer.powerTokens;
