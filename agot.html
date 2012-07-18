@@ -212,7 +212,7 @@
 		{
 			var victoryTrack = document.getElementById('victoryTrack');
 			$(victoryTrack).empty()
-			for (var i = game.gameStats.victory.minimum; i < game.gameStats.victory.maximum; i++) {
+			for (var i = game.gameStats.victory.minimum; i <= game.gameStats.victory.maximum; i++) {
 				var li = document.createElement('li');
 				li.textContent = '';
 
@@ -231,7 +231,7 @@
 		{
 			var supplyTrack = document.getElementById('supplyTrack');
 			$(supplyTrack).empty()
-			for (var i = game.gameStats.supply.minimum; i < game.gameStats.supply.maximum; i++) {
+			for (var i = game.gameStats.supply.minimum; i <= game.gameStats.supply.maximum; i++) {
 				var li = document.createElement('li');
 				li.textContent = '';
 
