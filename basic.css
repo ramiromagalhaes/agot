@@ -29,9 +29,13 @@ body {
 	border: 1px solid black;
 }
 
-#stats {
+#stats, #overlays {
 	min-width: 30em;
 	font-size: 0.75em;
+}
+
+#overlays {
+	margin-bottom: 1em;
 }
 
 h1 {

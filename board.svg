@@ -25,12 +25,13 @@ function onmouseoverArea(event) {
 	//event.target.setAttribute('fill', '#eee');
 
 	//as recomended in http://srufaculty.sru.edu/david.dailey/svg/intro/PartF_B.html
-	//top.showAreaName(event); //showAreaName is a function in the HTML document
+	top.showAreaName(event); //showAreaName is a function in the HTML document
 }
 
 function onmouseoutArea(event) {
 	//todo must find another way to highlight a certain area
 	//event.target.setAttribute('fill', '#fff');
+	top.hideAreaName(event); //showAreaName is a function in the HTML document
 }
 
 ]]></script>

@@ -18,9 +18,13 @@
 	<script src="orders.js" type="text/javascript" charset="UTF-8"></script>
 
 	<script type="text/javascript" charset="UTF-8">
+	function getSVGDocument() {
+		return document.getElementsByTagName('embed').item(0).getSVGDocument();
+	}
+
 	function highlightControlledArea(theBoard, someArea) {
 		var svgns = "http://www.w3.org/2000/svg";
-		var svgDoc = document.getElementById('map').childNodes[1].getSVGDocument();
+		var svgDoc = getSVGDocument();
 
 		var controller = theBoard.getController(someArea);
 
@@ -51,7 +55,7 @@
 
 	function drawUnit(unit, area) {
 		var svgns = "http://www.w3.org/2000/svg";
-		var svgDoc = document.getElementById('map').childNodes[1].getSVGDocument();
+		var svgDoc = getSVGDocument();
 		var map = svgDoc.childNodes[0];
 
 		var color = null;
@@ -108,6 +112,8 @@
 			map.appendChild(rect);
 		}
 	}
+
+	var game = new Game(1,6);
 
 	$(document).ready(function(){
 		var game = new Game(1,6);
@@ -249,12 +255,35 @@
 
 	});
 
+	function showAreaName(event) {
+		var areaCode = event.target.id;
+		var area = game.board.areasByCode[areaCode];
+		document.getElementById('selectedAreaName').textContent = area.name;
+		document.getElementById('selectedAreaSupply').textContent = area.supply;
+		document.getElementById('selectedAreaPower').textContent = area.power;
+	}
+	function hideAreaName(event) {
+		var areaCode = event.target.id;
+		document.getElementById('selectedAreaName').textContent = '(none)';
+		document.getElementById('selectedAreaSupply').textContent = '-';
+		document.getElementById('selectedAreaPower').textContent = '-';
+	}
 	</script>
 </head>
 
 <body>
 	<div id="dashboard">
 		<div id="map">
+			<div id="overlays">
+				<div>
+					<span id="selectedAreaName" class="label, needsRoom">(none)</span>
+					<span class="label">Supply: </span><span id="selectedAreaSupply"></span>
+					<span class="label">Power: </span><span id="selectedAreaPower"></span>
+				</div>
+				<a href="#" class="needsRoom">Default overlay</a>
+				<a href="#" class="needsRoom">Territory type overlay</a>
+				<a href="#" class="needsRoom">Controllers overlay</a>
+			</div>
 			<embed src="board.svg" type="image/svg+xml" />
 		</div>
 
