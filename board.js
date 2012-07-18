@@ -28,6 +28,7 @@ function Area(name, codename, type, supply, power, castle, hasPort, defaultContr
 function Board() {
 	this.areaCount = 50; //12 sea, 38 land
 	this.areas = new Array();
+	this.areasByCode = new Object(); //hash of areas by its codName attributes. Useful for interoperating with the map
 	this.adjacency = new Array(); //big matrix telling what is adjacent to what
 	                              //todo add code to verify movement adjacency due to ship transportation
 	                              //todo should I provide an alternative way to store adjacencies to a certain area for performance sake?
@@ -40,6 +41,7 @@ function Board() {
 	this.addArea = function(area) {
 		area.id = this.areas.length; //the area's id is the area's index on the array
 		this.areas.push(area);
+		this.areasByCode[area.codeName] = area;
 		this.occupiers.push(null);
 	};
 
