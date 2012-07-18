@@ -152,7 +152,6 @@ function GameStats(amountPlayers) {
 		}
 	};
 
-
 	this.setSupply = function(supply, house) {
 		this.supply.setPositionOfHouse(supply, house);
 	};

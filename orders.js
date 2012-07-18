@@ -2,10 +2,6 @@ function Order(name, issuer) {
 	//how the starred orders will be played?
 	this.name = name;
 	this.issuer = issuer; //todo should I store the player or the house?
-
-	this.cancel = function() {
-		//just remove the order from the board.
-	};
 }
 
 
@@ -18,11 +14,15 @@ function OrderCollection(board, gameStats) { //todo more verifications on the or
 
 	//returns true if it replaced a previously placed order
 	this.placeOrder = function(area, order) {
+		if (!board.hasController(area) && !board.isOccupied(area)) {
+			throw 'A player can only place orders on units he controls. ' + area.name + ' has no controller or is not occupied.';
+		}
 		if (board.getController(area).name != order.issuer.name) {
 			throw 'A player can only place orders on the units he controls. Those units are controlled by the house ' + board.getController(area).name;
 		}
 
-		//todo other checks
+		//todo other checks?
+		//todo check if a player placed more orders than he's able to. Consider his King's Court track.
 
 		var returnValue = false;
 		if (this.orders[area.id] != null) {
@@ -34,14 +34,19 @@ function OrderCollection(board, gameStats) { //todo more verifications on the or
 		return returnValue;
 	};
 
+	this.removeOrder = function(area) {
+		this.orders[area.id] = null;
+	};
+
 	//supposed to be a private method
 	this.getOrdersOfType = function(orderName) {
+		var orderClass = window[orderName];
 		var ordersOfType = new Array();
 		for (var i = 0; i < this.orders.length; i++) {
 			if (this.orders[i] === null || typeof(this.orders[i]) === 'undefined') {
 				continue;
 			}
-			if (this.orders[i] instanceof window[orderName]) {
+			if (this.orders[i] instanceof orderClass) {
 				ordersOfType.push(this.orders[i]);
 			}
 		}
