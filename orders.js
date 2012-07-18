@@ -55,7 +55,7 @@ function OrderCollection(board, gameStats) { //todo more verifications on the or
 	};
 
 	//supposed to be a private method
-	this.sortOrdersByIronThroneInfluence = function(someOrders) {
+	this.sortOrdersByIronThroneInfluence = function(someOrders) { //todo it seems this will be reused a lot. Should this method really be here?
 		var rank = this.gameStats.ironThrone.getRank();
 		var hashRank = new Object(); //todo consider applying this technique in the SingleRankTracker.getRank() method
 		for (var i = 0; i < rank.length; i++) {

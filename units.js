@@ -87,3 +87,25 @@ function Army(units) {
 
 
 
+function Muster(game, area) {
+	this.game = game;
+	this.area = area;
+
+	this.showOptions = function() {
+		var musteringPoints = this.area.castle;
+		var occupiers = this.game.board.occupiers[this.area.id];
+		var controller = this.game.board.getController(this.area);
+		var supply = this.game.gameStats.getArmyLimitsOfHouse();
+
+		if (occupiers instanceof Army) {
+			//todo
+		} else {
+			//todo
+		}
+	};
+
+	this.getMusteringOptions = function() {
+		
+	};
+}
+

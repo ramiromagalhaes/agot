@@ -19,6 +19,18 @@ function WildlingCard(name, lowestBidderText, everyoneElseText, highestBidderTex
 
 //Westeros Deck 1 - Winter is Coming, Mustering, Supply, Last Days of Summer, A Throne of Blades
 var mustering = new WesterosCard('Mustering',           0, 'Recruit new units in Strongholds and Castles');
+mustering.takeEffect = function(game) {
+	var musteringAreas = game.board.getPlayerOwnedCastleAreas();
+
+	//todo for each area, ask players, in Iron Throne dominance order to muster units in the musteringAreas. This could also be made simultaneously.
+	//todo implement the player ordering
+	for (var i = 0; i < musteringAreas.length; i++) {
+		//todo ask players for mustering options. Upgrade unit to another? Get new units? This should produce only valid mustering options.
+	}
+
+	//todo somehow get player's mustering options. Should I verify here if the mustering options are valid? Should I get them already done? What is the data structure?
+};
+
 var supply    = new WesterosCard('Supply',              0, 'Adjust Supply track. Reconcile armies.');
 var blades    = new WesterosCard('A Throne of Blades',  1, 'The holder of the Iron Throne token chooses whether: a) everyone updates their Supply then reconciles armies, b) everyone musters units, or c) this card has no effect.');
 

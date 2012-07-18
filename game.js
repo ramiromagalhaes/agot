@@ -160,6 +160,20 @@ function GameStats(amountPlayers) {
 		return this.supply.getPositionOfHouse(house);
 	};
 
+	this.getArmyLimitsOfHouse = function(house) {
+		var limits = [
+			[2, 2],
+			[3, 2],
+			[3, 2, 2],
+			[3, 2, 2, 2],
+			[3, 3, 2, 2],
+			[4, 3, 2, 2],
+			[4, 3, 2, 2, 2]
+		];
+
+		return limits[this.supply.getPositionOfHouse(house) - this.supply.minimum];
+	};
+
 	this.setVictory = function(victory, house) {
 		this.victory.setPositionOfHouse(victory, house);
 	};

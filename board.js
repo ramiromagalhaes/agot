@@ -103,6 +103,18 @@ function Board() {
 		return adjacents;
 	};
 
+	//returns an array with castles and strongholds
+	this.getPlayerOwnedCastleAreas = function() {
+		var castleAreas = new Array();
+		for (var i = 0; i < this.areas.length; i++) {
+			if (this.areas[i].castle != 0 && this.hasController(this.areas[i])) {
+				castleAreas.push(this.areas[i]);
+			}
+		}
+
+		return castleAreas;
+	}
+
 }
 
 
