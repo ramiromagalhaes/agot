@@ -19,18 +19,33 @@
 	<script src="view.js" type="text/javascript" charset="UTF-8"></script>
 
 	<script type="text/javascript" charset="UTF-8">
+		var game = new Game(1,6);
+		game.addPlayer( new Player('P1', stark) );
+		game.addPlayer( new Player('P2', lannister) );
+		game.addPlayer( new Player('P3', baratheon) );
+		game.addPlayer( new Player('P4', greyjoy) );
+		game.addPlayer( new Player('P5', tyrell) );
+		game.addPlayer( new Player('P6', martell) );
+
+		var stateMachine = new GameStateMachine(game);
+		stateMachine.fireEvent('start');
+
+		function showAreaName(event) {
+			var areaCode = event.target.id;
+			var area = game.board.areasByCode[areaCode];
+			document.getElementById('selectedAreaName').textContent = area.name;
+			document.getElementById('selectedAreaSupply').textContent = area.supply;
+			document.getElementById('selectedAreaPower').textContent = area.power;
+		}
+
+		function hideAreaName(event) {
+			var areaCode = event.target.id;
+			document.getElementById('selectedAreaName').textContent = '(none)';
+			document.getElementById('selectedAreaSupply').textContent = '-';
+			document.getElementById('selectedAreaPower').textContent = '-';
+		}
+
 		$(document).ready(function(){
-			var game = new Game(1,6);
-			game.addPlayer( new Player('P1', stark) );
-			game.addPlayer( new Player('P2', lannister) );
-			game.addPlayer( new Player('P3', baratheon) );
-			game.addPlayer( new Player('P4', greyjoy) );
-			game.addPlayer( new Player('P5', tyrell) );
-			game.addPlayer( new Player('P6', martell) );
-
-			var stateMachine = new GameStateMachine(game);
-			stateMachine.fireEvent('start');
-
 			var panel = new PlayerPanel(game, game.players[0]);
 			panel.update();
 		});
