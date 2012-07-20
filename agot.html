@@ -16,259 +16,24 @@
 	<script src="units.js" type="text/javascript" charset="UTF-8"></script>
 	<script src="westeros-wildlings.js" type="text/javascript" charset="UTF-8"></script>
 	<script src="orders.js" type="text/javascript" charset="UTF-8"></script>
+	<script src="view.js" type="text/javascript" charset="UTF-8"></script>
 
 	<script type="text/javascript" charset="UTF-8">
-	//todo create a class that represents the view
-	function getSVGDocument() {
-		return document.getElementsByTagName('embed').item(0).getSVGDocument();
-	}
+		$(document).ready(function(){
+			var game = new Game(1,6);
+			game.addPlayer( new Player('P1', stark) );
+			game.addPlayer( new Player('P2', lannister) );
+			game.addPlayer( new Player('P3', baratheon) );
+			game.addPlayer( new Player('P4', greyjoy) );
+			game.addPlayer( new Player('P5', tyrell) );
+			game.addPlayer( new Player('P6', martell) );
 
-	function highlightControlledArea(theBoard, someArea) {
-		var svgns = "http://www.w3.org/2000/svg";
-		var svgDoc = getSVGDocument();
+			var stateMachine = new GameStateMachine(game);
+			stateMachine.fireEvent('start');
 
-		var controller = theBoard.getController(someArea);
-
-		var color = null;
-		switch (controller.name) {
-			case stark.name:
-				color = '#d9d9d9';
-				break;
-			case lannister.name:
-				color = '#ffc0c0';
-				break;
-			case baratheon.name:
-				color = '#dfdfa0';
-				break;
-			case greyjoy.name:
-				color = '#7a7a7a';
-				break;
-			case tyrell.name:
-				color = '#afa';
-				break;
-			case martell.name:
-				color = '#fa6';
-				break;
-		}
-
-		svgDoc.getElementById(someArea.codeName).setAttribute('fill', color);
-	}
-
-	function drawUnit(unit, area) {
-		var svgns = "http://www.w3.org/2000/svg";
-		var svgDoc = getSVGDocument();
-		var map = svgDoc.childNodes[0];
-
-		var color = null;
-		if (unit.controller.name === stark.name) {
-			color = '#909090';
-		} else if (unit.controller.name === lannister.name) {
-			color = '#f00';
-		} else if (unit.controller.name === baratheon.name) {
-			color = '#cc0';
-		} else if (unit.controller.name === greyjoy.name) {
-			color = '#222';
-		} else if (unit.controller.name === tyrell.name) {
-			color = '#181';
-		} else if (unit.controller.name === martell.name) {
-			color = '#d70';
-		}
-
-		if (unit instanceof Footman) {
-			var circle = svgDoc.createElementNS(svgns, 'circle');
-			circle.setAttribute('cx', Math.random()*1458);
-			circle.setAttribute('cy', Math.random()*2736);
-			circle.setAttribute('r', 40);
-			circle.setAttribute('fill', color);
-			map.appendChild(circle);
-		}
-		if (unit instanceof Knight) {
-			var circle = svgDoc.createElementNS(svgns, 'circle');
-			circle.setAttribute('cx', Math.random()*1458);
-			circle.setAttribute('cy', Math.random()*2736);
-			circle.setAttribute('r', 40);
-			circle.setAttribute('fill', color);
-			circle.setAttribute('stroke', '#000');
-			circle.setAttribute('stroke-width', 8);
-			map.appendChild(circle);
-		}
-		if (unit instanceof Ship) {
-			var rect = svgDoc.createElementNS(svgns, 'rect');
-			rect.setAttribute('x', Math.random()*1458);
-			rect.setAttribute('y', Math.random()*2736);
-			rect.setAttribute('width', 80);
-			rect.setAttribute('height', 80);
-			rect.setAttribute('fill', color);
-			map.appendChild(rect);
-		}
-		if (unit instanceof Siege) {
-			var rect = svgDoc.createElementNS(svgns, 'rect');
-			rect.setAttribute('x', Math.random()*1458);
-			rect.setAttribute('y', Math.random()*2736);
-			rect.setAttribute('width', 80);
-			rect.setAttribute('height', 80);
-			rect.setAttribute('fill', color);
-			rect.setAttribute('stroke', 'black');
-			rect.setAttribute('stroke-width', 4);
-			map.appendChild(rect);
-		}
-	}
-
-	var game = new Game(1,6);
-
-	$(document).ready(function(){
-		var game = new Game(1,6);
-		game.addPlayer( new Player('P1', stark) );
-		game.addPlayer( new Player('P2', lannister) );
-		game.addPlayer( new Player('P3', baratheon) );
-		game.addPlayer( new Player('P4', greyjoy) );
-		game.addPlayer( new Player('P5', tyrell) );
-		game.addPlayer( new Player('P6', martell) );
-
-		var stateMachine = new GameStateMachine(game);
-		stateMachine.fireEvent('start');
-
-
-
-		//this will display controlled areas on the map
-		for (var i = 0; i < game.board.occupiers.length; i++) {
-			if (game.board.hasController(game.board.areas[i])) {
-				highlightControlledArea(game.board, game.board.areas[i]);
-			}
-		}
-
-
-
-		//displaying game details to the player
-		var thisPlayer = game.players[0];
-
-		document.getElementById('houseName').textContent = thisPlayer.house.name;
-		document.getElementById('playerPowerTokens').textContent = thisPlayer.powerTokens;
-		document.getElementById('playerSupply').textContent = game.gameStats.supply.getPositionOfHouse(thisPlayer.house);
-		document.getElementById('playerVictory').textContent = game.gameStats.victory.getPositionOfHouse(thisPlayer.house);
-
-		//todo report orders
-		//todo report units
-
-		document.getElementById('currentRound').textContent = game.gameStats.round;
-		document.getElementById('wildlingsStrength').textContent = game.gameStats.wildlings;
-
-		var cardsTable = document.getElementById('playerCards').tBodies[0];
-		for (; cardsTable.rows.length > 0; cardsTable.deleteRow(0));
-		for (var i = 0; i < thisPlayer.house.cards.length; i++) {
-			var row = cardsTable.insertRow(-1);
-			var card = thisPlayer.house.cards[i];
-			row.insertCell(0).textContent = card.name;
-			row.insertCell(1).textContent = card.power;
-			row.insertCell(2).textContent = card.swords;
-			row.insertCell(3).textContent = card.towers;
-			row.insertCell(4).textContent = card.text;
-		}
-
-		for (var i = 0; i < game.board.occupiers.length; i++) {
-			var occupier = game.board.occupiers[i];
-			if (occupier === null || typeof(occupier) === 'undefined') {
-				continue;
-			}
-			if (occupier instanceof Army) {
-				for (var j = 0; j < occupier.units.length; j++) {
-					drawUnit(occupier.units[j], game.board.areas[i]);
-				}
-			} else {
-				drawUnit(occupier, game.board.areas[i]);
-			}
-		}
-
-		document.getElementById('playerSwordStatus').textContent = game.gameStats.swordStatusText();
-		document.getElementById('playerRavenStatus').textContent = game.gameStats.ravenStatusText();
-
-		{
-			var throneTrack = document.getElementById('ironThroneTrack');
-			var throneRank = game.gameStats.ironThrone.getRank();
-			$(throneTrack).empty()
-			for (var i = 0; i < throneRank.length; i++) {
-				var li = document.createElement('li');
-				li.textContent = throneRank[i].name;
-				throneTrack.appendChild(li);
-			}
-		}
-
-		{
-			var fiefdomTrack = document.getElementById('fiefdomTrack');
-			var fiefdomRank = game.gameStats.fiefdom.getRank();
-			$(fiefdomTrack).empty()
-			for (var i = 0; i < fiefdomRank.length; i++) {
-				var li = document.createElement('li');
-				li.textContent = fiefdomRank[i].name;
-				fiefdomTrack.appendChild(li);
-			}
-		}
-
-
-		{
-			var kingsCourtTrack = document.getElementById('kingsCourtTrack');
-			var kingsCourtRank = game.gameStats.kingsCourt.getRank();
-			$(kingsCourtTrack).empty()
-			for (var i = 0; i < kingsCourtRank.length; i++) {
-				var li = document.createElement('li');
-				li.textContent = kingsCourtRank[i].name;
-				kingsCourtTrack.appendChild(li);
-			}
-		}
-
-		{
-			var victoryTrack = document.getElementById('victoryTrack');
-			$(victoryTrack).empty()
-			for (var i = game.gameStats.victory.minimum; i <= game.gameStats.victory.maximum; i++) {
-				var li = document.createElement('li');
-				li.textContent = '';
-
-				var housesOnPosition = game.gameStats.victory.getHousesInPosition(i);
-				for (var j = 0; j < housesOnPosition.length; j++) {
-					li.textContent += housesOnPosition[j].name;
-					if (j != housesOnPosition.length - 1) {
-						li.textContent += ', ';
-					}
-				}
-
-				victoryTrack.appendChild(li);
-			}
-		}
-
-		{
-			var supplyTrack = document.getElementById('supplyTrack');
-			$(supplyTrack).empty()
-			for (var i = game.gameStats.supply.minimum; i <= game.gameStats.supply.maximum; i++) {
-				var li = document.createElement('li');
-				li.textContent = '';
-
-				var housesOnPosition = game.gameStats.supply.getHousesInPosition(i);
-				for (var j = 0; j < housesOnPosition.length; j++) {
-					li.textContent += housesOnPosition[j].name;
-					if (j != housesOnPosition.length - 1) {
-						li.textContent += ', ';
-					}
-				}
-
-				supplyTrack.appendChild(li);
-			}
-		}
-
-	});
-
-	function showAreaName(event) {
-		var areaCode = event.target.id;
-		var area = game.board.areasByCode[areaCode];
-		document.getElementById('selectedAreaName').textContent = area.name;
-		document.getElementById('selectedAreaSupply').textContent = area.supply;
-		document.getElementById('selectedAreaPower').textContent = area.power;
-	}
-	function hideAreaName(event) {
-		var areaCode = event.target.id;
-		document.getElementById('selectedAreaName').textContent = '(none)';
-		document.getElementById('selectedAreaSupply').textContent = '-';
-		document.getElementById('selectedAreaPower').textContent = '-';
-	}
+			var panel = new PlayerPanel(game, game.players[0]);
+			panel.update();
+		});
 	</script>
 </head>
 
@@ -352,8 +117,8 @@
 					<div id="influenceCaput">
 						<h1>Influence</h1>
 						<div id="dominance">
-							<span class="label">Valyrian Steel Blade: </span><span id="playerSwordStatus" class="needsRoom"></span>
-							<span class="label">Raven: </span><span id="playerRavenStatus"></span>
+							<span class="label">Valyrian Steel Blade: </span><span id="bladeStatus" class="needsRoom"></span>
+							<span class="label">Raven: </span><span id="ravenStatus"></span>
 						</div>
 					</div>
 

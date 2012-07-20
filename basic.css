@@ -107,6 +107,10 @@ table#playerCards {
 	border-spacing: 0;
 }
 
+table#playerCards tbody tr.unavailable {
+	text-decoration: line-through;
+}
+
 table#playerCards tr td {
 	border: 1px solid black;
 	padding: 0 0.3em;
