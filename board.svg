@@ -5,35 +5,33 @@
 	version="1.1" baseProfile="full"
 	viewBox="0 0 1458 2736"
 	preserveAspectRatio="xMinYMin meet"
-	onload="onloadSVG(evt);">
+	onload="setupSVG(event);">
 
 <!-- See https://jwatt.org/svg/authoring/ -->
 <!-- See http://stackoverflow.com/questions/5069006/change-attributes-defined-in-defs-on-use-element -->
 
 <script type="text/javascript"><![CDATA[
-function onloadSVG(event) {
+/*
+All events captured here will be handled by the HTML document because the menus, interface responses and
+and stuff like that will depend on the game state to respond to user commands. Therefore, what we must do
+here is just tell things to pass the controll to the HTML document when something happens.
+
+More about sending things to the HTML document in
+http://srufaculty.sru.edu/david.dailey/svg/intro/PartF_B.html
+*/
+function setupSVG(event) {
 	var pathElements = event.target.getElementsByTagName('path');
-
-	for (var i = 14; i < pathElements.length; i++) { //magic number 19: from the 20th. element the paths represent westeros areas
-		pathElements.item(i).addEventListener("mouseover", onmouseoverArea, false);
-		pathElements.item(i).addEventListener("mouseout",  onmouseoutArea,  false);
+	for (var i = 14; i < pathElements.length; i++) { //magic number 14: from the 15th element the paths represent westeros areas
+		var theItem = pathElements.item(i);
+		theItem.addEventListener("mouseover", onmouseoverArea, false);
+		theItem.addEventListener("mouseout",  onmouseoutArea,  false);
+		theItem.addEventListener("click", onclickArea, false);
 	}
-
 }
 
-function onmouseoverArea(event) {
-	//todo must find another way to highlight a certain area
-	//event.target.setAttribute('fill', '#eee');
-
-	//as recomended in http://srufaculty.sru.edu/david.dailey/svg/intro/PartF_B.html
-	top.showAreaName(event); //showAreaName is a function in the HTML document
-}
-
-function onmouseoutArea(event) {
-	//todo must find another way to highlight a certain area
-	//event.target.setAttribute('fill', '#fff');
-	top.hideAreaName(event); //showAreaName is a function in the HTML document
-}
+function onmouseoverArea(event) { top.mouseOverArea(event); }
+function onmouseoutArea(event) { top.mouseOutArea(event); }
+function onclickArea(event) { top.mouseOutArea(event); }
 
 ]]></script>
 <defs>
