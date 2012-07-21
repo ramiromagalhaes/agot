@@ -30,7 +30,7 @@
 		var stateMachine = new GameStateMachine(game);
 		stateMachine.fireEvent('start');
 
-		function showAreaName(event) {
+		function mouseOverArea(event) {
 			var areaCode = event.target.id;
 			var area = game.board.areasByCode[areaCode];
 			document.getElementById('selectedAreaName').textContent = area.name;
@@ -38,11 +38,15 @@
 			document.getElementById('selectedAreaPower').textContent = area.power;
 		}
 
-		function hideAreaName(event) {
+		function mouseOutArea(event) {
 			var areaCode = event.target.id;
 			document.getElementById('selectedAreaName').textContent = '(none)';
 			document.getElementById('selectedAreaSupply').textContent = '-';
 			document.getElementById('selectedAreaPower').textContent = '-';
+		}
+
+		function mouseClickArea(event) {
+			alert(event.target.id);
 		}
 
 		$(document).ready(function(){

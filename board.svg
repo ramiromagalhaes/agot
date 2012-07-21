@@ -5,7 +5,7 @@
 	version="1.1" baseProfile="full"
 	viewBox="0 0 1458 2736"
 	preserveAspectRatio="xMinYMin meet"
-	onload="setupSVG(event);">
+	onload="setupSVG(evt);">
 
 <!-- See https://jwatt.org/svg/authoring/ -->
 <!-- See http://stackoverflow.com/questions/5069006/change-attributes-defined-in-defs-on-use-element -->
@@ -31,7 +31,7 @@ function setupSVG(event) {
 
 function onmouseoverArea(event) { top.mouseOverArea(event); }
 function onmouseoutArea(event) { top.mouseOutArea(event); }
-function onclickArea(event) { top.mouseOutArea(event); }
+function onclickArea(event) { top.mouseClickArea(event); }
 
 ]]></script>
 <defs>
