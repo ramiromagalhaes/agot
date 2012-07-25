@@ -174,6 +174,19 @@ function GameStats(amountPlayers) {
 		return limits[this.supply.getPositionOfHouse(house) - this.supply.minimum];
 	};
 
+	this.getArmyLimitsOfHouseAsText = function(house) {
+		var limits = this.getArmyLimitsOfHouse(house);
+		var text = '(';
+		for (var i = 0; i < limits.length; i++) {
+			text += limits[i];
+			if (i < limits.length - 1) {
+				text += ', ';
+			}
+		}
+		text += ')';
+		return text;
+	};
+
 	this.setVictory = function(victory, house) {
 		this.victory.setPositionOfHouse(victory, house);
 	};

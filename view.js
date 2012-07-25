@@ -198,9 +198,11 @@ function PlayerPanel(game, player) {
 
 	//supposed to be private
 	this.updateSupplyTrack = function() {
-		var theSupply = this.game.gameStats.supply;
-		this.playerSupplyElement.text(theSupply.getPositionOfHouse(this.player.house));
-		this.updateMultiRankTracker(this.victoryTrack, theSupply);
+		var gameStats = this.game.gameStats;
+		this.playerSupplyElement.text(
+			gameStats.getSupplyOfHouse(this.player.house) + ' ' + gameStats.getArmyLimitsOfHouseAsText(this.player.house)
+		);
+		this.updateMultiRankTracker(this.supplyTrack, gameStats.supply);
 	};
 
 	//supposed to be private
