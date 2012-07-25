@@ -198,8 +198,9 @@ function PlayerPanel(game, player) {
 
 	//supposed to be private
 	this.updateSupplyTrack = function() {
-		this.playerSupplyElement.text(this.game.gameStats.supply.getPositionOfHouse(this.player.house));
-		this.updateMultiRankTracker(this.victoryTrack, this.game.gameStats.supply);
+		var theSupply = this.game.gameStats.supply;
+		this.playerSupplyElement.text(theSupply.getPositionOfHouse(this.player.house));
+		this.updateMultiRankTracker(this.victoryTrack, theSupply);
 	};
 
 	//supposed to be private
