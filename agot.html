@@ -19,17 +19,6 @@
 	<script src="view.js" type="text/javascript" charset="UTF-8"></script>
 
 	<script type="text/javascript" charset="UTF-8">
-		var game = new Game(1,6);
-		game.addPlayer( new Player('P1', stark) );
-		game.addPlayer( new Player('P2', lannister) );
-		game.addPlayer( new Player('P3', baratheon) );
-		game.addPlayer( new Player('P4', greyjoy) );
-		game.addPlayer( new Player('P5', tyrell) );
-		game.addPlayer( new Player('P6', martell) );
-
-		var stateMachine = new GameStateMachine(game);
-		stateMachine.fireEvent('start');
-
 		function mouseOverArea(event) {
 			var areaCode = event.target.id;
 			var area = game.board.areasByCode[areaCode];
@@ -48,6 +37,17 @@
 		function mouseClickArea(event) {
 			alert(event.target.id);
 		}
+
+		var game = new Game(1,6);
+		game.addPlayer( new Player('P1', stark) );
+		game.addPlayer( new Player('P2', lannister) );
+		game.addPlayer( new Player('P3', baratheon) );
+		game.addPlayer( new Player('P4', greyjoy) );
+		game.addPlayer( new Player('P5', tyrell) );
+		game.addPlayer( new Player('P6', martell) );
+
+		var stateMachine = new GameStateMachine(game);
+		stateMachine.fireEvent('start');
 
 		$(document).ready(function(){
 			var panel = new PlayerPanel(game, game.players[0]);
