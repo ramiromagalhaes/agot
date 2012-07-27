@@ -7,9 +7,11 @@
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 
 	<link rel="stylesheet" type="text/css" href="basic.css" charset="UTF-8" />
+	<link rel="stylesheet" type="text/css" href="musteringMenu.css" charset="UTF-8" />
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js" type="text/javascript"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.js" type="text/javascript"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js" type="text/javascript" charset="UTF-8"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.js" type="text/javascript" charset="UTF-8"></script>
+	<script src="js-imports/mypopbox.js" type="text/javascript" charset="UTF-8"></script>
 	<script src="base.js" type="text/javascript" charset="UTF-8"></script>
 	<script src="game.js" type="text/javascript" charset="UTF-8"></script>
 	<script src="houses.js" type="text/javascript" charset="UTF-8"></script>
@@ -36,6 +38,7 @@
 		}
 
 		function mouseClickArea(event) {
+			//todo depending on the current state of the game, this behaviour should be different.
 			alert(event.target.id);
 		}
 
@@ -51,7 +54,7 @@
 		stateMachine.fireEvent('start');
 
 		$(document).ready(function(){
-			var panel = new PlayerPanel(game, game.players[0]);
+			var panel = new PlayerPanel(game, game.players[5]);
 			panel.update();
 		});
 	</script>
@@ -70,7 +73,7 @@
 				<a href="#" class="needsRoom">Territory type overlay</a>
 				<a href="#" class="needsRoom">Controllers overlay</a>
 			</div>
-			<embed src="board.svg" type="image/svg+xml" />
+			<embed id="board" src="board.svg" type="image/svg+xml" />
 		</div>
 
 		<div id="stats">
@@ -209,7 +212,6 @@
 		</div>
 		<br style="clear: both;"/>
 	</div>
-
 </body>
 
 </html>
