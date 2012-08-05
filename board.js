@@ -93,16 +93,43 @@ function Board() {
 		return this.adjacency[area1.id][area2.id];
 	};
 
-	this.getAdjacents = function(area) { //warning cheap code ahead
+	//this is supposed to be a private method
+	this.getAdjacentsWithCriteria = function(area, criteria) { //warning cheap code ahead! criteria should be a function that checks if a potentially adjacent area has what it needs to be considered adjacent.
 		var adjacents = new Array(); //todo see note on caput of this class
 
 		for (var i = 0; i < this.areaCount; i++) {
-			if (this.adjacency[area.id][i] === true) {
+			var potentialAdjacent = this.areas[i];
+			if ( this.isAdjacent(area, potentialAdjacent)
+			        && criteria(potentialAdjacent) ) {
 				adjacents.push(this.areas[i]);
 			}
 		}
 
 		return adjacents;
+	};
+
+	this.getLandAdjacents = function(area) { //warning cheap code ahead
+		return this.getAdjacentsWithCriteria(area,
+			function (otherArea) {
+				return otherArea.type === 0; //0 is land. See Land class caput.
+			}
+		);
+	};
+
+	this.getSeaAdjacents = function(area) { //warning cheap code ahead
+		return this.getAdjacentsWithCriteria(area,
+			function (otherArea) {
+				return otherArea.type === 1; //0 is sea. See Land class caput.
+			}
+		);
+	};
+
+	this.getAdjacents = function(area) { //warning cheap code ahead
+		return this.getAdjacentsWithCriteria(area,
+			function (otherArea) {
+				return true;
+			}
+		);
 	};
 
 	//returns an array with castles and strongholds
