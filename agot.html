@@ -28,13 +28,26 @@
 			document.getElementById('selectedAreaName').textContent = area.name;
 			document.getElementById('selectedAreaSupply').textContent = area.supply;
 			document.getElementById('selectedAreaPower').textContent = area.power;
+
+			var adjacents = game.board.getAdjacents(area);
+			for (var i = 0; i < adjacents.length; i++) {
+				var adjacent = svgDocument().getElementById(adjacents[i].codeName);
+				adjacent.setAttribute('fill', '#ddd');
+			}
 		}
 
 		function mouseOutArea(event) {
-			var areaCode = event.target.id;
 			document.getElementById('selectedAreaName').textContent = '(none)';
 			document.getElementById('selectedAreaSupply').textContent = '-';
 			document.getElementById('selectedAreaPower').textContent = '-';
+
+			var adjacents = game.board.getAdjacents(
+				game.board.areasByCode[ event.target.id ]
+			);
+			for (var i = 0; i < adjacents.length; i++) {
+				var adjacent = svgDocument().getElementById(adjacents[i].codeName);
+				adjacent.setAttribute('fill', '#fff');
+			}
 		}
 
 		function mouseClickArea(event) {

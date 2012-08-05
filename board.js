@@ -98,7 +98,7 @@ function Board() {
 
 		for (var i = 0; i < this.areaCount; i++) {
 			if (this.adjacency[area.id][i] === true) {
-				adjacents.push(areas[i]);
+				adjacents.push(this.areas[i]);
 			}
 		}
 
