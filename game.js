@@ -136,22 +136,6 @@ function GameStats(amountPlayers) {
 		return house.name === this.kingsCourt.getFirst().name;
 	};
 
-	this.swordStatusText = function(house) {
-		if ( this.isSwordUsable() ) {
-			return 'unused';
-		} else {
-			return 'used';
-		}
-	};
-
-	this.ravenStatusText = function(house) {
-		if ( this.isRavenUsable() ) {
-			return 'unused';
-		} else {
-			return 'used';
-		}
-	};
-
 	this.setSupply = function(supply, house) {
 		this.supply.setPositionOfHouse(supply, house);
 	};
@@ -172,19 +156,6 @@ function GameStats(amountPlayers) {
 		];
 
 		return limits[this.supply.getPositionOfHouse(house) - this.supply.minimum];
-	};
-
-	this.getArmyLimitsOfHouseAsText = function(house) {
-		var limits = this.getArmyLimitsOfHouse(house);
-		var text = '(';
-		for (var i = 0; i < limits.length; i++) {
-			text += limits[i];
-			if (i < limits.length - 1) {
-				text += ', ';
-			}
-		}
-		text += ')';
-		return text;
 	};
 
 	this.setVictory = function(victory, house) {

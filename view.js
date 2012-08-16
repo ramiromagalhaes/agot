@@ -199,16 +199,47 @@ function PlayerPanel(game, player) {
 	//supposed to be private
 	this.updateSupplyTrack = function() {
 		var gameStats = this.game.gameStats;
-		this.playerSupplyElement.text(
-			gameStats.getSupplyOfHouse(this.player.house) + ' ' + gameStats.getArmyLimitsOfHouseAsText(this.player.house)
-		);
+
+		{
+			var limits = gameStats.getArmyLimitsOfHouse(this.player.house);
+			var text = '(';
+			for (var i = 0; i < limits.length; i++) {
+				text += limits[i];
+				if (i < limits.length - 1) {
+					text += ', ';
+				}
+			}
+			text += ')';
+
+			this.playerSupplyElement.text(
+				gameStats.getSupplyOfHouse(this.player.house) + ' ' + text
+			);
+		}
+
 		this.updateMultiRankTracker(this.supplyTrack, gameStats.supply);
 	};
 
 	//supposed to be private
 	this.updateGameData = function() {
-		this.bladeStatusElement.text(this.game.gameStats.swordStatusText());
-		this.ravenStatusElement.text(this.game.gameStats.ravenStatusText());
+		{
+			if ( this.game.gameStats.isSwordUsable() ) {
+				var text = 'unused';
+			} else {
+				var text = 'used';
+			}
+
+			this.bladeStatusElement.text(text);
+		}
+
+		{
+			if ( this.game.gameStats.isRavenUsable() ) {
+				var text = 'unused';
+			} else {
+				var text = 'used';
+			}
+
+			this.ravenStatusElement.text( text );
+		}
 
 		this.updateIronThroneTrack();
 		this.updateFiefdomTrack();
