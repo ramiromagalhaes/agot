@@ -9,9 +9,7 @@
 	<link rel="stylesheet" type="text/css" href="basic.css" charset="UTF-8" />
 	<link rel="stylesheet" type="text/css" href="musteringMenu.css" charset="UTF-8" />
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js" type="text/javascript" charset="UTF-8"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.js" type="text/javascript" charset="UTF-8"></script>
-	<script src="js-imports/mypopbox.js" type="text/javascript" charset="UTF-8"></script>
+	<script src="js-imports/jquery-2.1.4.js" type="text/javascript" charset="UTF-8"></script>
 	<script src="base.js" type="text/javascript" charset="UTF-8"></script>
 	<script src="game.js" type="text/javascript" charset="UTF-8"></script>
 	<script src="houses.js" type="text/javascript" charset="UTF-8"></script>
@@ -22,13 +20,78 @@
 	<script src="view.js" type="text/javascript" charset="UTF-8"></script>
 
 	<script type="text/javascript" charset="UTF-8">
+		function CombatScreen(attacker, defendant, board, embattledArea) { //TODO faltam: unidades marchando, área de origem da marcha, bônus da marcha (quase tudo isso pode ser um objeto "marcha")
+			this.attacker = attacker;
+			this.defendant = defendant;
+			this.board = board;
+			this.embattledArea = embattledArea;
+
+			this.attackerStrength = 0;
+			this.defendantStrength = 0;
+
+			this.embattledAreaElement = document.getElementById('embattledArea');
+			this.attackerStrengthElement = $('#attackerStrength');
+			this.defendantStrengthElement = $('#defendantStrength');
+			this.attackerCardsElement = document.getElementById('attackerCards').tBodies[0];
+			this.defendantCardsElement = document.getElementById('defendantCards').tBodies[0];
+			this.supportStatusElement = document.getElementById('supportStatus').tBodies[0];
+			this.valyrianSteelBladeStatus = $('valyrianSteelBladeStatus');
+
+			this.update = function() {
+				this.embattledAreaElement.textContent = this.embattledArea.name;
+				displayCards(this.attackerCardsElement, new Player('P1', stark));
+				displayCards(this.defendantCardsElement, new Player('P2', lannister));
+			}
+
+			function displayCards(tableBodyElement, player) {
+				$(tableBodyElement).empty();
+				for (var i = 0; i < player.house.cards.length; i++) {
+					var row = tableBodyElement.insertRow(-1);
+
+					var radio = document.createElement("input");
+					radio.setAttribute('type', 'radio');
+					radio.setAttribute('value', 'cardnameorid');
+
+					var card = player.house.cards[i];
+					row.insertCell(0).appendChild(radio);
+					row.insertCell(1).textContent = card.name;
+					row.insertCell(2).textContent = card.power;
+					row.insertCell(3).textContent = card.swords;
+					row.insertCell(4).textContent = card.towers;
+					row.insertCell(5).textContent = card.text;
+
+					if (!card.available) {
+						row.setAttribute('class', 'unavailable');
+					}
+				}
+			}
+		}
+
+		$(document).ready(function(){
+			var game = new Game(1,6);
+			game.addPlayer( new Player('P1', stark) );
+			game.addPlayer( new Player('P2', lannister) );
+			game.addPlayer( new Player('P3', baratheon) );
+			game.addPlayer( new Player('P4', greyjoy) );
+			game.addPlayer( new Player('P5', tyrell) );
+			game.addPlayer( new Player('P6', martell) );
+			game.board = board;
+
+			var stateMachine = new GameStateMachine(game);
+			stateMachine.fireEvent('start');
+
+			var combatScreen = new CombatScreen(new Player('P1', stark), new Player('P2', lannister), game.board, game.board.areas[0]);
+			combatScreen.update();
+		});
 	</script>
 </head>
 
 <body>
 	<div id="combatantsMenu">
-		<span class="label">Attacker strength:<span><span id="attackerStrength" class="label">7<span alt="Leads the fiefdom track">*</span><span>
-		<span class="label">Defendant strength:<span><span id="defendantStrength" class="label">7<span>
+		<h1>Battle resolution</h1>
+		<span class="label">Embattled area: </span><span id="embattledArea" class="label"></span>
+		<span class="label">Attacker strength: </span><span id="attackerStrength" class="label">7</span><span alt="Leads the fiefdom track">*</span>
+		<span class="label">Defendant strength: </span><span id="defendantStrength" class="label">7</span>
 
 		<br style="clear: both;" />
 
@@ -36,6 +99,7 @@
 		<table id="attackerCards">
 			<thead>
 				<tr>
+					<td><!-- RadioButton --></td>
 					<td class="cardname">Name</td>
 					<td>P</td>
 					<td>S</td>
@@ -50,6 +114,7 @@
 		<table id="defendantCards">
 			<thead>
 				<tr>
+					<td><!-- RadioButton --></td>
 					<td class="cardname">Name</td>
 					<td>P</td>
 					<td>S</td>
@@ -61,7 +126,7 @@
 		</table>
 
 		<h2 style="display: inline-block;">Support status</h2>
-		<table id="defendantCards">
+		<table id="supportStatus">
 			<thead>
 				<tr>
 					<td>House</td>
@@ -93,9 +158,8 @@
 			</tbody>
 		</table>
 	
-		<span>Valyrian Steel Blade:</span><span>available/not available/in use</span>
+		<span class="label">Valyrian Steel Blade:</span><span id="valyrianSteelBladeStatus">available/not available/in use</span>
 	<div>
 </body>
-
 </html>
 
