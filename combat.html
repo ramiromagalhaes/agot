@@ -20,6 +20,13 @@
 	<script src="view.js" type="text/javascript" charset="UTF-8"></script>
 
 	<script type="text/javascript" charset="UTF-8">
+		function March(attacker, marchFrom, marchTo, marchingUnits, marchBonus) { //TODO ou será marchToken?
+			this.attacker = attacker;
+			this.marchFrom = marchFrom;
+			this.marchTo = marchTo;
+			this.marchingUnits = marchingUnits;
+		}
+
 		function CombatScreen(attacker, defendant, board, embattledArea) { //TODO faltam: unidades marchando, área de origem da marcha, bônus da marcha (quase tudo isso pode ser um objeto "marcha")
 			this.attacker = attacker;
 			this.defendant = defendant;
@@ -30,12 +37,12 @@
 			this.defendantStrength = 0;
 
 			this.embattledAreaElement = document.getElementById('embattledArea');
-			this.attackerStrengthElement = $('#attackerStrength');
-			this.defendantStrengthElement = $('#defendantStrength');
+			this.attackerStrengthElement = document.getElementById('attackerStrength');
+			this.defendantStrengthElement = document.getElementById('defendantStrength');
 			this.attackerCardsElement = document.getElementById('attackerCards').tBodies[0];
 			this.defendantCardsElement = document.getElementById('defendantCards').tBodies[0];
 			this.supportStatusElement = document.getElementById('supportStatus').tBodies[0];
-			this.valyrianSteelBladeStatus = $('valyrianSteelBladeStatus');
+			this.valyrianSteelBladeStatus = document.getElementById('valyrianSteelBladeStatus');
 
 			this.update = function() {
 				this.embattledAreaElement.textContent = this.embattledArea.name;
@@ -43,6 +50,7 @@
 				displayCards(this.defendantCardsElement, new Player('P2', lannister));
 			}
 
+			//Supposed to be private
 			function displayCards(tableBodyElement, player) {
 				$(tableBodyElement).empty();
 				for (var i = 0; i < player.house.cards.length; i++) {
@@ -79,6 +87,8 @@
 
 			var stateMachine = new GameStateMachine(game);
 			stateMachine.fireEvent('start');
+
+			var theMarch = new March(game.players[0], game.board.areas[0], game.board.areas[2], "unidades marchando", "um numero ou um token?");
 
 			var combatScreen = new CombatScreen(new Player('P1', stark), new Player('P2', lannister), game.board, game.board.areas[0]);
 			combatScreen.update();
@@ -157,9 +167,14 @@
 				</tr>
 			</tbody>
 		</table>
-	
-		<span class="label">Valyrian Steel Blade:</span><span id="valyrianSteelBladeStatus">available/not available/in use</span>
-	<div>
+
+		<div id="valyrianSteelBladeChoice">
+			<span class="label">Your Valyrian Steel Blade is not available.</span>
+			<span class="label">Valyrian Steel Blade: </span><span id="valyrianSteelBladeStatus">available</span>
+			<span class="label">Valyrian Steel Blade: </span><span id="valyrianSteelBladeStatus">not available</span>
+			<span class="label">Valyrian Steel Blade: </span><span id="valyrianSteelBladeStatus">in use</span>
+			<input type="checkbox" name="useValyrianSteelBlade" value="use"/><span class="label">Use the Valyrian Steel Blade.</span>
+		</div>
+	</div>
 </body>
 </html>
-
