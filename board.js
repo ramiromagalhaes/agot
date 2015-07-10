@@ -89,6 +89,10 @@ function Board() {
 		}
 	};
 
+	this.getOccupiers = function(area) {
+		return this.occupiers[area.id];
+	};
+
 	this.isAdjacent = function(area1, area2) {
 		return this.adjacency[area1.id][area2.id];
 	};

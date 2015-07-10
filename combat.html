@@ -20,11 +20,44 @@
 	<script src="view.js" type="text/javascript" charset="UTF-8"></script>
 
 	<script type="text/javascript" charset="UTF-8">
-		function March(attacker, marchFrom, marchTo, marchingUnits, marchBonus) { //TODO ou será marchToken?
+
+		//Represents a combat situation while resolving a march order
+		function Combat(attacker, defendant, marchFrom, marchTo, marchingUnits, marchBonus, board) {
 			this.attacker = attacker;
+			this.defendant = defendant;
 			this.marchFrom = marchFrom;
 			this.marchTo = marchTo;
 			this.marchingUnits = marchingUnits;
+			this.board = board;
+			this.attackerStrength = 0;
+			this.defendantStrength = 0;
+
+			this.supporters = {}; //a map of areas able to support combat, and their total support strength
+
+			this.attackerStrength = calculateTotalStrength(marchingUnits);
+			this.defendantStrength = calculateTotalStrength(this.board.getOccupiers(marchTo));
+
+			var candidateSupporters = this.board.getAdjacents(marchTo);
+			for (var i = 0; i < candidateSupporters.length; i++) {
+				if ( !board.isOccupied(candidateSupporters[i]) ) { //TODO preciso verificar se tem ordem de suporte também! Vide método board.getAdjacentsWithCriteria()
+					continue;
+				}
+
+				var supportStrength = 0;
+				var unitsAbleToSupport = board.getOccupiers(candidateSupporters[i]);
+				supportStrength = calculateTotalStrength(unitsAbleToSupport);
+
+				supporters[candidateSupporters[i]] = supportStrength;
+			}
+
+			this.calculateTotalStrength = function(units) {
+				var totalStrength = 0;
+				for (var i = 0; i < units.length; i++) {
+					totalStrength += units[i].strength;
+				}
+
+				return totalStrength;
+			}
 		}
 
 		function CombatScreen(attacker, defendant, board, embattledArea) { //TODO faltam: unidades marchando, área de origem da marcha, bônus da marcha (quase tudo isso pode ser um objeto "marcha")
@@ -139,6 +172,7 @@
 		<table id="supportStatus">
 			<thead>
 				<tr>
+					<td>Area</td>
 					<td>House</td>
 					<td>Support strength available</td>
 					<td>Who is supported</td>
@@ -146,21 +180,25 @@
 			</thead>
 			<tbody>
 				<tr>
+					<td>Winterfell</td>
 					<td>Stark</td>
 					<td>0</td>
 					<td>Unknown</td>
 				</tr>
 				<tr>
+					<td>Another area</td>
 					<td>Lannister</td>
 					<td>3</td>
 					<td>No support</td>
 				</tr>
 				<tr>
+					<td>Somewhere else</td>
 					<td>Baratheon</td>
 					<td>2</td>
 					<td>Attacker</td>
 				</tr>
 				<tr>
+					<td>Yet another region</td>
 					<td>Martel</td>
 					<td>1</td>
 					<td>Defendant</td>
